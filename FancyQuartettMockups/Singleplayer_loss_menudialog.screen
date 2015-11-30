@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore" xmlns:o="http://wireframesketcher.com/1.0/model/overrides">
+  <widgets xsi:type="model:Master" id="1" x="200" measuredWidth="456" measuredHeight="872">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Devices/Nexus%206.screen#Nexus%206"/>
+  </widgets>
+  <widgets xsi:type="model:Master" id="2" x="221" y="101" measuredWidth="411" measuredHeight="56">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Navigation.screen#Toolbar%20Text"/>
+    <overrides>
+      <widgetChanges xsi:type="o:Delete" ref="158"/>
+      <widgets ref="152" width="411"/>
+      <widgets ref="153" x="10" y="12">
+        <attributes key="icon" value="assets/ic-close (large)"/>
+      </widgets>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Placeholder" id="3" x="231" y="184" width="390" height="200" measuredWidth="390" measuredHeight="200" layoutParams="anchor-right|anchor-middle"/>
+  <widgets xsi:type="model:WidgetGroup" id="4" x="392" y="360" measuredWidth="63" measuredHeight="16">
+    <widgets xsi:type="model:Master" id="5" x="15" measuredWidth="48" measuredHeight="16">
+      <screen xsi:type="model:WidgetGroup" href="assets/Android5/Navigation.screen#Pager%20Indicator"/>
+    </widgets>
+    <widgets xsi:type="model:Icon" id="6" measuredWidth="16" measuredHeight="16" layoutParams="anchor-left|anchor-middle" icon="assets/ic-info-outline (small)"/>
+  </widgets>
+  <widgets xsi:type="model:WidgetGroup" id="7" x="426" y="383" measuredWidth="195" measuredHeight="50">
+    <widgets xsi:type="model:Panel" id="8" width="195" height="50" measuredWidth="195" measuredHeight="50"/>
+    <widgets xsi:type="model:Icon" id="9" x="10" y="13" measuredWidth="24" measuredHeight="24" layoutParams="anchor-left|anchor-middle" icon="assets/ic-panorama (medium)"/>
+    <widgets xsi:type="model:Master" id="10" x="41" y="12" measuredWidth="66" measuredHeight="25">
+      <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Header"/>
+      <overrides>
+        <widgets ref="15" text="AttrName"/>
+      </overrides>
+    </widgets>
+    <widgets xsi:type="model:Master" id="11" x="120" y="11" measuredWidth="42" measuredHeight="28">
+      <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Small"/>
+      <overrides>
+        <widgets ref="6" text="Value"/>
+      </overrides>
+    </widgets>
+    <widgets xsi:type="model:Icon" id="12" x="161" y="13" measuredWidth="24" measuredHeight="24" layoutParams="anchor-left|anchor-middle" icon="arrow-right-down (medium)"/>
+  </widgets>
+  <widgets xsi:type="model:WidgetGroup" id="13" x="231" y="383" measuredWidth="195" measuredHeight="50">
+    <widgets xsi:type="model:Panel" id="14" width="195" height="50" measuredWidth="195" measuredHeight="50"/>
+    <widgets xsi:type="model:Icon" id="15" x="10" y="13" measuredWidth="24" measuredHeight="24" layoutParams="anchor-left|anchor-middle" icon="assets/ic-panorama (medium)"/>
+    <widgets xsi:type="model:Master" id="16" x="41" y="12" measuredWidth="66" measuredHeight="25">
+      <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Header"/>
+      <overrides>
+        <widgets ref="15" text="AttrName"/>
+      </overrides>
+    </widgets>
+    <widgets xsi:type="model:Master" id="17" x="120" y="11" measuredWidth="42" measuredHeight="28">
+      <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Small"/>
+      <overrides>
+        <widgets ref="6" text="Value"/>
+      </overrides>
+    </widgets>
+    <widgets xsi:type="model:Icon" id="18" x="161" y="13" measuredWidth="24" measuredHeight="24" layoutParams="anchor-left|anchor-middle" icon="arrow-right-up (medium)"/>
+  </widgets>
+  <widgets xsi:type="model:WidgetGroup" id="19" x="231" y="433" measuredWidth="195" measuredHeight="50">
+    <widgets xsi:type="model:Panel" id="20" width="195" height="50" measuredWidth="195" measuredHeight="50"/>
+    <widgets xsi:type="model:Icon" id="21" x="10" y="13" measuredWidth="24" measuredHeight="24" layoutParams="anchor-left|anchor-middle" icon="assets/ic-panorama (medium)"/>
+    <widgets xsi:type="model:Master" id="22" x="41" y="12" measuredWidth="66" measuredHeight="25">
+      <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Header"/>
+      <overrides>
+        <widgets ref="15" text="AttrName"/>
+      </overrides>
+    </widgets>
+    <widgets xsi:type="model:Master" id="23" x="120" y="11" measuredWidth="42" measuredHeight="28">
+      <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Small"/>
+      <overrides>
+        <widgets ref="6" text="Value"/>
+      </overrides>
+    </widgets>
+    <widgets xsi:type="model:Icon" id="24" x="161" y="13" measuredWidth="24" measuredHeight="24" layoutParams="anchor-left|anchor-middle" icon="arrow-right-up (medium)"/>
+  </widgets>
+  <widgets xsi:type="model:WidgetGroup" id="25" x="426" y="482" measuredWidth="195" measuredHeight="50">
+    <widgets xsi:type="model:Panel" id="26" width="195" height="50" measuredWidth="195" measuredHeight="50"/>
+    <widgets xsi:type="model:Icon" id="27" x="10" y="13" measuredWidth="24" measuredHeight="24" layoutParams="anchor-left|anchor-middle" icon="assets/ic-panorama (medium)"/>
+    <widgets xsi:type="model:Master" id="28" x="41" y="12" measuredWidth="66" measuredHeight="25">
+      <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Header"/>
+      <overrides>
+        <widgets ref="15" text="AttrName"/>
+      </overrides>
+    </widgets>
+    <widgets xsi:type="model:Master" id="29" x="120" y="11" measuredWidth="42" measuredHeight="28">
+      <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Small"/>
+      <overrides>
+        <widgets ref="6" text="Value"/>
+      </overrides>
+    </widgets>
+    <widgets xsi:type="model:Icon" id="30" x="161" y="13" measuredWidth="24" measuredHeight="24" layoutParams="anchor-left|anchor-middle" icon="arrow-right-down (medium)"/>
+  </widgets>
+  <widgets xsi:type="model:WidgetGroup" id="31" x="425" y="433" measuredWidth="195" measuredHeight="50">
+    <widgets xsi:type="model:Panel" id="32" width="195" height="50" measuredWidth="195" measuredHeight="50"/>
+    <widgets xsi:type="model:Icon" id="33" x="10" y="13" measuredWidth="24" measuredHeight="24" layoutParams="anchor-left|anchor-middle" icon="assets/ic-panorama (medium)"/>
+    <widgets xsi:type="model:Master" id="34" x="41" y="12" measuredWidth="66" measuredHeight="25">
+      <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Header"/>
+      <overrides>
+        <widgets ref="15" text="AttrName"/>
+      </overrides>
+    </widgets>
+    <widgets xsi:type="model:Master" id="35" x="120" y="11" measuredWidth="42" measuredHeight="28">
+      <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Small"/>
+      <overrides>
+        <widgets ref="6" text="Value"/>
+      </overrides>
+    </widgets>
+    <widgets xsi:type="model:Icon" id="36" x="161" y="13" measuredWidth="24" measuredHeight="24" layoutParams="anchor-left|anchor-middle" icon="arrow-right-up (medium)"/>
+  </widgets>
+  <widgets xsi:type="model:WidgetGroup" id="37" x="232" y="482" measuredWidth="195" measuredHeight="50">
+    <widgets xsi:type="model:Panel" id="38" width="195" height="50" measuredWidth="195" measuredHeight="50"/>
+    <widgets xsi:type="model:Icon" id="39" x="10" y="13" measuredWidth="24" measuredHeight="24" layoutParams="anchor-left|anchor-middle" icon="assets/ic-panorama (medium)"/>
+    <widgets xsi:type="model:Master" id="40" x="41" y="12" measuredWidth="66" measuredHeight="25">
+      <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Header"/>
+      <overrides>
+        <widgets ref="15" text="AttrName"/>
+      </overrides>
+    </widgets>
+    <widgets xsi:type="model:Master" id="41" x="120" y="11" measuredWidth="42" measuredHeight="28">
+      <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Small"/>
+      <overrides>
+        <widgets ref="6" text="Value"/>
+      </overrides>
+    </widgets>
+    <widgets xsi:type="model:Icon" id="42" x="161" y="13" measuredWidth="24" measuredHeight="24" layoutParams="anchor-left|anchor-middle" icon="arrow-right-down (medium)"/>
+  </widgets>
+  <widgets xsi:type="model:Master" id="43" x="231" y="168" width="390" measuredWidth="390" measuredHeight="8">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Controls.screen#Progress%20Bar"/>
+    <overrides>
+      <widgets ref="25" width="390"/>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Panel" id="44" x="221" y="101" width="410" height="657" measuredWidth="410" measuredHeight="657" background="#999999" alpha="192" foreground="#999999"/>
+  <widgets xsi:type="model:Master" id="45" x="231" y="331" measuredWidth="390" measuredHeight="198">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Prompts.screen#Alert"/>
+    <overrides>
+      <widgetChanges xsi:type="o:Delete" ref="282"/>
+      <widgetChanges xsi:type="o:Insert" newIndex="1">
+        <object xsi:type="model:Panel" id="92" width="390" height="70" background="#cc0000"/>
+      </widgetChanges>
+      <widgets ref="280" width="390" height="198"/>
+      <widgets ref="281" width="342" text="Verloren">
+        <attributes key="foreground" value="#ffffff"/>
+      </widgets>
+      <widgets ref="301" x="265" y="173" width="125" height="15"/>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Master" id="46" x="255" y="432" measuredWidth="98" measuredHeight="25">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Header"/>
+    <overrides>
+      <widgets ref="15" text="Dein Wert: xxx"/>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Master" id="47" x="255" y="456" measuredWidth="163" measuredHeight="25">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Header"/>
+    <overrides>
+      <widgets ref="15" text="Wert deines Gegners: xxx"/>
+    </overrides>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font size="12px"/>
+</model:Screen>
