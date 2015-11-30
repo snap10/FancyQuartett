@@ -29,7 +29,7 @@
         <widgets ref="15" text="AttrName"/>
       </overrides>
     </widgets>
-    <widgets xsi:type="model:Master" id="11" x="120" y="11" measuredWidth="42" measuredHeight="28">
+    <widgets xsi:type="model:Master" id="11" x="120" y="11" measuredWidth="43" measuredHeight="28">
       <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Small"/>
       <overrides>
         <widgets ref="6" text="Value"/>
@@ -46,7 +46,7 @@
         <widgets ref="15" text="AttrName"/>
       </overrides>
     </widgets>
-    <widgets xsi:type="model:Master" id="17" x="120" y="11" measuredWidth="42" measuredHeight="28">
+    <widgets xsi:type="model:Master" id="17" x="120" y="11" measuredWidth="43" measuredHeight="28">
       <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Small"/>
       <overrides>
         <widgets ref="6" text="Value"/>
@@ -63,7 +63,7 @@
         <widgets ref="15" text="AttrName"/>
       </overrides>
     </widgets>
-    <widgets xsi:type="model:Master" id="23" x="120" y="11" measuredWidth="42" measuredHeight="28">
+    <widgets xsi:type="model:Master" id="23" x="120" y="11" measuredWidth="43" measuredHeight="28">
       <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Small"/>
       <overrides>
         <widgets ref="6" text="Value"/>
@@ -80,7 +80,7 @@
         <widgets ref="15" text="AttrName"/>
       </overrides>
     </widgets>
-    <widgets xsi:type="model:Master" id="29" x="120" y="11" measuredWidth="42" measuredHeight="28">
+    <widgets xsi:type="model:Master" id="29" x="120" y="11" measuredWidth="43" measuredHeight="28">
       <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Small"/>
       <overrides>
         <widgets ref="6" text="Value"/>
@@ -97,7 +97,7 @@
         <widgets ref="15" text="AttrName"/>
       </overrides>
     </widgets>
-    <widgets xsi:type="model:Master" id="35" x="120" y="11" measuredWidth="42" measuredHeight="28">
+    <widgets xsi:type="model:Master" id="35" x="120" y="11" measuredWidth="43" measuredHeight="28">
       <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Small"/>
       <overrides>
         <widgets ref="6" text="Value"/>
@@ -114,7 +114,7 @@
         <widgets ref="15" text="AttrName"/>
       </overrides>
     </widgets>
-    <widgets xsi:type="model:Master" id="41" x="120" y="11" measuredWidth="42" measuredHeight="28">
+    <widgets xsi:type="model:Master" id="41" x="120" y="11" measuredWidth="43" measuredHeight="28">
       <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Small"/>
       <overrides>
         <widgets ref="6" text="Value"/>
@@ -137,22 +137,22 @@
         <object xsi:type="model:Panel" id="92" width="390" height="70" background="#cc0000"/>
       </widgetChanges>
       <widgets ref="280" width="390" height="198"/>
-      <widgets ref="281" width="342" text="Verloren">
+      <widgets ref="281" width="342" text="Loss">
         <attributes key="foreground" value="#ffffff"/>
       </widgets>
       <widgets ref="301" x="265" y="173" width="125" height="15"/>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Master" id="46" x="255" y="432" measuredWidth="98" measuredHeight="25">
+  <widgets xsi:type="model:Master" id="46" x="255" y="432" measuredWidth="100" measuredHeight="25">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Header"/>
     <overrides>
-      <widgets ref="15" text="Dein Wert: xxx"/>
+      <widgets ref="15" text="Your value: xxx"/>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Master" id="47" x="255" y="456" measuredWidth="163" measuredHeight="25">
+  <widgets xsi:type="model:Master" id="47" x="255" y="456" measuredWidth="182" measuredHeight="25">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Header"/>
     <overrides>
-      <widgets ref="15" text="Wert deines Gegners: xxx"/>
+      <widgets ref="15" text="Value of your opponent: xxx"/>
     </overrides>
   </widgets>
   <hRuler/>

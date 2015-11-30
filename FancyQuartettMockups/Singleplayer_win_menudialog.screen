@@ -29,7 +29,7 @@
         <widgets ref="15" text="AttrName"/>
       </overrides>
     </widgets>
-    <widgets xsi:type="model:Master" id="11" x="120" y="11" measuredWidth="42" measuredHeight="28">
+    <widgets xsi:type="model:Master" id="11" x="120" y="11" measuredWidth="43" measuredHeight="28">
       <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Small"/>
       <overrides>
         <widgets ref="6" text="Value"/>
@@ -46,7 +46,7 @@
         <widgets ref="15" text="AttrName"/>
       </overrides>
     </widgets>
-    <widgets xsi:type="model:Master" id="17" x="120" y="11" measuredWidth="42" measuredHeight="28">
+    <widgets xsi:type="model:Master" id="17" x="120" y="11" measuredWidth="43" measuredHeight="28">
       <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Small"/>
       <overrides>
         <widgets ref="6" text="Value"/>
@@ -63,7 +63,7 @@
         <widgets ref="15" text="AttrName"/>
       </overrides>
     </widgets>
-    <widgets xsi:type="model:Master" id="23" x="120" y="11" measuredWidth="42" measuredHeight="28">
+    <widgets xsi:type="model:Master" id="23" x="120" y="11" measuredWidth="43" measuredHeight="28">
       <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Small"/>
       <overrides>
         <widgets ref="6" text="Value"/>
@@ -80,7 +80,7 @@
         <widgets ref="15" text="AttrName"/>
       </overrides>
     </widgets>
-    <widgets xsi:type="model:Master" id="29" x="120" y="11" measuredWidth="42" measuredHeight="28">
+    <widgets xsi:type="model:Master" id="29" x="120" y="11" measuredWidth="43" measuredHeight="28">
       <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Small"/>
       <overrides>
         <widgets ref="6" text="Value"/>
@@ -97,7 +97,7 @@
         <widgets ref="15" text="AttrName"/>
       </overrides>
     </widgets>
-    <widgets xsi:type="model:Master" id="35" x="120" y="11" measuredWidth="42" measuredHeight="28">
+    <widgets xsi:type="model:Master" id="35" x="120" y="11" measuredWidth="43" measuredHeight="28">
       <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Small"/>
       <overrides>
         <widgets ref="6" text="Value"/>
@@ -114,7 +114,7 @@
         <widgets ref="15" text="AttrName"/>
       </overrides>
     </widgets>
-    <widgets xsi:type="model:Master" id="41" x="120" y="11" measuredWidth="42" measuredHeight="28">
+    <widgets xsi:type="model:Master" id="41" x="120" y="11" measuredWidth="43" measuredHeight="28">
       <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Small"/>
       <overrides>
         <widgets ref="6" text="Value"/>
@@ -137,26 +137,26 @@
         <object xsi:type="model:Panel" id="16995" width="390" height="70" background="#93c47d"/>
       </widgetChanges>
       <widgets ref="280" width="390" height="606"/>
-      <widgets ref="281" width="342" text="Gewonnen"/>
+      <widgets ref="281" width="342" text="Win"/>
       <widgets ref="301" x="265" y="559" width="125" height="47"/>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Master" id="16841" x="255" y="224" measuredWidth="98" measuredHeight="25">
+  <widgets xsi:type="model:Master" id="16841" x="255" y="224" measuredWidth="95" measuredHeight="25">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Header"/>
     <overrides>
-      <widgets ref="15" text="Dein Wert: xxx"/>
+      <widgets ref="15" text="You value: xxx"/>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Master" id="16842" x="255" y="248" measuredWidth="163" measuredHeight="25">
+  <widgets xsi:type="model:Master" id="16842" x="255" y="248" measuredWidth="177" measuredHeight="25">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Header"/>
     <overrides>
-      <widgets ref="15" text="Wert deines Gegners: xxx"/>
+      <widgets ref="15" text="Value of you opponent: xxx"/>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Master" id="16883" x="255" y="283" measuredWidth="126" measuredHeight="25">
+  <widgets xsi:type="model:Master" id="16883" x="255" y="283" measuredWidth="63" measuredHeight="25">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Header"/>
     <overrides>
-      <widgets ref="15" text="Du hast gewonnen:"/>
+      <widgets ref="15" text="You won:"/>
     </overrides>
   </widgets>
   <widgets xsi:type="model:WidgetGroup" id="16927" x="255" y="312" measuredWidth="346" measuredHeight="374">

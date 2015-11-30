@@ -56,6 +56,25 @@
       <widgets ref="2" text="Neues Spiel"/>
     </overrides>
   </widgets>
+  <widgets xsi:type="model:Master" id="17" x="453" y="120" height="89" measuredWidth="170" measuredHeight="89">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Prompts.screen#Menu"/>
+    <overrides>
+      <widgetChanges xsi:type="o:Delete" ref="2"/>
+      <widgets ref="4" height="89"/>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Master" id="18" x="472" y="130" measuredWidth="51" measuredHeight="33">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Medium"/>
+    <overrides>
+      <widgets ref="4" text="Rules"/>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Master" id="19" x="472" y="166" measuredWidth="67" measuredHeight="33">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Medium"/>
+    <overrides>
+      <widgets ref="4" text="Imprint"/>
+    </overrides>
+  </widgets>
   <hRuler/>
   <vRuler/>
   <font size="12px"/>

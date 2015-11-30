@@ -20,7 +20,7 @@
     <overrides>
       <widgets ref="152" width="411"/>
       <widgets ref="158" x="53" width="207"/>
-      <widgets ref="158/4" width="207" text="Kartenübersicht"/>
+      <widgets ref="158/4" width="207" text="Card Overview"/>
       <widgets ref="158/3" x="-26" y="56"/>
     </overrides>
   </widgets>
