@@ -15,7 +15,7 @@
   </widgets>
   <widgets xsi:type="model:WidgetGroup" id="3" x="231" y="200" width="390" height="419" measuredWidth="390" measuredHeight="419">
     <widgets xsi:type="model:Panel" id="4" width="390" height="419" measuredWidth="390" measuredHeight="419"/>
-    <widgets xsi:type="model:Master" id="50" x="86" y="64" measuredWidth="221" measuredHeight="53">
+    <widgets xsi:type="model:Master" id="50" x="86" y="64" measuredWidth="240" measuredHeight="46">
       <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Medium"/>
       <overrides>
         <widgets ref="4" text="Player 1's turn">
@@ -23,7 +23,7 @@
         </widgets>
       </overrides>
     </widgets>
-    <widgets xsi:type="model:Master" id="51" x="161" y="168" measuredWidth="80" measuredHeight="39">
+    <widgets xsi:type="model:Master" id="51" x="161" y="168" measuredWidth="87" measuredHeight="34">
       <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Large"/>
       <overrides>
         <widgets ref="2" text="Ready?">
@@ -31,34 +31,34 @@
         </widgets>
       </overrides>
     </widgets>
-    <widgets xsi:type="model:Master" id="52" x="65" y="264" measuredWidth="264" measuredHeight="33">
+    <widgets xsi:type="model:Master" id="52" x="65" y="264" measuredWidth="255" measuredHeight="29">
       <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Medium"/>
       <overrides>
         <widgets ref="4" text="Tap to turn around your deck..."/>
       </overrides>
     </widgets>
   </widgets>
-  <widgets xsi:type="model:Master" id="46" x="301" y="171" width="244" measuredWidth="244" measuredHeight="8">
+  <widgets xsi:type="model:Master" id="46" x="306" y="171" width="231" measuredWidth="231" measuredHeight="8">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Controls.screen#Progress%20Bar"/>
     <overrides>
-      <widgets ref="25" width="244"/>
+      <widgets ref="25" width="231"/>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Master" id="47" x="231" y="161" measuredWidth="58" measuredHeight="28">
+  <widgets xsi:type="model:Master" id="47" x="231" y="161" measuredWidth="76" measuredHeight="25">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Small"/>
     <overrides>
-      <widgets ref="6" text="Player 1">
+      <widgets ref="6" text="Player 1: 5">
         <attributes key="foreground" value="#009385"/>
       </widgets>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Master" id="48" x="563" y="161" measuredWidth="58" measuredHeight="28">
+  <widgets xsi:type="model:Master" id="48" x="544" y="161" measuredWidth="78" measuredHeight="25">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Small"/>
     <overrides>
-      <widgets ref="6" text="Player 2"/>
+      <widgets ref="6" width="78" text="Player 2: 17"/>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Note" id="53" x="496" y="656" text="Hotseat Multiplayer looks like Singleplayer.&#xD;&#xA;During device handover this screen is shown." measuredWidth="254" measuredHeight="44">
+  <widgets xsi:type="model:Note" id="53" x="496" y="656" text="Hotseat Multiplayer looks like Singleplayer.&#xD;&#xA;During device handover this screen is shown." measuredWidth="273" measuredHeight="44">
     <font/>
   </widgets>
   <hRuler/>
