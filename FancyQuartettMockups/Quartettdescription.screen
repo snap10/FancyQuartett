@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore" xmlns:o="http://wireframesketcher.com/1.0/model/overrides">
+  <widgets xsi:type="model:Master" id="1" x="200" measuredWidth="456" measuredHeight="872">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Devices/Nexus%206.screen#Nexus%206"/>
+  </widgets>
+  <widgets xsi:type="model:Master" id="2" x="221" y="101" measuredWidth="411" measuredHeight="660">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Navigation.screen#Toolbar%20Text"/>
+    <overrides>
+      <widgetChanges xsi:type="o:Insert" newIndex="3">
+        <object xsi:type="model:Image" id="146" y="55" width="411" height="605" annotation="true"/>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Delete" ref="158"/>
+      <widgets ref="152" width="411"/>
+      <widgets ref="153" x="10" y="12" link="TabbedViewGallery.screen">
+        <attributes key="icon" value="assets/ic-arrow-back (large)"/>
+      </widgets>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Master" id="145" x="262" y="116" measuredWidth="120" measuredHeight="26">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Header"/>
+    <overrides>
+      <widgets ref="15" text="Quartettname">
+        <font size="16px"/>
+      </widgets>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Master" id="149" x="231" y="168" width="390" measuredWidth="390" measuredHeight="577">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Content.screen#Card%20Big"/>
+    <overrides>
+      <widgetChanges xsi:type="o:Delete" ref="13"/>
+      <widgetChanges xsi:type="o:Delete" ref="8"/>
+      <widgetChanges xsi:type="o:Delete" ref="6"/>
+      <widgetChanges xsi:type="o:Delete" ref="10"/>
+      <widgetChanges xsi:type="o:Delete" ref="12"/>
+      <widgetChanges xsi:type="o:Delete" ref="11"/>
+      <widgets ref="5" width="390" height="577"/>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Text" id="152" x="241" y="246" width="370" height="206" text="Bacon ipsum dolor sit amet porchetta turkey leberkas Corned beef prosciutto ground Bacon ipsum dolor sit amet porchetta turkey leberkas Corned beef prosciutto ground Bacon ipsum dolor sit amet porchetta turkey leberkas Corned beef prosciutto ground Bacon ipsum dolor sit amet porchetta turkey leberkas Corned beef prosciutto ground Bacon ipsum dolor sit amet porchetta turkey leberkas Corned beef prosciutto ground Bacon ipsum dolor sit amet porchetta turkey leberkas Corned beef prosciutto ground Bacon ipsum dolor sit amet porchetta turkey leberkas Corned beef prosciutto ground ..." measuredWidth="370" measuredHeight="206" layoutParams="anchor-left,anchor-right|anchor-top,anchor-bottom" lineHeight="1.4">
+    <font size="14px"/>
+  </widgets>
+  <widgets xsi:type="model:Master" id="153" x="241" y="216" measuredWidth="99" measuredHeight="29">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Medium"/>
+    <overrides>
+      <widgets ref="4" text="Description"/>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Master" id="154" x="241" y="178" measuredWidth="182" measuredHeight="29">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Medium"/>
+    <overrides>
+      <widgets ref="4" text="Number of Cards:  48"/>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Note" id="148" x="496" y="464" text="Background Image is QuartettCover with&#xA;dark Overlay and Details in White Color&#xA;" measuredWidth="247" measuredHeight="44">
+    <font/>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font size="12px"/>
+</model:Screen>

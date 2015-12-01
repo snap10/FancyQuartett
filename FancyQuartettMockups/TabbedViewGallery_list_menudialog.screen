@@ -85,16 +85,19 @@
       <widgets ref="80" x="356"/>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Master" id="103" x="451" y="341" measuredWidth="170" measuredHeight="104">
+  <widgets xsi:type="model:Master" id="103" x="451" y="341" measuredWidth="170" measuredHeight="152">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Prompts.screen#Menu"/>
     <overrides>
-      <widgets ref="2" text="Download&#xA;Neues Spiel">
+      <widgets ref="4" height="148"/>
+      <widgets ref="2" text="Download&#xA;Description&#xA;Neues Spiel">
         <items ref="@items.2" text="Download"/>
-        <items ref="@items.3" text="Neues Spiel"/>
+        <items ref="@items.3" text="Neues Spiel" link="NewGameTime.screen"/>
+        <itemChanges xsi:type="o:Insert" newIndex="3">
+          <object xsi:type="model:Item" link="Quartettdescription.screen" text="Description"/>
+        </itemChanges>
         <itemChanges xsi:type="o:Delete" ref="@items.1"/>
         <itemChanges xsi:type="o:Delete" ref="@items.0"/>
       </widgets>
-      <widgets ref="4" height="104"/>
     </overrides>
   </widgets>
   <hRuler/>

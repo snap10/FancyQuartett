@@ -48,7 +48,7 @@
       </widgets>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Master" id="8" x="231" y="168" height="270" measuredWidth="391" measuredHeight="270">
+  <widgets xsi:type="model:Master" id="8" x="231" y="168" height="270" measuredWidth="391" measuredHeight="270" link="NewGameTime.screen">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Content.screen#Card%20Thumbnail"/>
     <overrides>
       <widgetChanges xsi:type="o:Insert" newIndex="4">

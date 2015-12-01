@@ -12,6 +12,7 @@
       <widgets ref="158" x="53" width="207"/>
       <widgets ref="158/4" width="207" text="Card Overview"/>
       <widgets ref="158/3" x="-26" y="56"/>
+      <widgets ref="153" link="TabbedViewGallery.screen"/>
     </overrides>
   </widgets>
   <widgets xsi:type="model:Master" id="13" x="231" y="176" height="270" measuredWidth="391" measuredHeight="270">
@@ -26,7 +27,7 @@
         </object>
       </widgetChanges>
       <widgetChanges xsi:type="o:Insert" newIndex="4">
-        <object xsi:type="model:Image" id="18" x="211" y="283" width="180" height="270"/>
+        <object xsi:type="model:Image" id="18" x="211" y="283" width="180" height="270" link="CardViewDetail.screen"/>
       </widgetChanges>
       <widgetChanges xsi:type="o:Insert" newIndex="4">
         <object xsi:type="model:Panel" id="19" x="211" y="283" width="180" height="270" layoutParams="anchor-left,anchor-right|anchor-top,anchor-bottom"/>
@@ -40,13 +41,10 @@
         </object>
       </widgetChanges>
       <widgetChanges xsi:type="o:Insert" newIndex="4">
-        <object xsi:type="model:Image" id="24" x="2" y="283" width="180" height="270"/>
+        <object xsi:type="model:Image" id="24" x="2" y="283" width="180" height="270" link="CardViewDetail.screen"/>
       </widgetChanges>
       <widgetChanges xsi:type="o:Insert" newIndex="4">
         <object xsi:type="model:Panel" id="25" x="2" y="283" width="180" height="270" layoutParams="anchor-left,anchor-right|anchor-top,anchor-bottom"/>
-      </widgetChanges>
-      <widgetChanges xsi:type="o:Insert" newIndex="4">
-        <object xsi:type="model:Icon" id="27" x="355" y="233" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-more-vert (medium)"/>
       </widgetChanges>
       <widgetChanges xsi:type="o:Insert" newIndex="4">
         <object xsi:type="model:HLine" id="28" x="211" y="219" width="178" layoutParams="anchor-left,anchor-right|anchor-bottom"/>
@@ -57,7 +55,7 @@
         </object>
       </widgetChanges>
       <widgetChanges xsi:type="o:Insert" newIndex="4">
-        <object xsi:type="model:Image" id="30" x="209" width="180" height="270"/>
+        <object xsi:type="model:Image" id="30" x="209" width="180" height="270" link="CardViewDetail.screen"/>
       </widgetChanges>
       <widgetChanges xsi:type="o:Insert" newIndex="4">
         <object xsi:type="model:Panel" id="31" x="209" width="180" height="270" layoutParams="anchor-left,anchor-right|anchor-top,anchor-bottom"/>
@@ -74,7 +72,7 @@
         </object>
       </widgetChanges>
       <widgetChanges xsi:type="o:Insert" newIndex="4">
-        <object xsi:type="model:Image" id="36" width="180" height="270"/>
+        <object xsi:type="model:Image" id="36" width="180" height="270" link="CardViewDetail.screen"/>
       </widgetChanges>
       <widgetChanges xsi:type="o:Insert" newIndex="4">
         <object xsi:type="model:Panel" id="37" width="180" height="270" layoutParams="anchor-left,anchor-right|anchor-top,anchor-bottom"/>
@@ -85,7 +83,7 @@
       <widgetChanges xsi:type="o:Delete" ref="64"/>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Icon" id="42" x="596" y="127" measuredWidth="24" measuredHeight="24" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-view-list (medium)"/>
+  <widgets xsi:type="model:Icon" id="42" x="596" y="127" measuredWidth="24" measuredHeight="24" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-view-list (medium)" link="CardView_list.screen"/>
   <hRuler/>
   <vRuler/>
   <font size="12px"/>

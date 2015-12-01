@@ -22,7 +22,7 @@
     </overrides>
   </widgets>
   <widgets xsi:type="model:Icon" id="58" x="596" y="117" measuredWidth="24" measuredHeight="24" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-view-module (medium)" link="NewGameGallery.screen"/>
-  <widgets xsi:type="model:Master" id="59" x="231" y="170" measuredWidth="390" measuredHeight="104">
+  <widgets xsi:type="model:Master" id="59" x="231" y="170" measuredWidth="390" measuredHeight="104" link="NewGameTime.screen">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Content.screen#Card%20List_Quartett"/>
     <overrides>
       <widgetChanges xsi:type="o:Delete" ref="77"/>
@@ -34,7 +34,7 @@
       <widgets ref="80" x="356"/>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Master" id="60" x="231" y="408" measuredWidth="390" measuredHeight="104">
+  <widgets xsi:type="model:Master" id="60" x="231" y="408" measuredWidth="390" measuredHeight="104" link="NewGameTime.screen">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Content.screen#Card%20List_Quartett"/>
     <overrides>
       <widgetChanges xsi:type="o:Delete" ref="77"/>
@@ -46,7 +46,7 @@
       <widgets ref="80" x="356"/>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Master" id="61" x="231" y="291" measuredWidth="390" measuredHeight="104">
+  <widgets xsi:type="model:Master" id="61" x="231" y="291" measuredWidth="390" measuredHeight="104" link="NewGameTime.screen">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Content.screen#Card%20List_Quartett"/>
     <overrides>
       <widgetChanges xsi:type="o:Delete" ref="77"/>
@@ -58,7 +58,7 @@
       <widgets ref="80" x="356"/>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Master" id="62" x="231" y="528" measuredWidth="390" measuredHeight="104">
+  <widgets xsi:type="model:Master" id="62" x="231" y="528" measuredWidth="390" measuredHeight="104" link="NewGameTime.screen">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Content.screen#Card%20List_Quartett"/>
     <overrides>
       <widgetChanges xsi:type="o:Delete" ref="77"/>
@@ -70,7 +70,7 @@
       <widgets ref="80" x="356"/>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Master" id="63" x="231" y="648" measuredWidth="390" measuredHeight="104">
+  <widgets xsi:type="model:Master" id="63" x="231" y="648" measuredWidth="390" measuredHeight="104" link="NewGameTime.screen">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Content.screen#Card%20List_Quartett"/>
     <overrides>
       <widgetChanges xsi:type="o:Delete" ref="77"/>

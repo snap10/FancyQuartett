@@ -50,7 +50,7 @@
       </widgets>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Master" id="14" x="231" y="488" measuredWidth="126" measuredHeight="39">
+  <widgets xsi:type="model:Master" id="14" x="231" y="488" measuredWidth="122" measuredHeight="34">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Large"/>
     <overrides>
       <widgets ref="2" text="Neues Spiel"/>
@@ -63,13 +63,13 @@
       <widgets ref="4" height="89"/>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Master" id="18" x="472" y="130" measuredWidth="51" measuredHeight="33">
+  <widgets xsi:type="model:Master" id="18" x="472" y="130" measuredWidth="51" measuredHeight="29" link="Rules.screen">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Medium"/>
     <overrides>
       <widgets ref="4" text="Rules"/>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Master" id="19" x="472" y="166" measuredWidth="67" measuredHeight="33">
+  <widgets xsi:type="model:Master" id="19" x="472" y="166" measuredWidth="63" measuredHeight="29" link="Imprint.screen">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Medium"/>
     <overrides>
       <widgets ref="4" text="Imprint"/>

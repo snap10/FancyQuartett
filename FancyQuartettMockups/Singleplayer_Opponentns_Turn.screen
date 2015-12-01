@@ -195,10 +195,18 @@
       </widgets>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Master" id="57" x="231" y="712" measuredWidth="387" measuredHeight="36">
+  <widgets xsi:type="model:Master" id="57" x="231" y="712" measuredWidth="387" measuredHeight="36" link="Singleplayer_win_menudialog.screen">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Controls.screen#Button%20Raised"/>
     <overrides>
       <widgets ref="15" width="387" text="Skip AI"/>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Master" id="58" x="368" y="116" measuredWidth="117" measuredHeight="26">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Header"/>
+    <overrides>
+      <widgets ref="15" text="Round: 15/35">
+        <font size="16px"/>
+      </widgets>
     </overrides>
   </widgets>
   <hRuler/>

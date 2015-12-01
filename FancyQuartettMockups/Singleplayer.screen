@@ -13,7 +13,7 @@
       </widgets>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:WidgetGroup" id="89" x="231" y="200" width="390" height="419" measuredWidth="390" measuredHeight="419">
+  <widgets xsi:type="model:WidgetGroup" id="89" x="231" y="200" width="390" height="419" measuredWidth="488" measuredHeight="419">
     <widgets xsi:type="model:Panel" id="90" width="390" height="419" measuredWidth="390" measuredHeight="419"/>
     <widgets xsi:type="model:Placeholder" id="91" y="43" width="390" height="197" measuredWidth="390" measuredHeight="197" layoutParams="anchor-right|anchor-middle"/>
     <widgets xsi:type="model:WidgetGroup" id="92" x="161" y="216" measuredWidth="58" measuredHeight="16">
@@ -22,7 +22,7 @@
       </widgets>
       <widgets xsi:type="model:Icon" id="94" measuredWidth="16" measuredHeight="16" layoutParams="anchor-left|anchor-middle" icon="assets/ic-info-outline (small)"/>
     </widgets>
-    <widgets xsi:type="model:WidgetGroup" id="95" x="195" y="246" width="185" height="48" measuredWidth="185" measuredHeight="48">
+    <widgets xsi:type="model:WidgetGroup" id="95" x="195" y="246" width="185" height="48" measuredWidth="185" measuredHeight="48" link="Singleplayer_loss_menudialog.screen">
       <widgets xsi:type="model:Panel" id="96" width="185" height="48" measuredWidth="185" measuredHeight="48"/>
       <widgets xsi:type="model:Icon" id="97" x="10" y="12" measuredWidth="24" measuredHeight="24" layoutParams="anchor-left|anchor-middle" icon="assets/ic-panorama (medium)"/>
       <widgets xsi:type="model:Master" id="98" x="38" y="11" width="62" measuredWidth="62" measuredHeight="24">
@@ -39,7 +39,7 @@
       </widgets>
       <widgets xsi:type="model:Icon" id="100" x="151" y="12" measuredWidth="24" measuredHeight="24" layoutParams="anchor-left|anchor-middle" icon="arrow-right-down (medium)"/>
     </widgets>
-    <widgets xsi:type="model:WidgetGroup" id="101" x="9" y="246" width="185" height="48" measuredWidth="185" measuredHeight="48">
+    <widgets xsi:type="model:WidgetGroup" id="101" x="9" y="246" width="185" height="48" measuredWidth="185" measuredHeight="48" link="Singleplayer_win_menudialog.screen">
       <widgets xsi:type="model:Panel" id="102" width="185" height="48" measuredWidth="185" measuredHeight="48"/>
       <widgets xsi:type="model:Icon" id="103" x="10" y="12" measuredWidth="24" measuredHeight="24" layoutParams="anchor-left|anchor-middle" icon="assets/ic-panorama (medium)"/>
       <widgets xsi:type="model:Master" id="104" x="38" y="11" width="62" measuredWidth="62" measuredHeight="24">
@@ -56,7 +56,7 @@
       </widgets>
       <widgets xsi:type="model:Icon" id="106" x="151" y="12" measuredWidth="24" measuredHeight="24" layoutParams="anchor-left|anchor-middle" icon="arrow-right-up (medium)"/>
     </widgets>
-    <widgets xsi:type="model:WidgetGroup" id="107" x="9" y="295" width="185" height="48" measuredWidth="185" measuredHeight="48">
+    <widgets xsi:type="model:WidgetGroup" id="107" x="9" y="295" width="185" height="48" measuredWidth="185" measuredHeight="48" link="Singleplayer_win_menudialog.screen">
       <widgets xsi:type="model:Panel" id="108" width="185" height="48" measuredWidth="185" measuredHeight="48"/>
       <widgets xsi:type="model:Icon" id="109" x="10" y="12" measuredWidth="24" measuredHeight="24" layoutParams="anchor-left|anchor-middle" icon="assets/ic-panorama (medium)"/>
       <widgets xsi:type="model:Master" id="110" x="38" y="11" width="62" measuredWidth="62" measuredHeight="24">
@@ -73,7 +73,7 @@
       </widgets>
       <widgets xsi:type="model:Icon" id="112" x="151" y="12" measuredWidth="24" measuredHeight="24" layoutParams="anchor-left|anchor-middle" icon="arrow-right-up (medium)"/>
     </widgets>
-    <widgets xsi:type="model:WidgetGroup" id="113" x="195" y="342" width="185" height="48" measuredWidth="185" measuredHeight="48">
+    <widgets xsi:type="model:WidgetGroup" id="113" x="195" y="342" width="185" height="48" measuredWidth="185" measuredHeight="48" link="Singleplayer_loss_menudialog.screen">
       <widgets xsi:type="model:Panel" id="114" width="185" height="48" measuredWidth="185" measuredHeight="48"/>
       <widgets xsi:type="model:Icon" id="115" x="10" y="12" measuredWidth="24" measuredHeight="24" layoutParams="anchor-left|anchor-middle" icon="assets/ic-panorama (medium)"/>
       <widgets xsi:type="model:Master" id="116" x="38" y="11" width="62" measuredWidth="62" measuredHeight="24">
@@ -90,7 +90,7 @@
       </widgets>
       <widgets xsi:type="model:Icon" id="118" x="151" y="12" measuredWidth="24" measuredHeight="24" layoutParams="anchor-left|anchor-middle" icon="arrow-right-down (medium)"/>
     </widgets>
-    <widgets xsi:type="model:WidgetGroup" id="119" x="194" y="295" width="185" height="48" measuredWidth="185" measuredHeight="48">
+    <widgets xsi:type="model:WidgetGroup" id="119" x="194" y="295" width="185" height="48" measuredWidth="185" measuredHeight="48" link="Singleplayer_win_menudialog.screen">
       <widgets xsi:type="model:Panel" id="120" width="185" height="48" measuredWidth="185" measuredHeight="48"/>
       <widgets xsi:type="model:Icon" id="121" x="10" y="12" measuredWidth="24" measuredHeight="24" layoutParams="anchor-left|anchor-middle" icon="assets/ic-panorama (medium)"/>
       <widgets xsi:type="model:Master" id="122" x="38" y="11" width="62" measuredWidth="62" measuredHeight="24">
@@ -107,7 +107,7 @@
       </widgets>
       <widgets xsi:type="model:Icon" id="124" x="151" y="12" measuredWidth="24" measuredHeight="24" layoutParams="anchor-left|anchor-middle" icon="arrow-right-up (medium)"/>
     </widgets>
-    <widgets xsi:type="model:WidgetGroup" id="125" x="10" y="342" width="185" height="48" measuredWidth="185" measuredHeight="48">
+    <widgets xsi:type="model:WidgetGroup" id="125" x="10" y="342" width="185" height="48" measuredWidth="185" measuredHeight="48" link="Singleplayer_loss_menudialog.screen">
       <widgets xsi:type="model:Panel" id="126" width="185" height="48" measuredWidth="185" measuredHeight="48"/>
       <widgets xsi:type="model:Icon" id="127" x="10" y="12" measuredWidth="24" measuredHeight="24" layoutParams="anchor-left|anchor-middle" icon="assets/ic-panorama (medium)"/>
       <widgets xsi:type="model:Master" id="128" x="38" y="11" width="62" measuredWidth="62" measuredHeight="24">
@@ -131,6 +131,9 @@
           <font size="32px"/>
         </widgets>
       </overrides>
+    </widgets>
+    <widgets xsi:type="model:Note" id="146" x="265" y="104" text="Standard is erstes Bild im Slider, &#xA;nach links zur Description der Karte,&#xA;nach rechts zu weiteren Bildern" measuredWidth="223" measuredHeight="59">
+      <font/>
     </widgets>
   </widgets>
   <widgets xsi:type="model:Master" id="132" x="545" y="114" measuredWidth="82" measuredHeight="26">
@@ -191,6 +194,14 @@
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Header"/>
     <overrides>
       <widgets ref="15" text="Your Card">
+        <font size="16px"/>
+      </widgets>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Master" id="147" x="368" y="116" measuredWidth="117" measuredHeight="26">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Header"/>
+    <overrides>
+      <widgets ref="15" text="Round: 15/35">
         <font size="16px"/>
       </widgets>
     </overrides>

@@ -36,13 +36,13 @@
       <widgets ref="31" width="358" height="97" text="Quartettname&#xA;Kartenstand:&#xA;&#xA;Datum: dd.mm.yy hh:mm"/>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Master" id="12" x="231" y="521" measuredWidth="390" measuredHeight="36">
+  <widgets xsi:type="model:Master" id="12" x="231" y="521" measuredWidth="390" measuredHeight="36" link="NewGameGallery.screen">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Controls.screen#Button%20Raised"/>
     <overrides>
       <widgets ref="15" width="390" text="Singleplayer"/>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Master" id="13" x="231" y="568" measuredWidth="390" measuredHeight="36">
+  <widgets xsi:type="model:Master" id="13" x="231" y="568" measuredWidth="390" measuredHeight="36" link="NewGameGallery.screen">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Controls.screen#Button%20Raised"/>
     <overrides>
       <widgets ref="15" width="390" text="Multiplayer">

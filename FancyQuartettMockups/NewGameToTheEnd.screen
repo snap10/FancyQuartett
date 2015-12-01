@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore" xmlns:o="http://wireframesketcher.com/1.0/model/overrides">
+  <widgets xsi:type="model:Master" id="64" x="231" y="371" width="390" height="374" measuredWidth="390" measuredHeight="374">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Content.screen#Card%20Thumbnail"/>
+    <overrides>
+      <widgetChanges xsi:type="o:Delete" ref="70"/>
+      <widgetChanges xsi:type="o:Delete" ref="68"/>
+      <widgetChanges xsi:type="o:Delete" ref="67"/>
+      <widgets ref="64" width="390" height="374"/>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Master" id="2" x="200" measuredWidth="456" measuredHeight="872">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Devices/Nexus%206.screen#Nexus%206"/>
+  </widgets>
+  <widgets xsi:type="model:Master" id="3" x="221" y="101" measuredWidth="411" measuredHeight="56">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Navigation.screen#Toolbar%20Text"/>
+    <overrides>
+      <widgetChanges xsi:type="o:Delete" ref="158"/>
+      <widgets ref="152" width="411"/>
+      <widgets ref="153" x="10" y="12" link="NewGameGallery.screen">
+        <attributes key="icon" value="assets/ic-arrow-back (large)"/>
+      </widgets>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Master" id="55" x="262" y="116" measuredWidth="165" measuredHeight="26">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Header"/>
+    <overrides>
+      <widgets ref="15" text="New Game Settings">
+        <font size="16px"/>
+      </widgets>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Master" id="61" x="231" y="168" height="193" measuredWidth="390" measuredHeight="193">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Content.screen#Card%20List_Quartett"/>
+    <overrides>
+      <widgetChanges xsi:type="o:Delete" ref="80"/>
+      <widgetChanges xsi:type="o:Delete" ref="77"/>
+      <widgets ref="72" width="390" height="193"/>
+      <widgets ref="73" x="10" y="20" width="251" height="151"/>
+      <widgets ref="74" y="20" height="157"/>
+      <widgets ref="76" x="113" y="30"/>
+      <widgets ref="76/4" width="128"/>
+      <widgets ref="78" x="113" y="70" width="250" height="89"/>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Master" id="65" x="231" y="447" measuredWidth="390" measuredHeight="6">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Controls.screen#Divider"/>
+    <overrides>
+      <widgets ref="41" width="390"/>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Master" id="63" x="231" y="382" measuredWidth="391" measuredHeight="70">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Controls.screen#Tabs%20Fixed_Caption"/>
+    <overrides>
+      <widgets ref="125" width="391" text="To The End, Time, Points, HotSeat">
+        <items ref="@items.0" text="To The End" link=""/>
+        <items ref="@items.1" text="Time" link="NewGameTime.screen"/>
+        <items ref="@items.2" text="Points" link="NewGamePoints.screen"/>
+        <itemChanges xsi:type="o:Insert" newIndex="3">
+          <object xsi:type="model:Item" link="NewGameHotSeat.screen" text="HotSeat"/>
+        </itemChanges>
+      </widgets>
+      <widgets ref="127" x="13" width="297"/>
+      <widgets ref="127/4" width="297" text="Game Modes"/>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Master" id="66" x="580" y="116" measuredWidth="38" measuredHeight="25" link="Singleplayer.screen">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Small"/>
+    <overrides>
+      <widgets ref="6" text="Start"/>
+    </overrides>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font size="12px"/>
+</model:Screen>

@@ -13,6 +13,14 @@
       </widgets>
     </overrides>
   </widgets>
+  <widgets xsi:type="model:Master" id="16997" x="368" y="116" measuredWidth="117" measuredHeight="26">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Header"/>
+    <overrides>
+      <widgets ref="15" text="Round: 15/35">
+        <font size="16px"/>
+      </widgets>
+    </overrides>
+  </widgets>
   <widgets xsi:type="model:Master" id="16996" x="262" y="116" measuredWidth="86" measuredHeight="26">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Header"/>
     <overrides>
@@ -146,7 +154,10 @@
       </widgetChanges>
       <widgets ref="280" width="390" height="606"/>
       <widgets ref="281" width="342" text="Win"/>
-      <widgets ref="301" x="265" y="559" width="125" height="47"/>
+      <widgets ref="301" x="329" y="559" width="61" height="47" text="OK">
+        <items ref="@items.1" link="Singleplayer_Opponentns_Turn.screen"/>
+        <itemChanges xsi:type="o:Delete" ref="@items.0"/>
+      </widgets>
     </overrides>
   </widgets>
   <widgets xsi:type="model:Master" id="16841" x="255" y="224" measuredWidth="102" measuredHeight="24">

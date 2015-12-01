@@ -21,14 +21,14 @@
       </widgets>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Master" id="9" x="231" y="245" height="270" measuredWidth="391" measuredHeight="270">
+  <widgets xsi:type="model:Master" id="9" x="231" y="245" height="270" measuredWidth="391" measuredHeight="270" link="CardView.screen">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Content.screen#Card%20Thumbnail"/>
     <overrides>
       <widgetChanges xsi:type="o:Insert" newIndex="4">
         <object xsi:type="model:Icon" id="61" x="148" y="10" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-check-box (medium)"/>
       </widgetChanges>
       <widgetChanges xsi:type="o:Insert" newIndex="4">
-        <object xsi:type="model:Icon" id="60" x="357" y="516" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-more-vert (medium)"/>
+        <object xsi:type="model:Icon" id="60" x="357" y="516" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-more-vert (medium)" link="TabbedViewGallery_list_menudialog.screen"/>
       </widgetChanges>
       <widgetChanges xsi:type="o:Insert" newIndex="4">
         <object xsi:type="model:HLine" id="59" x="213" y="502" width="178" layoutParams="anchor-left,anchor-right|anchor-bottom"/>
@@ -48,7 +48,7 @@
         <object xsi:type="model:Icon" id="49" x="148" y="293" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-my-library-add (medium)"/>
       </widgetChanges>
       <widgetChanges xsi:type="o:Insert" newIndex="4">
-        <object xsi:type="model:Icon" id="48" x="148" y="516" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-more-vert (medium)"/>
+        <object xsi:type="model:Icon" id="48" x="148" y="516" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-more-vert (medium)" link="TabbedViewGallery_list_menudialog.screen"/>
       </widgetChanges>
       <widgetChanges xsi:type="o:Insert" newIndex="4">
         <object xsi:type="model:HLine" id="47" x="4" y="502" width="178" layoutParams="anchor-left,anchor-right|anchor-bottom"/>
@@ -68,7 +68,7 @@
         <object xsi:type="model:Icon" id="37" x="355" y="10" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-check-box (medium)"/>
       </widgetChanges>
       <widgetChanges xsi:type="o:Insert" newIndex="4">
-        <object xsi:type="model:Icon" id="36" x="355" y="233" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-more-vert (medium)"/>
+        <object xsi:type="model:Icon" id="36" x="355" y="233" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-more-vert (medium)" link="TabbedViewGallery_list_menudialog.screen"/>
       </widgetChanges>
       <widgetChanges xsi:type="o:Insert" newIndex="4">
         <object xsi:type="model:HLine" id="35" x="211" y="219" width="178" layoutParams="anchor-left,anchor-right|anchor-bottom"/>
@@ -88,7 +88,7 @@
         <object xsi:type="model:Icon" id="25" x="321" y="323" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-my-library-add (medium)"/>
       </widgetChanges>
       <widgetChanges xsi:type="o:Insert" newIndex="4">
-        <object xsi:type="model:Icon" id="24" x="146" y="233" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-more-vert (medium)"/>
+        <object xsi:type="model:Icon" id="24" x="146" y="233" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-more-vert (medium)" link="TabbedViewGallery_list_menudialog.screen"/>
       </widgetChanges>
       <widgetChanges xsi:type="o:Insert" newIndex="4">
         <object xsi:type="model:HLine" id="23" x="2" y="219" width="178" layoutParams="anchor-left,anchor-right|anchor-bottom"/>
@@ -113,7 +113,7 @@
   <widgets xsi:type="model:Master" id="1" x="200" y="10" measuredWidth="456" measuredHeight="872">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Devices/Nexus%206.screen#Nexus%206"/>
   </widgets>
-  <widgets xsi:type="model:Icon" id="63" x="566" y="127" measuredWidth="24" measuredHeight="24" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-view-list (medium)"/>
+  <widgets xsi:type="model:Icon" id="63" x="566" y="127" measuredWidth="24" measuredHeight="24" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-view-list (medium)" link="TabbedViewGallery_list.screen"/>
   <widgets xsi:type="model:Icon" id="67" x="586" y="538" measuredWidth="24" measuredHeight="24" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-my-library-add (medium)"/>
   <hRuler/>
   <vRuler/>

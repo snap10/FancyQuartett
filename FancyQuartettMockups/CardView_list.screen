@@ -22,10 +22,11 @@
       <widgets ref="158" x="53" width="207"/>
       <widgets ref="158/4" width="207" text="Card Overview"/>
       <widgets ref="158/3" x="-26" y="56"/>
+      <widgets ref="153" link="TabbedViewGallery_list.screen"/>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Icon" id="42" x="596" y="127" measuredWidth="24" measuredHeight="24" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-view-list (medium)"/>
-  <widgets xsi:type="model:Master" id="43" x="231" y="177" width="391" measuredWidth="391" measuredHeight="104">
+  <widgets xsi:type="model:Icon" id="42" x="596" y="127" measuredWidth="24" measuredHeight="24" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-view-list (medium)" link="CardView.screen"/>
+  <widgets xsi:type="model:Master" id="43" x="231" y="177" width="391" measuredWidth="391" measuredHeight="104" link="CardViewDetail.screen">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Content.screen#Card%20List_Quartett"/>
     <overrides>
       <widgetChanges xsi:type="o:Delete" ref="80"/>
@@ -37,7 +38,7 @@
       <widgets ref="78" x="127" width="250"/>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Master" id="44" x="231" y="290" measuredWidth="391" measuredHeight="104">
+  <widgets xsi:type="model:Master" id="44" x="231" y="290" measuredWidth="391" measuredHeight="104" link="CardViewDetail.screen">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Content.screen#Card%20List_Quartett"/>
     <overrides>
       <widgetChanges xsi:type="o:Delete" ref="80"/>
@@ -49,7 +50,7 @@
       <widgets ref="78" x="127" width="250"/>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Master" id="45" x="231" y="403" measuredWidth="391" measuredHeight="104">
+  <widgets xsi:type="model:Master" id="45" x="231" y="403" measuredWidth="391" measuredHeight="104" link="CardViewDetail.screen">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Content.screen#Card%20List_Quartett"/>
     <overrides>
       <widgetChanges xsi:type="o:Delete" ref="80"/>
@@ -61,7 +62,7 @@
       <widgets ref="78" x="127" width="250"/>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Master" id="46" x="231" y="516" measuredWidth="391" measuredHeight="104">
+  <widgets xsi:type="model:Master" id="46" x="231" y="516" measuredWidth="391" measuredHeight="104" link="CardViewDetail.screen">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Content.screen#Card%20List_Quartett"/>
     <overrides>
       <widgetChanges xsi:type="o:Delete" ref="80"/>
@@ -73,7 +74,7 @@
       <widgets ref="78" x="127" width="250"/>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Master" id="47" x="231" y="632" measuredWidth="391" measuredHeight="104">
+  <widgets xsi:type="model:Master" id="47" x="231" y="632" measuredWidth="391" measuredHeight="104" link="CardViewDetail.screen">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Content.screen#Card%20List_Quartett"/>
     <overrides>
       <widgetChanges xsi:type="o:Delete" ref="80"/>
