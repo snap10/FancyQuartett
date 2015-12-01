@@ -10,16 +10,16 @@
       <widgetChanges xsi:type="o:Delete" ref="4"/>
       <widgets ref="5" text="FancyQuartett"/>
       <widgets ref="2" width="410" height="120"/>
-      <widgets ref="3" x="378"/>
+      <widgets ref="3" x="378" link="TabbedView_more_dialog.screen"/>
     </overrides>
   </widgets>
   <widgets xsi:type="model:Master" id="8" x="221" y="181" measuredWidth="410" measuredHeight="48">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Controls.screen#Tabs%20Fixed"/>
     <overrides>
       <widgets ref="68" width="410" text="Start, Gallery, Statistik">
-        <items ref="@items.0" text="Start"/>
-        <items ref="@items.1" text="Gallery"/>
-        <items ref="@items.2" text="Statistik"/>
+        <items ref="@items.0" text="Start" link=""/>
+        <items ref="@items.1" text="Gallery" link="TabbedViewGallery.screen"/>
+        <items ref="@items.2" text="Statistik" link="TabbedViewStats.screen"/>
       </widgets>
     </overrides>
   </widgets>
@@ -50,7 +50,7 @@
       </widgets>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Master" id="14" x="231" y="488" measuredWidth="126" measuredHeight="39">
+  <widgets xsi:type="model:Master" id="14" x="231" y="488" measuredWidth="122" measuredHeight="34">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Large"/>
     <overrides>
       <widgets ref="2" text="Neues Spiel"/>

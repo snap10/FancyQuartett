@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore" xmlns:o="http://wireframesketcher.com/1.0/model/overrides">
+  <widgets xsi:type="model:Master" id="33" x="233" y="736" height="270" measuredWidth="389" measuredHeight="270">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Content.screen#Card%20Thumbnail"/>
+    <overrides>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:Icon" id="34" x="148" y="10" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-check-box (medium)"/>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:Icon" id="46" x="355" y="10" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-check-box (medium)"/>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:Image" id="50" x="209" width="180" height="113"/>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:Panel" id="51" x="209" width="180" height="113" layoutParams="anchor-left,anchor-right|anchor-top,anchor-bottom"/>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:Image" id="56" width="180" height="113"/>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:Panel" id="57" width="180" height="113" layoutParams="anchor-left,anchor-right|anchor-top,anchor-bottom"/>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Delete" ref="70"/>
+      <widgetChanges xsi:type="o:Delete" ref="68"/>
+      <widgetChanges xsi:type="o:Delete" ref="67"/>
+      <widgetChanges xsi:type="o:Delete" ref="64"/>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Master" id="2" x="200" measuredWidth="456" measuredHeight="872">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Devices/Nexus%206.screen#Nexus%206"/>
+  </widgets>
+  <widgets xsi:type="model:Master" id="3" x="221" y="101" measuredWidth="411" measuredHeight="56">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Navigation.screen#Toolbar%20Text"/>
+    <overrides>
+      <widgetChanges xsi:type="o:Delete" ref="158"/>
+      <widgets ref="152" width="411"/>
+      <widgets ref="153" x="10" y="12">
+        <attributes key="icon" value="assets/ic-arrow-back (large)"/>
+      </widgets>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Master" id="4" x="262" y="116" measuredWidth="128" measuredHeight="26">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Header"/>
+    <overrides>
+      <widgets ref="15" text="Pick Card Deck">
+        <font size="16px"/>
+      </widgets>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Master" id="8" x="231" y="168" height="270" measuredWidth="391" measuredHeight="270">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Content.screen#Card%20Thumbnail"/>
+    <overrides>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:Icon" id="9" x="148" y="10" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-check-box (medium)"/>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:Icon" id="10" x="357" y="516" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-more-vert (medium)"/>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:HLine" id="11" x="213" y="502" width="178" layoutParams="anchor-left,anchor-right|anchor-bottom"/>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:Label" id="12" x="228" y="516" text="Quartettname" layoutParams="anchor-left|anchor-bottom">
+          <font size="16px"/>
+        </object>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:Image" id="13" x="211" y="283" width="180" height="270"/>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:Panel" id="14" x="211" y="283" width="180" height="270" layoutParams="anchor-left,anchor-right|anchor-top,anchor-bottom"/>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:Icon" id="15" x="148" y="293" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-my-library-add (medium)"/>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:Icon" id="16" x="148" y="516" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-more-vert (medium)"/>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:HLine" id="17" x="4" y="502" width="178" layoutParams="anchor-left,anchor-right|anchor-bottom"/>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:Label" id="18" x="19" y="516" text="Quartettname" layoutParams="anchor-left|anchor-bottom">
+          <font size="16px"/>
+        </object>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:Image" id="19" x="2" y="283" width="180" height="270"/>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:Panel" id="20" x="2" y="283" width="180" height="270" layoutParams="anchor-left,anchor-right|anchor-top,anchor-bottom"/>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:Icon" id="21" x="355" y="10" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-check-box (medium)"/>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:Icon" id="22" x="355" y="233" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-more-vert (medium)"/>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:HLine" id="23" x="211" y="219" width="178" layoutParams="anchor-left,anchor-right|anchor-bottom"/>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:Label" id="24" x="226" y="233" text="Quartettname" layoutParams="anchor-left|anchor-bottom">
+          <font size="16px"/>
+        </object>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:Image" id="25" x="209" width="180" height="270"/>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:Panel" id="26" x="209" width="180" height="270" layoutParams="anchor-left,anchor-right|anchor-top,anchor-bottom"/>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:Icon" id="27" x="321" y="323" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-my-library-add (medium)"/>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:Icon" id="28" x="146" y="233" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-more-vert (medium)"/>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:HLine" id="29" x="2" y="219" width="178" layoutParams="anchor-left,anchor-right|anchor-bottom"/>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:Label" id="30" x="17" y="233" text="Quartettname" layoutParams="anchor-left|anchor-bottom">
+          <font size="16px"/>
+        </object>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:Image" id="31" width="180" height="270"/>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Insert" newIndex="4">
+        <object xsi:type="model:Panel" id="32" width="180" height="270" layoutParams="anchor-left,anchor-right|anchor-top,anchor-bottom"/>
+      </widgetChanges>
+      <widgetChanges xsi:type="o:Delete" ref="70"/>
+      <widgetChanges xsi:type="o:Delete" ref="68"/>
+      <widgetChanges xsi:type="o:Delete" ref="67"/>
+      <widgetChanges xsi:type="o:Delete" ref="64"/>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Icon" id="58" x="596" y="117" measuredWidth="24" measuredHeight="24" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-view-list (medium)" link="NewGameGalleryList.screen"/>
+  <hRuler/>
+  <vRuler/>
+  <font size="12px"/>
+</model:Screen>

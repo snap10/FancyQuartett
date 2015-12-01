@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore" xmlns:o="http://wireframesketcher.com/1.0/model/overrides">
+  <widgets xsi:type="model:Master" id="2" x="200" measuredWidth="456" measuredHeight="872">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Devices/Nexus%206.screen#Nexus%206"/>
+  </widgets>
+  <widgets xsi:type="model:Master" id="3" x="221" y="101" measuredWidth="411" measuredHeight="56">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Navigation.screen#Toolbar%20Text"/>
+    <overrides>
+      <widgetChanges xsi:type="o:Delete" ref="158"/>
+      <widgets ref="152" width="411"/>
+      <widgets ref="153" x="10" y="12">
+        <attributes key="icon" value="assets/ic-arrow-back (large)"/>
+      </widgets>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Master" id="4" x="262" y="116" measuredWidth="128" measuredHeight="26">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Header"/>
+    <overrides>
+      <widgets ref="15" text="Pick Card Deck">
+        <font size="16px"/>
+      </widgets>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Icon" id="58" x="596" y="117" measuredWidth="24" measuredHeight="24" layoutParams="anchor-right|anchor-bottom" icon="assets/ic-view-module (medium)" link="NewGameGallery.screen"/>
+  <widgets xsi:type="model:Master" id="59" x="231" y="170" measuredWidth="390" measuredHeight="104">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Content.screen#Card%20List_Quartett"/>
+    <overrides>
+      <widgetChanges xsi:type="o:Delete" ref="77"/>
+      <widgets ref="72" width="390"/>
+      <widgets ref="73" width="251"/>
+      <widgets ref="76" x="113"/>
+      <widgets ref="76/4" width="128"/>
+      <widgets ref="78" x="113" width="250"/>
+      <widgets ref="80" x="356"/>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Master" id="60" x="231" y="408" measuredWidth="390" measuredHeight="104">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Content.screen#Card%20List_Quartett"/>
+    <overrides>
+      <widgetChanges xsi:type="o:Delete" ref="77"/>
+      <widgets ref="72" width="390"/>
+      <widgets ref="73" width="251"/>
+      <widgets ref="76" x="113"/>
+      <widgets ref="76/4" width="128"/>
+      <widgets ref="78" x="113" width="250"/>
+      <widgets ref="80" x="356"/>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Master" id="61" x="231" y="291" measuredWidth="390" measuredHeight="104">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Content.screen#Card%20List_Quartett"/>
+    <overrides>
+      <widgetChanges xsi:type="o:Delete" ref="77"/>
+      <widgets ref="72" width="390"/>
+      <widgets ref="73" width="251"/>
+      <widgets ref="76" x="113"/>
+      <widgets ref="76/4" width="128"/>
+      <widgets ref="78" x="113" width="250"/>
+      <widgets ref="80" x="356"/>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Master" id="62" x="231" y="528" measuredWidth="390" measuredHeight="104">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Content.screen#Card%20List_Quartett"/>
+    <overrides>
+      <widgetChanges xsi:type="o:Delete" ref="77"/>
+      <widgets ref="72" width="390"/>
+      <widgets ref="73" width="251"/>
+      <widgets ref="76" x="113"/>
+      <widgets ref="76/4" width="128"/>
+      <widgets ref="78" x="113" width="250"/>
+      <widgets ref="80" x="356"/>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:Master" id="63" x="231" y="648" measuredWidth="390" measuredHeight="104">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Content.screen#Card%20List_Quartett"/>
+    <overrides>
+      <widgetChanges xsi:type="o:Delete" ref="77"/>
+      <widgets ref="72" width="390"/>
+      <widgets ref="73" width="251"/>
+      <widgets ref="76" x="113"/>
+      <widgets ref="76/4" width="128"/>
+      <widgets ref="78" x="113" width="250"/>
+      <widgets ref="80" x="356"/>
+    </overrides>
+  </widgets>
+  <hRuler/>
+  <vRuler/>
+  <font size="12px"/>
+</model:Screen>
