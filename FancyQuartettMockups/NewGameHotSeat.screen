@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <model:Screen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:model="http://wireframesketcher.com/1.0/model.ecore" xmlns:o="http://wireframesketcher.com/1.0/model/overrides">
-  <widgets xsi:type="model:Master" id="64" x="231" y="371" width="390" height="374" measuredWidth="390" measuredHeight="374">
+  <widgets xsi:type="model:Master" id="64" x="231" y="371" height="182" measuredWidth="390" measuredHeight="182">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Content.screen#Card%20Thumbnail"/>
     <overrides>
       <widgetChanges xsi:type="o:Delete" ref="70"/>
       <widgetChanges xsi:type="o:Delete" ref="68"/>
       <widgetChanges xsi:type="o:Delete" ref="67"/>
-      <widgets ref="64" width="390" height="374"/>
+      <widgets ref="64" width="390" height="182"/>
     </overrides>
   </widgets>
   <widgets xsi:type="model:Master" id="2" x="200" measuredWidth="456" measuredHeight="872">
@@ -58,7 +58,7 @@
         <items ref="@items.1" text="Time" link="NewGameTime.screen"/>
         <items ref="@items.2" text="Points" link="NewGamePoints.screen"/>
         <itemChanges xsi:type="o:Insert" newIndex="3">
-          <object xsi:type="model:Item" link="" text="HotSeat"/>
+          <object xsi:type="model:Item" text="HotSeat"/>
         </itemChanges>
       </widgets>
       <widgets ref="127" x="13" width="297"/>
@@ -69,6 +69,25 @@
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Small"/>
     <overrides>
       <widgets ref="6" text="Start"/>
+    </overrides>
+  </widgets>
+  <widgets xsi:type="model:List" id="68" x="244" y="594" text="[x] Timeout for one round:" measuredWidth="198" measuredHeight="29" border="false" alpha="0">
+    <font size="16px"/>
+    <items x="0" y="2" width="198" height="25" text="[x] Timeout for one round:"/>
+  </widgets>
+  <widgets xsi:type="model:List" id="69" x="244" y="666" width="101" text="() Hard&#xA;(o) Normal&#xA;( ) Easy" measuredWidth="101" measuredHeight="79" border="false" background="#cccccc" alpha="0" rowHeight="20" alternative="#cccccc">
+    <font size="16px" bold="false"/>
+    <items x="0" y="2" width="101" height="25" text="() Hard"/>
+    <items x="0" y="27" width="101" height="25" text="(o) Normal"/>
+    <items x="0" y="52" width="101" height="25" text="( ) Easy"/>
+  </widgets>
+  <widgets xsi:type="model:Label" id="70" x="244" y="642" width="342" text="AI mode" measuredWidth="342" measuredHeight="26" layoutParams="anchor-left,anchor-right|anchor-top" state="disabled">
+    <font size="16px" bold="true"/>
+  </widgets>
+  <widgets xsi:type="model:Master" id="71" x="231" y="560" measuredWidth="141" measuredHeight="29">
+    <screen xsi:type="model:WidgetGroup" href="assets/Android5/Typography.screen#Text%20Medium"/>
+    <overrides>
+      <widgets ref="4" text="General Settings"/>
     </overrides>
   </widgets>
   <hRuler/>
