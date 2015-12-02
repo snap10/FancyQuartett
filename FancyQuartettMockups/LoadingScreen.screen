@@ -12,7 +12,7 @@
       </widgets>
     </overrides>
   </widgets>
-  <widgets xsi:type="model:Master" id="3" x="375" y="456" height="100" measuredWidth="100" measuredHeight="100">
+  <widgets xsi:type="model:Master" id="3" x="375" y="456" measuredWidth="100" measuredHeight="100">
     <screen xsi:type="model:WidgetGroup" href="assets/Android5/Controls.screen#Progress%20Bar%20Circular"/>
   </widgets>
   <hRuler/>
