@@ -1,0 +1,39 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="layout.StartFragment">
+
+
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:id="@+id/resumeGameCard"
+            style="@style/CardView.Dark"
+            android:layout_margin="5dp">
+
+        </android.support.v7.widget.CardView>
+        <Button
+            android:layout_marginTop="100dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/newSingleplayerButton"
+            style="@style/Base.Widget.AppCompat.Button.Colored"
+            android:text="@string/newSinglePlayer" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/newMultiplayerButton"
+            android:text="@string/newMultiPlayer" />
+
+    </LinearLayout>
+
+</FrameLayout>

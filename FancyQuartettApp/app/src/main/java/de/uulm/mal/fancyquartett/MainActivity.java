@@ -1,5 +1,6 @@
 package de.uulm.mal.fancyquartett;
 
+import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,7 +20,11 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import layout.GalleryFragment;
+import layout.StartFragment;
+import layout.StatisticFragment;
+
+public class MainActivity extends AppCompatActivity implements StartFragment.OnFragmentInteractionListener,GalleryFragment.OnFragmentInteractionListener,StatisticFragment.OnFragmentInteractionListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -53,15 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        
 
     }
 
@@ -88,6 +85,11 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        //TODO
+    }
+
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -101,9 +103,12 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            switch (position){
+                case 0: return new StartFragment().newInstance();
+                case 1: return new GalleryFragment().newInstance();
+                case 2: return new StatisticFragment().newInstance();
+                default: throw new IllegalArgumentException("Wrong Fragment ID chosen");
+            }
         }
 
         @Override
@@ -116,13 +121,14 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "SECTION 1";
+                    return getString(R.string.start);
                 case 1:
-                    return "SECTION 2";
+                    return getString(R.string.gallery);
                 case 2:
-                    return "SECTION 3";
+                    return getString(R.string.statistic);
+                default:throw new IllegalArgumentException("Wrong Fragment ID chosen");
             }
-            return null;
+
         }
     }
 
