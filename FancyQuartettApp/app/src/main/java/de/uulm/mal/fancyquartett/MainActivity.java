@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnF
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-        
 
     }
 
