@@ -27,7 +27,7 @@ public class Property {
         this.id = json.getInt("id");
         this.text = json.getString("text");
         this.unit = json.getString("unit");
-        this.biggerWins = (json.getInt("biggerWins")==1);
+        this.biggerWins = (json.getInt("compare")==1);
         this.precision = json.getInt("precision");
     }
 
