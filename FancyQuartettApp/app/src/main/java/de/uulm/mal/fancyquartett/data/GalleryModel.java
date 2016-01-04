@@ -37,6 +37,15 @@ public class GalleryModel {
         this.offlineDeckFolder = offlineDeckFolder;
     }
 
+    //Override GalleryModel Constructor for use without View
+    //TODO remove after Testing
+    public GalleryModel(String onlineDeckHost, String offlineDeckFolder){
+        onlineDecks= new ArrayList<>();
+        offlineDecks= new ArrayList<>();
+        this.onlineDeckHost=onlineDeckHost;
+        this.offlineDeckFolder= offlineDeckFolder;
+    }
+
 
 
     public void fetchOnlineDeck(String deckname) {
@@ -54,6 +63,22 @@ public class GalleryModel {
         } catch (JSONException e) {
             System.out.println("Deck could not be added because downloaded JSON is invalid. "+e);
         }
+    }
+
+    /**
+     *
+     * @return the Amount of Decks in the Model. (onlinedecks+offlinedecks)
+     */
+    public int getSize(){
+        return onlineDecks.size()+offlineDecks.size();
+    }
+
+    public void addTestDecks(){
+        for (int i = 0; i < 20; i++) {
+            onlineDecks.add(new OnlineDeck("Testname" + i, "Testdescription" + i));
+            //TODO notify that dataset has changed
+        }
+
     }
 
 

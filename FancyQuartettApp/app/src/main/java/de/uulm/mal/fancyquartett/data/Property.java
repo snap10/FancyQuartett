@@ -15,7 +15,7 @@ public class Property {
     private String text = null;
 
     // true = bigger values win, false = smaller values win
-    private boolean compare = true;
+    private boolean biggerWins = true;
 
     // unit string displayed after numeric value
     private String unit = null;
@@ -27,13 +27,13 @@ public class Property {
         this.id = json.getInt("id");
         this.text = json.getString("text");
         this.unit = json.getString("unit");
-        this.compare = (json.getInt("compare")==1);
+        this.biggerWins = (json.getInt("biggerWins")==1);
         this.precision = json.getInt("precision");
     }
 
-    public Property(String text, boolean compare, int id, String unit, int precision) {
+    public Property(String text, boolean biggerWins, int id, String unit, int precision) {
         this.text = text;
-        this.compare = compare;
+        this.biggerWins = biggerWins;
         this.id = id;
         this.unit = unit;
         this.precision = precision;
@@ -41,5 +41,5 @@ public class Property {
 
     public int id() { return id; }
 
-    public boolean biggerWins() { return compare; }
+    public boolean biggerWins() { return biggerWins; }
 }

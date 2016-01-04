@@ -4,11 +4,16 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import de.uulm.mal.fancyquartett.R;
+import de.uulm.mal.fancyquartett.adapters.GalleryViewAdapter;
+import de.uulm.mal.fancyquartett.data.GalleryModel;
+import de.uulm.mal.fancyquartett.data.Settings;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,6 +24,10 @@ import de.uulm.mal.fancyquartett.R;
  * create an instance of this fragment.
  */
 public class GalleryFragment extends Fragment {
+
+    GalleryViewAdapter galleryViewAdapter;
+    RecyclerView recList;
+    LinearLayoutManager llm;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -55,13 +64,24 @@ public class GalleryFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main_gallery, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_main_gallery, container, false);
+        //Create a GallerViewAdapter for the RecyclerList
+        galleryViewAdapter = new GalleryViewAdapter(this.getContext(),new GalleryModel(Settings.serverAdress,Settings.localFolder));
+        recList = (RecyclerView) rootView.findViewById(R.id.recycler_gallery_list);
+        recList.setHasFixedSize(true);
+        llm = new LinearLayoutManager(this.getContext());
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        recList.setLayoutManager(llm);
+        recList.setAdapter(galleryViewAdapter);
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

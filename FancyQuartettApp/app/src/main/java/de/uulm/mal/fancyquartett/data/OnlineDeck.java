@@ -13,10 +13,21 @@ public class OnlineDeck extends Deck {
     private String host;
 
     public OnlineDeck(JSONObject json, String host) throws JSONException {
+
+        super(json.getString("name"),json.getString("description"));
         deckJson = json;
-        super.name = deckJson.getString("name");
-        super.description = deckJson.getString("description");
+
         this.host = host;
+    }
+
+    /**
+     * DummyConstructor for Testing with Custom Decks
+     * //TODO Delete when appropriate Deck Ressource is availabe
+     * @param name
+     * @param description
+     */
+    public OnlineDeck(String name,String description){
+        super(name,description);
     }
 
     // creates a full offline deck. includes download of images.

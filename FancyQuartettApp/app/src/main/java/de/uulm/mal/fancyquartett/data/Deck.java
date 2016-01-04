@@ -5,7 +5,14 @@ package de.uulm.mal.fancyquartett.data;
  */
 public class Deck {
 
+
     protected String name = null;
 
     protected String description = null;
+
+
+    public Deck(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 }

@@ -13,8 +13,7 @@ public class OfflineDeck extends Deck {
     private ArrayList<Property> properties;
 
     public OfflineDeck(String name, String description, Card[] cards, Property[] properties) {
-        super.name = name;
-        super.description = description;
+        super(name,description);
         this.cards = new ArrayList<Card>(Arrays.asList(cards));
         this.properties = new ArrayList<Property>(Arrays.asList(properties));
     }
