@@ -1,4 +1,4 @@
-package de.uulm.mal.fancyquartett;
+package de.uulm.mal.fancyquartett.activities;
 
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import de.uulm.mal.fancyquartett.R;
 import layout.GalleryFragment;
 import layout.StartFragment;
 import layout.StatisticFragment;

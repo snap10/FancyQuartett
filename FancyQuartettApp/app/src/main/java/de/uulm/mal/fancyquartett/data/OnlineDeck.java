@@ -1,19 +1,8 @@
-package data;
-
-import android.app.Activity;
-import android.app.Dialog;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
-import android.widget.ImageView;
+package de.uulm.mal.fancyquartett.data;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 /**
  * Created by mk on 02.01.2016.

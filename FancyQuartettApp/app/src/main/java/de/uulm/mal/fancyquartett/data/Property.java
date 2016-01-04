@@ -1,4 +1,4 @@
-package data;
+package de.uulm.mal.fancyquartett.data;
 
 import org.json.JSONException;
 import org.json.JSONObject;

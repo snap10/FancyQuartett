@@ -1,4 +1,4 @@
-package data;
+package de.uulm.mal.fancyquartett.data;
 
 import java.util.ArrayList;
 import java.util.Arrays;

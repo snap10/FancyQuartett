@@ -1,4 +1,4 @@
-package data;
+package de.uulm.mal.fancyquartett.data;
 
 /**
  * Created by mk on 01.01.2016.

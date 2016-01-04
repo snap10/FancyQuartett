@@ -1,4 +1,4 @@
-package data;
+package de.uulm.mal.fancyquartett.data;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
