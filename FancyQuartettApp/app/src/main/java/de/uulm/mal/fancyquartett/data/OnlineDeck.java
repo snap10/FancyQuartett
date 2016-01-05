@@ -11,13 +11,15 @@ public class OnlineDeck extends Deck {
 
     private JSONObject deckJson;
     private String host;
+    private GalleryModel gallery;
 
-    public OnlineDeck(JSONObject json, String host) throws JSONException {
+    public OnlineDeck(JSONObject json, String host, GalleryModel gallery) throws JSONException {
 
         super(json.getString("name"),json.getString("description"));
         deckJson = json;
 
         this.host = host;
+        this.gallery = gallery;
     }
 
     /**
@@ -41,9 +43,11 @@ public class OnlineDeck extends Deck {
         Card[] cards = new Card[cardsJson.length()];
         for(int i = 0; i < cards.length; i++) {
             // creating card objects initiates image downloads
-            cards[i] = new Card(cardsJson.getJSONObject(i), props, host);
+            cards[i] = new Card(cardsJson.getJSONObject(i), props, host, false);
         }
+        OfflineDeck offlineDeck = new OfflineDeck(super.name, super.description, cards, props);
+        gallery.move(this, offlineDeck);
         //TODO save json locally
-        return new OfflineDeck(super.name, super.description, cards, props);
+        return offlineDeck;
     }
 }

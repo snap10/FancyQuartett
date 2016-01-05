@@ -16,6 +16,7 @@ public class Deck {
         this.description = description;
     }
 
+
     public String getName() {
         return name;
     }
@@ -30,5 +31,8 @@ public class Deck {
 
     public void setDescription(String description) {
         this.description = description;
+
+    public Deck() {
+
     }
 }
