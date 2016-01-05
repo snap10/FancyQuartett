@@ -41,7 +41,7 @@ public class GalleryModel {
 
     //Override GalleryModel Constructor for use without View
     //TODO remove after Testing
-    public GalleryModel(String onlineDeckHost, String offlineDeckFolder) throws Exception {
+    public GalleryModel(String onlineDeckHost, String offlineDeckFolder) {
         onlineDecks= new ArrayList<>();
         offlineDecks= new ArrayList<>();
         this.onlineDeckHost=onlineDeckHost;
