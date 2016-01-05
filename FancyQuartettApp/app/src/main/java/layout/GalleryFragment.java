@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -38,6 +39,7 @@ public class GalleryFragment extends Fragment {
     GalleryViewAdapter galleryViewAdapter;
     RecyclerView recList;
     LinearLayoutManager llm;
+    GridLayoutManager glm;
     Activity parentActivity;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -87,6 +89,7 @@ public class GalleryFragment extends Fragment {
             //TODO
             e.printStackTrace();
         }
+        glm= new GridLayoutManager(getContext(),2);
         llm = new LinearLayoutManager(this.getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         //ListButton
@@ -117,22 +120,32 @@ public class GalleryFragment extends Fragment {
     private void setLayoutButtonClickListener() {
         parentActivity=getActivity();
         ImageView imageView = (ImageView) parentActivity.findViewById(R.id.listLayoutButton);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ImageView imageView = (ImageView) v;
-                if (imageView.getTag().equals("module")) {
-                    imageView.setImageResource(R.drawable.ic_view_list_24dp);
-                    imageView.setRotation(0);
-                    imageView.setTag("list");
-                } else {
-                    imageView.setImageResource(R.drawable.ic_view_module_24dp);
-                    imageView.setRotation(90);
-                    imageView.setTag("module");
+        if (imageView!=null){
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ImageView imageView = (ImageView) v;
+                    if (imageView.getTag().equals("module")) {
+                        recList.setLayoutManager(llm);
+                        galleryViewAdapter = new GalleryViewAdapter(getContext(),galleryViewAdapter.getGalleryModel(),GalleryViewAdapter.LISTLAYOUT);
+                        recList.setAdapter(galleryViewAdapter);
+                        imageView.setImageResource(R.drawable.ic_view_module_24dp);
+                        imageView.setRotation(90);
+                        imageView.setTag("list");
+
+                    } else {
+                        recList.setLayoutManager(glm);
+
+                        galleryViewAdapter = new GalleryViewAdapter(getContext(),galleryViewAdapter.getGalleryModel(),GalleryViewAdapter.GRIDLAYOUT);
+                        recList.setAdapter(galleryViewAdapter);
+                        imageView.setImageResource(R.drawable.ic_view_list_24dp);
+                        imageView.setRotation(0);
+                        imageView.setTag("module");
+
+                    }
                 }
-            }
-        });
-        //TODO change Recycler Layout
+            });
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

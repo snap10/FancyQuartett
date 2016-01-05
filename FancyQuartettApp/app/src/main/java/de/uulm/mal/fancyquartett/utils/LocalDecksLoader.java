@@ -115,7 +115,7 @@ public class LocalDecksLoader extends AsyncTask<Void, Void, ArrayList<OfflineDec
                 Card[] cards = new Card[cardsJson.length()];
                 for (int k = 0; k < cards.length; k++) {
                     // creating card objects initiates image downloads
-                    cards[k] = new Card(cardsJson.getJSONObject(k), props, Settings.serverAdress);
+                    cards[k] = new Card(cardsJson.getJSONObject(k), props, Settings.serverAdress,true);
                 }
                 offlineDecks.add(new OfflineDeck(deckJson.getString("name"), deckJson.getString("description"), cards, props))
                 ;

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+
+    <android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="300dip"
+    xmlns:cardview="http://schemas.android.com/apk/res-auto"
+        android:padding="6dip"
+        android:layout_margin="3dip"
+        android:paddingBottom="0dip"
+        cardview:cardCornerRadius="8dip"
+        cardview:cardElevation="4dip">
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@mipmap/ic_launcher"
+                android:scaleType="centerCrop"/>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true">
+
+                <RelativeLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#aaff9800">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:padding="5dip"
+                        android:text="DeckName"
+                        android:id="@+id/deckname"
+
+                        android:gravity="center" />
+
+                    <ImageView
+                        android:id="@+id/deck_options_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_more_vert_24dp"
+                        android:adjustViewBounds="false"
+                        android:layout_gravity="center"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignWithParentIfMissing="false"
+                        android:layout_centerInParent="true"
+                        android:layout_marginRight="4dip" />
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:padding="5dip"
+                    android:text="DeckName"
+                    android:id="@+id/deckdescription"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:background="#aaff9800"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+        </RelativeLayout>
+
+
+    </FrameLayout>
+
+</android.support.v7.widget.CardView>
+

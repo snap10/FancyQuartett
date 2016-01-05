@@ -21,13 +21,48 @@ import de.uulm.mal.fancyquartett.utils.OnTaskCompleted;
  */
 public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.GalleryViewHolder> implements OnTaskCompleted {
 
-    GalleryModel galleryModel;
+    public static final int LISTLAYOUT = 0;
+    public static final int GRIDLAYOUT = 1;
 
+    GalleryModel galleryModel;
     Context context;
+    int layout;
 
     public GalleryViewAdapter(Context context) {
         this.context = context;
         galleryModel = new GalleryModel();
+        layout=0;
+    }
+
+
+
+    public GalleryViewAdapter(Context context,GalleryModel galleryModel) {
+        this.context = context;
+        this.galleryModel = galleryModel;
+        layout=0;
+
+    }
+
+    public GalleryViewAdapter(Context context,GalleryModel galleryModel,int layout) {
+        this.context = context;
+        this.galleryModel = galleryModel;
+        this.layout=layout;
+    }
+
+    public int getLayout() {
+        return layout;
+    }
+
+    public void setLayout(int layout) {
+        this.layout = layout;
+    }
+
+    public GalleryModel getGalleryModel() {
+        return galleryModel;
+    }
+
+    public void setGalleryModel(GalleryModel galleryModel) {
+        this.galleryModel = galleryModel;
     }
 
     @Override
@@ -63,9 +98,17 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
 
     @Override
     public GalleryViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View itemView = LayoutInflater.
-                from(viewGroup.getContext()).
-                inflate(R.layout.deckgallery_list_item, viewGroup, false);
+        View itemView;
+        if(GRIDLAYOUT==layout){
+            itemView = LayoutInflater.
+                    from(viewGroup.getContext()).
+                    inflate(R.layout.deckgallery_grid_item, viewGroup, false);
+        }else{
+            itemView = LayoutInflater.
+                    from(viewGroup.getContext()).
+                    inflate(R.layout.deckgallery_list_item, viewGroup, false);
+        }
+
 
 
         return new GalleryViewHolder(itemView, i, context);

@@ -10,7 +10,7 @@ public class Deck {
 
     protected String description = null;
 
-
+    public Deck(){};
     public Deck(String name, String description) {
         this.name = name;
         this.description = description;
@@ -31,8 +31,6 @@ public class Deck {
 
     public void setDescription(String description) {
         this.description = description;
-
-    public Deck() {
 
     }
 }
