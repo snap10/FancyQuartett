@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import layout.GalleryFragment;
 /**
  * Created by mk on 02.01.2016.
  */
-public class GalleryModel {
+public class GalleryModel implements Serializable {
 
     private GalleryFragment view;
     private ArrayList<OnlineDeck> onlineDecks;
@@ -29,7 +30,13 @@ public class GalleryModel {
     // local deck folder
     private String offlineDeckFolder;
 
-
+    /**
+     * Dummy Constructor for empty galleryModel to prevent NullPointerExceptions.
+     */
+    public GalleryModel() {
+        onlineDecks= new ArrayList<>();
+        offlineDecks= new ArrayList<>();
+    }
 
     public GalleryModel(GalleryFragment view, String onlineDeckHost, String offlineDeckFolder) {
         this.view = view;
@@ -45,6 +52,16 @@ public class GalleryModel {
         this.onlineDeckHost=onlineDeckHost;
         this.offlineDeckFolder= offlineDeckFolder;
     }
+
+    /**
+     *
+     * @param offlineDeckList
+     */
+    public GalleryModel(ArrayList<OfflineDeck> offlineDeckList) {
+        offlineDecks=offlineDeckList;
+        onlineDecks= new ArrayList<>();
+    }
+
 
 
 
@@ -81,7 +98,14 @@ public class GalleryModel {
 
     }
 
+    public Deck getDeck(int i) {
+        if (i<offlineDecks.size()){
+            return offlineDecks.get(i);
+        }else{
+            return onlineDecks.get(i-offlineDecks.size());
+        }
 
+    }
 
 
     private class JsonDownloader extends AsyncTask<Void, Void, Void> {

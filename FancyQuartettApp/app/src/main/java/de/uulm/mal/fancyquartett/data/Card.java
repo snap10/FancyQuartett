@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -24,6 +25,8 @@ public class Card {
     private String name = null;
 
     public Card(JSONObject json, Property[] props, String host) throws JSONException {
+        images = new ArrayList<Image>();
+        values= new HashMap<>();
         this.id = json.getInt("id");
         this.name = json.getString("name");
         this.description = json.getString("description");

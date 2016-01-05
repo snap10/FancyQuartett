@@ -53,6 +53,11 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/assets" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/assets/decks/bikes" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/assets/decks/tuning" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/assets/carddecks" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/assets/carddecks/bikes" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/assets/carddecks/tuning" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/aidl" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/jni" isTestSource="false" />

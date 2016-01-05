@@ -17,6 +17,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets {
+        main {
+            assets.srcDirs = ['src/main/assets', 'src/main/assets/', 'src/main/assets/decks/bikes', 'src/main/assets/decks/tuning', 'src/main/assets/carddecks', 'src/main/assets/carddecks/bikes', 'src/main/assets/carddecks/tuning']
+        }
+    }
 }
 
 dependencies {

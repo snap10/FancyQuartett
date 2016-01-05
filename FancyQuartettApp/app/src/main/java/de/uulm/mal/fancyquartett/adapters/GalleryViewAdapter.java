@@ -9,21 +9,25 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.data.GalleryModel;
+import de.uulm.mal.fancyquartett.data.OfflineDeck;
+import de.uulm.mal.fancyquartett.utils.OnTaskCompleted;
 
 /**
  * Created by Snap10 on 04/01/16.
  */
-public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.GalleryViewHolder> {
+public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.GalleryViewHolder> implements OnTaskCompleted {
 
     GalleryModel galleryModel;
 
     Context context;
 
-    public GalleryViewAdapter(Context context, GalleryModel galleryModel) {
+    public GalleryViewAdapter(Context context) {
         this.context = context;
-        this.galleryModel=galleryModel;
+        galleryModel = new GalleryModel();
     }
 
     @Override
@@ -43,6 +47,8 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
      */
     @Override
     public void onBindViewHolder(final GalleryViewHolder galleryViewHolder, int i) {
+        galleryViewHolder.deckName.setText(galleryModel.getDeck(i).getName());
+        galleryViewHolder.deckDescription.setText(galleryModel.getDeck(i).getDescription());
 
     //TODO implement the and ClickListeners
     }
@@ -89,6 +95,16 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
     }
 
     /**
+     * Method for Callback of LocalDecksLoader, receives an ArrayList<OfflineDecks> when Task is completed.
+     * @param object
+     */
+    @Override
+    public void onTaskCompleted(Object object) {
+        galleryModel=new GalleryModel((ArrayList<OfflineDeck>) object);
+        notifyDataSetChanged();
+    }
+
+    /**
      * InnerClass TimerViewHolder extends RecyclerView.ViewHolder
      */
     public static class GalleryViewHolder extends RecyclerView.ViewHolder {
@@ -119,8 +135,6 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
             deckName = (TextView) v.findViewById(R.id.deckname);
             deckDescription = (TextView) v.findViewById(R.id.deckdescription);
             deckIcon = (ImageView) v.findViewById(R.id.deckicon);
-
-
         }
 
     }

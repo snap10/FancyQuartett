@@ -16,11 +16,14 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import java.io.IOException;
+
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.adapters.GalleryViewAdapter;
 import de.uulm.mal.fancyquartett.data.GalleryModel;
 import de.uulm.mal.fancyquartett.data.Image;
 import de.uulm.mal.fancyquartett.data.Settings;
+import de.uulm.mal.fancyquartett.utils.LocalDecksLoader;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,6 +54,8 @@ public class GalleryFragment extends Fragment {
         // Required empty public constructor
     }
 
+
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -73,6 +78,21 @@ public class GalleryFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+        //Initialize Data
+        galleryViewAdapter = new GalleryViewAdapter(getContext());
+        try {
+            LocalDecksLoader loader = new LocalDecksLoader(Settings.localFolder,getContext(),galleryViewAdapter);
+            loader.execute();
+        } catch (IOException e) {
+            //TODO
+            e.printStackTrace();
+        }
+        llm = new LinearLayoutManager(this.getContext());
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        //ListButton
+        setLayoutButtonClickListener();
+
+
 
 
     }
@@ -83,24 +103,20 @@ public class GalleryFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_main_gallery, container, false);
         //Create a GallerViewAdapter for the RecyclerList
-        galleryViewAdapter = new GalleryViewAdapter(this.getContext(),new GalleryModel(Settings.serverAdress,Settings.localFolder));
+
         recList = (RecyclerView) rootView.findViewById(R.id.recycler_gallery_list);
         recList.setHasFixedSize(true);
-        llm = new LinearLayoutManager(this.getContext());
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
+
         recList.setLayoutManager(llm);
         recList.setAdapter(galleryViewAdapter);
-        //ListButton
 
 
         return rootView;
     }
 
-    private void setLayoutButtonToToolbar() {
+    private void setLayoutButtonClickListener() {
         parentActivity=getActivity();
         ImageView imageView = (ImageView) parentActivity.findViewById(R.id.listLayoutButton);
-        imageView.setRotation(90);
-        imageView.setTag("module");
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,7 +132,7 @@ public class GalleryFragment extends Fragment {
                 }
             }
         });
-        imageView.setVisibility(View.VISIBLE);
+        //TODO change Recycler Layout
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -129,7 +145,7 @@ public class GalleryFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        setLayoutButtonToToolbar();
+
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -141,15 +157,11 @@ public class GalleryFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        hideLayoutButtonToToolbar();
+
         mListener = null;
     }
 
-    private void hideLayoutButtonToToolbar() {
-        parentActivity=getActivity();
-        ImageView imageView = (ImageView) parentActivity.findViewById(R.id.listLayoutButton);
-        imageView.setVisibility(View.INVISIBLE);
-    }
+
 
     /**
      * This interface must be implemented by activities that contain this

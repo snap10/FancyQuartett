@@ -18,14 +18,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import de.uulm.mal.fancyquartett.R;
+import de.uulm.mal.fancyquartett.data.GalleryModel;
+import de.uulm.mal.fancyquartett.data.OfflineDeck;
+import de.uulm.mal.fancyquartett.data.Settings;
+import de.uulm.mal.fancyquartett.utils.LocalDecksLoader;
+import de.uulm.mal.fancyquartett.utils.OnTaskCompleted;
 import layout.GalleryFragment;
 import layout.StartFragment;
 import layout.StatisticFragment;
 
 public class MainActivity extends AppCompatActivity implements StartFragment.OnFragmentInteractionListener,GalleryFragment.OnFragmentInteractionListener,StatisticFragment.OnFragmentInteractionListener {
+
+
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -41,6 +52,9 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnF
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private static final int STARTPOSITION=0;
+    private static final int GALLERYPOSITION=1;
+    private static final int STATISTICSPOSITION=2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +71,45 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnF
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position==GALLERYPOSITION){
+                    //Initialize LayoutButton
+                    ImageView imageView = (ImageView) findViewById(R.id.listLayoutButton);
+
+                    if (imageView.getTag()==null){
+                        imageView.setTag("module");
+                        imageView.setRotation(90);
+                    }
+                    imageView.setVisibility(View.VISIBLE);
+                }else{
+                    //Hide LayoutButton
+                    ImageView imageView = (ImageView) findViewById(R.id.listLayoutButton);
+                    imageView.setVisibility(View.INVISIBLE);
+                }
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-    }
 
+
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -92,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnF
     }
 
 
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -105,9 +153,9 @@ public class MainActivity extends AppCompatActivity implements StartFragment.OnF
         @Override
         public Fragment getItem(int position) {
             switch (position){
-                case 0: return new StartFragment().newInstance();
-                case 1: return new GalleryFragment().newInstance();
-                case 2: return new StatisticFragment().newInstance();
+                case STARTPOSITION: return new StartFragment().newInstance();
+                case GALLERYPOSITION: return new GalleryFragment().newInstance();
+                case STATISTICSPOSITION: return new StatisticFragment().newInstance();
                 default: throw new IllegalArgumentException("Wrong Fragment ID chosen");
             }
         }
