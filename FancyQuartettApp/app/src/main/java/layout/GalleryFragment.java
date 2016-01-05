@@ -1,18 +1,25 @@
 package layout;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.adapters.GalleryViewAdapter;
 import de.uulm.mal.fancyquartett.data.GalleryModel;
+import de.uulm.mal.fancyquartett.data.Image;
 import de.uulm.mal.fancyquartett.data.Settings;
 
 /**
@@ -28,6 +35,7 @@ public class GalleryFragment extends Fragment {
     GalleryViewAdapter galleryViewAdapter;
     RecyclerView recList;
     LinearLayoutManager llm;
+    Activity parentActivity;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -66,6 +74,7 @@ public class GalleryFragment extends Fragment {
         }
 
 
+
     }
 
     @Override
@@ -81,7 +90,33 @@ public class GalleryFragment extends Fragment {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
         recList.setAdapter(galleryViewAdapter);
+        //ListButton
+
+
         return rootView;
+    }
+
+    private void setLayoutButtonToToolbar() {
+        parentActivity=getActivity();
+        ImageView imageView = (ImageView) parentActivity.findViewById(R.id.listLayoutButton);
+        imageView.setRotation(90);
+        imageView.setTag("module");
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImageView imageView = (ImageView) v;
+                if (imageView.getTag().equals("module")) {
+                    imageView.setImageResource(R.drawable.ic_view_list_24dp);
+                    imageView.setRotation(0);
+                    imageView.setTag("list");
+                } else {
+                    imageView.setImageResource(R.drawable.ic_view_module_24dp);
+                    imageView.setRotation(90);
+                    imageView.setTag("module");
+                }
+            }
+        });
+        imageView.setVisibility(View.VISIBLE);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -94,6 +129,7 @@ public class GalleryFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        setLayoutButtonToToolbar();
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -105,7 +141,14 @@ public class GalleryFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        hideLayoutButtonToToolbar();
         mListener = null;
+    }
+
+    private void hideLayoutButtonToToolbar() {
+        parentActivity=getActivity();
+        ImageView imageView = (ImageView) parentActivity.findViewById(R.id.listLayoutButton);
+        imageView.setVisibility(View.INVISIBLE);
     }
 
     /**

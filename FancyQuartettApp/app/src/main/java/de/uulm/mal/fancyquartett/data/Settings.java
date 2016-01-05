@@ -7,7 +7,7 @@ package de.uulm.mal.fancyquartett.data;
 public class Settings {
 
     public static String serverAdress = "to implement";
-    public static String localFolder = "to implement";
+    public static String localFolder = "assets/";
     //TODO
 
 }
