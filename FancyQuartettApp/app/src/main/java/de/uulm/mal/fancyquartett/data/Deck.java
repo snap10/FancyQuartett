@@ -15,4 +15,8 @@ public class Deck {
         this.name = name;
         this.description = description;
     }
+
+    public Deck() {
+
+    }
 }

@@ -28,15 +28,11 @@ public class Image {
 
 
 
-    public Image(JSONObject json, String host) throws JSONException {
+    public Image(JSONObject json, String path, boolean isLocal) throws JSONException {
         this.id = json.getInt("id");
         this.filename = json.getString("filename");
-        this.path = host;
-    }
-
-    public Image(int id, String filename) {
-        this.id = id;
-        this.filename = filename;
+        this.path = path;
+        this.isLocal = isLocal;
     }
 
     public int id() { return id; }

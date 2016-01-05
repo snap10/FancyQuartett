@@ -23,14 +23,15 @@ public class Card {
 
     private String name = null;
 
-    public Card(JSONObject json, Property[] props, String host) throws JSONException {
+    // constructor used by OnlineDecks when downloading
+    public Card(JSONObject json, Property[] props, String path, boolean isLocal) throws JSONException {
         this.id = json.getInt("id");
         this.name = json.getString("name");
         this.description = json.getString("description");
         JSONArray imgsJson = json.getJSONArray("images");
         for(int i = 0; i < imgsJson.length(); i++) {
-            Image img = new Image(imgsJson.getJSONObject(i), host);
-            img.download();
+            Image img = new Image(imgsJson.getJSONObject(i), path, isLocal);
+            if(!isLocal) img.download();
             images.add(img);
         }
         JSONArray valsJson = json.getJSONArray("values");
@@ -52,9 +53,6 @@ public class Card {
     // overloaded add method
     public void add(Image image) {
         images.add(image);
-    }
-    public void add(Property p, float v) {
-        values.put(p, v);
     }
     public void add(String description) {
         this.description = description;
