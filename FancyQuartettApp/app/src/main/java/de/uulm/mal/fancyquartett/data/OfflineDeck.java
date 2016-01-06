@@ -20,14 +20,15 @@ public class OfflineDeck extends Deck {
     private ArrayList<Property> properties;
 
     public OfflineDeck(String name, String description, Card[] cards, Property[] properties) {
-        super(name,description);
+        super(name, description);
         this.cards = new ArrayList<Card>(Arrays.asList(cards));
         this.properties = new ArrayList<Property>(Arrays.asList(properties));
     }
 
-    public OfflineDeck(File folder) throws Exception {
+
+    public OfflineDeck(File folder, String name) throws Exception {
         super();
-        File jsonFile = new File(folder, folder.getName()+".json");
+        File jsonFile = new File(folder, name + ".json");
         BufferedReader br = null;
         StringBuffer buffer = new StringBuffer();
         br = new BufferedReader(new FileReader(jsonFile));
@@ -42,16 +43,28 @@ public class OfflineDeck extends Deck {
         super.description = json.getString("description");
         JSONArray cardsJson = json.getJSONArray("cards");
         JSONArray propsJson = json.getJSONArray("properties");
-        for(int i = 0; i < propsJson.length(); i++) {
+        for (int i = 0; i < propsJson.length(); i++) {
             properties.add(new Property(propsJson.getJSONObject(i)));
         }
-        for(int i = 0; i < cardsJson.length(); i++) {
-            cards.add(new Card(
-                    cardsJson.getJSONObject(i),
-                    (Property[])properties.toArray(),
-                    folder.getAbsolutePath(),
-                    true
-            ));
+        for (int i = 0; i < cardsJson.length(); i++) {
+            cards.add(new Card(cardsJson.getJSONObject(i),(Property[]) properties.toArray(),folder.getPath(),name,true));
         }
+
+    }
+
+    public ArrayList<Card> getCards() {
+        return cards;
+    }
+
+    public void setCards(ArrayList<Card> cards) {
+        this.cards = cards;
+    }
+
+    public ArrayList<Property> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(ArrayList<Property> properties) {
+        this.properties = properties;
     }
 }

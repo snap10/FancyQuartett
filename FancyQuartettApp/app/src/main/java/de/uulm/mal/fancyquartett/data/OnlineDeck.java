@@ -4,6 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+
 /**
  * Created by mk on 02.01.2016.
  */
@@ -32,6 +34,7 @@ public class OnlineDeck extends Deck {
         super(name,description);
     }
 
+    //TODO probably do Async
     // creates a full offline deck. includes download of images.
     public OfflineDeck download() throws JSONException {
         JSONArray cardsJson = deckJson.getJSONArray("cards");
@@ -43,10 +46,17 @@ public class OnlineDeck extends Deck {
         Card[] cards = new Card[cardsJson.length()];
         for(int i = 0; i < cards.length; i++) {
             // creating card objects initiates image downloads
-            cards[i] = new Card(cardsJson.getJSONObject(i), props, host, false);
+            cards[i] = new Card(cardsJson.getJSONObject(i), props, host,gallery.getContext().getFilesDir()+Settings.localFolder, getName(), false);
         }
-        OfflineDeck offlineDeck = new OfflineDeck(super.name, super.description, cards, props);
+        OfflineDeck offlineDeck= null;
+        try {
+            offlineDeck = new OfflineDeck(new File(gallery.getContext().getFilesDir()+ Settings.localFolder),getName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         gallery.move(this, offlineDeck);
+
+
         //TODO save json locally
         return offlineDeck;
     }

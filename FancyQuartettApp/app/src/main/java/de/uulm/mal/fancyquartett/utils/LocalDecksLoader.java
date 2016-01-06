@@ -2,6 +2,7 @@ package de.uulm.mal.fancyquartett.utils;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 
 import org.json.JSONArray;
@@ -10,11 +11,13 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import de.uulm.mal.fancyquartett.adapters.GalleryViewAdapter;
 import de.uulm.mal.fancyquartett.data.Card;
+import de.uulm.mal.fancyquartett.data.Image;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.data.Property;
 import de.uulm.mal.fancyquartett.data.Settings;
@@ -33,9 +36,12 @@ public class LocalDecksLoader extends AsyncTask<Void, Void, ArrayList<OfflineDec
     String[] deckFolders;
     AssetManager manager;
     OnTaskCompleted listener;
+    Context context;
+
 
     public LocalDecksLoader(String path, Context context) throws IOException {
         this.path = path;
+        this.context=context.getApplicationContext();
         manager = context.getAssets();
         deckFolders = manager.list(path);
 
@@ -44,6 +50,7 @@ public class LocalDecksLoader extends AsyncTask<Void, Void, ArrayList<OfflineDec
 
     public LocalDecksLoader(String path, Context context, OnTaskCompleted listener) throws IOException {
         this.path = path;
+        this.context=context.getApplicationContext();
         manager = context.getAssets();
         deckFolders = manager.list(path);
         this.listener=listener;
@@ -115,8 +122,14 @@ public class LocalDecksLoader extends AsyncTask<Void, Void, ArrayList<OfflineDec
                 Card[] cards = new Card[cardsJson.length()];
                 for (int k = 0; k < cards.length; k++) {
                     // creating card objects initiates image downloads
-                    cards[k] = new Card(cardsJson.getJSONObject(k), props, Settings.serverAdress,true);
+                    cards[k] = new Card(cardsJson.getJSONObject(k), props, context.getFilesDir()+Settings.localFolder,deckFolders[i],false);
+                    for (Image image: cards[k].getImages()) {
+                        //TODO
+                        //TODO image.saveBitmap(BitmapFactory.decodeFile(manager.(path + "/"+ deckFolders[i] + "/" + image.getFileName())));
+
+                    }
                 }
+
                 offlineDecks.add(new OfflineDeck(deckJson.getString("name"), deckJson.getString("description"), cards, props))
                 ;
             } catch (JSONException e) {

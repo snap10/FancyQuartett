@@ -6,8 +6,10 @@ package de.uulm.mal.fancyquartett.data;
  */
 public class Settings {
 
-    public static String serverAdress = "to implement";
-    public static String localFolder = "decks";
+    //Testadress for Localhost on FerdiBirksMacbook, please adapt for your localhost
+    public static String serverAdress = "192.168.0.40/fancyquartetttest";
+    public static String localAssets = "decks";
+    public static String localFolder = "/decks/";
     //TODO
 
 }

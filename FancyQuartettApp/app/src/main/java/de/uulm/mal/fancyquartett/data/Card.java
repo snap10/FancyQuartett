@@ -18,6 +18,7 @@ public class Card {
     private ArrayList<Image> images;
 
     private String description = null;
+    private String deckname;
 
     // map properties onto card values. Use float for all value types.
     private Map<Property, Float> values;
@@ -26,15 +27,16 @@ public class Card {
 
 
     // constructor used by OnlineDecks when downloading
-    public Card(JSONObject json, Property[] props, String path, boolean isLocal) throws JSONException {
+    public Card(JSONObject json, Property[] props, String pathToOnlinePictures,String localFolder,String deckname,  boolean isLocal) throws JSONException {
         images = new ArrayList<Image>();
         values= new HashMap<>();
         this.id = json.getInt("id");
         this.name = json.getString("name");
         this.description = json.getString("description");
+        this.deckname=deckname;
         JSONArray imgsJson = json.getJSONArray("images");
         for(int i = 0; i < imgsJson.length(); i++) {
-            Image img = new Image(imgsJson.getJSONObject(i), path, isLocal);
+            Image img = new Image(imgsJson.getJSONObject(i), pathToOnlinePictures,localFolder,deckname, isLocal);
             if(!isLocal) img.download();
             images.add(img);
         }
@@ -50,6 +52,42 @@ public class Card {
                 }
             }
         }
+    }
+
+    // constructor used by OfflineDecks
+    public Card(JSONObject json, Property[] props, String localFolder,String deckname,  boolean isLocal) throws JSONException {
+        images = new ArrayList<Image>();
+        values= new HashMap<>();
+        this.id = json.getInt("id");
+        this.name = json.getString("name");
+        this.description = json.getString("description");
+        this.deckname=deckname;
+        JSONArray imgsJson = json.getJSONArray("images");
+        for(int i = 0; i < imgsJson.length(); i++) {
+            Image img = new Image(imgsJson.getJSONObject(i), localFolder,deckname, isLocal);
+            if(!isLocal) img.download();
+            images.add(img);
+        }
+        JSONArray valsJson = json.getJSONArray("values");
+        for(int i = 0; i < valsJson.length(); i++) {
+            JSONObject pair = valsJson.getJSONObject(i);
+            int propId = pair.getInt("propertyId");
+            float val = (float) pair.getDouble("value");
+            for(int j = 0; j < props.length; j++) { // search property with given id for each value
+                if(props[j].id()==propId) {
+                    values.put(props[j], val);
+                    break;
+                }
+            }
+        }
+    }
+
+    public ArrayList<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(ArrayList<Image> images) {
+        this.images = images;
     }
 
     public int id() { return id; }

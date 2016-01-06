@@ -12,8 +12,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import de.uulm.mal.fancyquartett.R;
+import de.uulm.mal.fancyquartett.data.Deck;
 import de.uulm.mal.fancyquartett.data.GalleryModel;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
+import de.uulm.mal.fancyquartett.data.Settings;
 import de.uulm.mal.fancyquartett.utils.OnTaskCompleted;
 
 /**
@@ -29,7 +31,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
     int layout;
 
     public GalleryViewAdapter(Context context) {
-        this.context = context;
+        this.context = context.getApplicationContext();
         galleryModel = new GalleryModel();
         layout=0;
     }
@@ -48,6 +50,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
         this.galleryModel = galleryModel;
         this.layout=layout;
     }
+
 
     public int getLayout() {
         return layout;
@@ -82,6 +85,17 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
      */
     @Override
     public void onBindViewHolder(final GalleryViewHolder galleryViewHolder, int i) {
+        OfflineDeck offlineDeck=galleryModel.getOfflineDeck(i);
+        if(offlineDeck==null){
+            //No OfflineDeck Information available thus just set Name and Description
+            galleryViewHolder.deckName.setText(galleryModel.getDeck(i).getName());
+            galleryViewHolder.deckDescription.setText(galleryModel.getDeck(i).getDescription());
+        }else{
+            galleryViewHolder.deckName.setText(offlineDeck.getName());
+            galleryViewHolder.deckDescription.setText(offlineDeck.getDescription());
+            galleryViewHolder.deckIcon.setImageBitmap(offlineDeck.getCards().get(0).getImages().get(0).getBitmap());
+
+        }
         galleryViewHolder.deckName.setText(galleryModel.getDeck(i).getName());
         galleryViewHolder.deckDescription.setText(galleryModel.getDeck(i).getDescription());
 
@@ -145,6 +159,8 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
     public void onTaskCompleted(Object object) {
         galleryModel=new GalleryModel((ArrayList<OfflineDeck>) object);
         notifyDataSetChanged();
+        galleryModel.setAdapter(this);
+        galleryModel.fetchOnlineDeck(Settings.serverAdress,"bikes");
     }
 
     /**
