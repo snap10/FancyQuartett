@@ -2,13 +2,18 @@ package layout;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -45,6 +50,7 @@ public class GalleryFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private Menu menu;
 
     public GalleryFragment() {
         // Required empty public constructor
@@ -73,7 +79,7 @@ public class GalleryFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
+        setHasOptionsMenu(true);
         //Initialize Data
         galleryViewAdapter = new GalleryViewAdapter(getContext());
         LocalDecksLoader loader = new LocalDecksLoader(Settings.localAssets,getContext(),galleryViewAdapter);
@@ -83,7 +89,7 @@ public class GalleryFragment extends Fragment {
         llm = new LinearLayoutManager(this.getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         //ListButton
-        setLayoutButtonClickListener();
+        //TODO setLayoutButtonClickListener();
 
 
 
@@ -107,7 +113,7 @@ public class GalleryFragment extends Fragment {
         return rootView;
     }
 
-    private void setLayoutButtonClickListener() {
+    /*private void setLayoutButtonClickListener() {
         parentActivity=getActivity();
         ImageView imageView = (ImageView) parentActivity.findViewById(R.id.listLayoutButton);
         if (imageView!=null){
@@ -136,7 +142,7 @@ public class GalleryFragment extends Fragment {
                 }
             });
         }
-    }
+    }*/
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -164,7 +170,71 @@ public class GalleryFragment extends Fragment {
         mListener = null;
     }
 
+    /**
+     * Initialize the contents of the Activity's standard options menu.  You
+     * should place your menu items in to <var>menu</var>.  For this method
+     * to be called, you must have first called {@link #setHasOptionsMenu}.  See
+     * {@link Activity#onCreateOptionsMenu(Menu) Activity.onCreateOptionsMenu}
+     * for more information.
+     *
+     * @param menu     The options menu in which you place your items.
+     * @param inflater
+     * @see #setHasOptionsMenu
+     * @see #onPrepareOptionsMenu
+     * @see #onOptionsItemSelected
+     */
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        this.menu=menu;
+        if (recList.getLayoutManager().equals(llm)){
+            menu.findItem(R.id.gridLayoutButton).setVisible(true);
+        }else{
+            menu.findItem(R.id.listLayoutButton).setVisible(true);
+        }
+    }
 
+    /**
+     * This hook is called whenever an item in your options menu is selected.
+     * The default implementation simply returns false to have the normal
+     * processing happen (calling the item's Runnable or sending a message to
+     * its Handler as appropriate).  You can use this method for any items
+     * for which you would like to do processing without those other
+     * facilities.
+     * <p/>
+     * <p>Derived classes should call through to the base class for it to
+     * perform the default menu handling.
+     *
+     * @param item The menu item that was selected.
+     * @return boolean Return false to allow normal menu processing to
+     * proceed, true to consume it here.
+     * @see #onCreateOptionsMenu
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        
+        if (item.getItemId()==R.id.listLayoutButton) {
+            recList.setLayoutManager(llm);
+            galleryViewAdapter = new GalleryViewAdapter(getContext(), galleryViewAdapter.getGalleryModel(), GalleryViewAdapter.LISTLAYOUT);
+            recList.setAdapter(galleryViewAdapter);
+            item.setVisible(false);
+            MenuItem item2 = menu.findItem(R.id.gridLayoutButton);
+            item2.setVisible(true);
+        }else if(item.getItemId()==R.id.gridLayoutButton){
+            recList.setLayoutManager(glm);
+            galleryViewAdapter = new GalleryViewAdapter(getContext(),galleryViewAdapter.getGalleryModel(),GalleryViewAdapter.GRIDLAYOUT);
+            recList.setAdapter(galleryViewAdapter);
+            item.setVisible(false);
+            MenuItem item2=menu.findItem(R.id.listLayoutButton);
+            item2.setVisible(true);
+        }
+
+
+    
+
+
+
+        return super.onOptionsItemSelected(item);
+    }
 
     /**
      * This interface must be implemented by activities that contain this

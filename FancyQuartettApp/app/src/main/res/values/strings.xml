@@ -2,6 +2,7 @@
     <string name="app_name">FancyQuartett</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="change_content_layout">Change Content Layout</string>
 
 
     <string name="newSinglePlayer">New Singleplayer</string>
@@ -9,6 +10,7 @@
     <string name="start">Start</string>
     <string name="gallery">Gallery</string>
     <string name="statistic">Statistic</string>
+    <string name="action_rules">Rules</string>
 
 
 </resources>

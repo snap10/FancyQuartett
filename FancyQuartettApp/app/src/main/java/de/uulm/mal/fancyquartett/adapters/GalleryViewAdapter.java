@@ -3,7 +3,9 @@ package de.uulm.mal.fancyquartett.adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -194,11 +196,18 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
          * @param index
          * @param context
          */
-        public GalleryViewHolder(View v, int index, Context context) {
+        public GalleryViewHolder(View v, int index, final Context context) {
             super(v);
             deckName = (TextView) v.findViewById(R.id.deckname);
             deckDescription = (TextView) v.findViewById(R.id.deckdescription);
             deckIcon = (ImageView) v.findViewById(R.id.deckicon);
+
+            v.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+                @Override
+                public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+                    new MenuInflater(context).inflate(R.menu.gallerylist_menu,menu);
+                }
+            });
         }
 
     }

@@ -20,19 +20,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import de.uulm.mal.fancyquartett.R;
-import de.uulm.mal.fancyquartett.data.GalleryModel;
-import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.data.Settings;
 import de.uulm.mal.fancyquartett.utils.AssetsInstaller;
-import de.uulm.mal.fancyquartett.utils.LocalDecksLoader;
 import layout.GalleryFragment;
 import layout.StartFragment;
 import layout.StatisticFragment;
@@ -57,12 +52,14 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
     private static final int STARTPOSITION = 0;
     private static final int GALLERYPOSITION = 1;
     private static final int STATISTICSPOSITION = 2;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        if (!pref.getBoolean("filesInstalled",false)) {
+        boolean secondRun = pref.getBoolean("filesInstalled", false);
+        if (!secondRun) {
 
             AssetsInstaller installer = null;
             try {
@@ -90,36 +87,7 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                if (position == GALLERYPOSITION) {
-                    //Initialize LayoutButton
-                    ImageView imageView = (ImageView) findViewById(R.id.listLayoutButton);
-
-                    if (imageView.getTag() == null) {
-                        imageView.setTag("module");
-                        imageView.setRotation(90);
-                    }
-                    imageView.setVisibility(View.VISIBLE);
-                } else {
-                    //Hide LayoutButton
-                    ImageView imageView = (ImageView) findViewById(R.id.listLayoutButton);
-                    imageView.setVisibility(View.INVISIBLE);
-                }
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
 
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -128,8 +96,13 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
 
     }
 
+    public Menu getMenu() {
+        return menu;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu=menu;
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
@@ -141,7 +114,9 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+        if (id==R.id.action_rules){
+            //TODO start new Activity with Rules 
+        }
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
@@ -165,7 +140,9 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
     public void onAssetsInstallerCompleted(Exception possibleException) {
         if (possibleException == null) {
             SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-            pref.edit().putBoolean("filesInstalled", true);
+            pref.edit().putBoolean("filesInstalled", true).commit();
+            //TODO test
+            boolean test = pref.getBoolean("filesInstalled",false);
             Toast toast = Toast.makeText(this, "Files installed correctly", Toast.LENGTH_LONG);
             toast.show();
 

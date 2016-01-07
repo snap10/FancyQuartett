@@ -16,12 +16,13 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import de.uulm.mal.fancyquartett.adapters.GalleryViewAdapter;
+import de.uulm.mal.fancyquartett.utils.JsonDownloader;
 import layout.GalleryFragment;
 
 /**
  * Created by mk on 02.01.2016.
  */
-public class GalleryModel implements Serializable {
+public class GalleryModel implements Serializable, JsonDownloader.OnJasonDownloaderFinished {
 
     private GalleryViewAdapter adapter;
     private ArrayList<OnlineDeck> onlineDecks;
@@ -76,7 +77,13 @@ public class GalleryModel implements Serializable {
         this.adapter = adapter;
     }
 
+
     // searches for already downloaded decks in local storage and creates OfflineDecks
+
+    /**
+     * //TODO check if needed when LocalDecksLoader is used
+     * @throws Exception
+     */
     public void scanOfflineDecks() throws Exception {
         File decksDirectory = new File(adapter.getContext().getFilesDir() + Settings.localFolder);
         String[] decks = decksDirectory.list();
@@ -88,7 +95,6 @@ public class GalleryModel implements Serializable {
                     offlineDecks.add(offlineDeck);
                 } catch (Exception e) {
                     e.printStackTrace();
-
                 }
             }
         } else {
@@ -102,12 +108,6 @@ public class GalleryModel implements Serializable {
     }
 
 
-    // initiates the download of a json file and the creation of an OnlineDeck
-    public void fetchOnlineDeck(String deckname) {
-        new JsonDownloader("http://" + onlineDeckHost + "/" + deckname + ".json").execute();
-    }
-
-
     /**
      * Overload of fetch Online Deck for Testing
      * //TODO possibly remove after Testing if not needed
@@ -117,7 +117,7 @@ public class GalleryModel implements Serializable {
      */
     public void fetchOnlineDeck(String host, String deckname) {
         this.onlineDeckHost = host;
-        new JsonDownloader("http://" + onlineDeckHost + "/" + deckname + "/" + deckname + ".json").execute();
+        new JsonDownloader("http://" + onlineDeckHost + "/" + deckname + "/" + deckname + ".json",this).execute();
     }
 
     private void add(OnlineDeck d) {
@@ -134,14 +134,6 @@ public class GalleryModel implements Serializable {
         onlineDecks.remove(onlineDeck);
         offlineDecks.add(offlineDeck);
         adapter.notifyDataSetChanged();
-    }
-
-    protected void downloadCallback(String json) {
-        try {
-            add(new OnlineDeck(new JSONObject(json), onlineDeckHost, this));
-        } catch (JSONException e) {
-            System.out.println("Deck could not be added because downloaded JSON is invalid. " + e);
-        }
     }
 
     /**
@@ -190,39 +182,19 @@ public class GalleryModel implements Serializable {
 
     }
 
-
-    private class JsonDownloader extends AsyncTask<Void, Void, Void> {
-
-        private String url;
-        private String json;
-
-        public JsonDownloader(String url) {
-            super();
-            this.url = url;
-        }
-
-        @Override
-        protected Void doInBackground(Void... v) {
-            try {
-                URL u = new URL(url);
-                HttpURLConnection c = (HttpURLConnection) u.openConnection();
-                BufferedReader in = new BufferedReader(new InputStreamReader(c.getInputStream()));
-                String inputLine;
-                StringBuffer response = new StringBuffer();
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-                    response.append("\n");
-                }
-                in.close();
-                json = response.toString();
-            } catch (IOException e) {
-                System.out.println(e);
-            }
-            return null;
-        }
-
-        protected void onPostExecute(Void v) {
-            downloadCallback(json);
+    /**
+     * Callback Method for JsonDownloader, called when finished or exception is thrown.
+     * Possible Exception is deliverd as parameter. Equals null if no exception was thrown
+     *
+     * @param possibleException
+     * @param json The JsonString
+     */
+    @Override
+    public void onDownloadFinished(Exception possibleException, String json) {
+        try {
+            add(new OnlineDeck(new JSONObject(json), onlineDeckHost, this));
+        } catch (JSONException e) {
+            System.out.println("Deck could not be added because downloaded JSON is invalid. " + e);
         }
     }
 }
