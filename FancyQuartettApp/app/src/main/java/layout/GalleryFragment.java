@@ -76,13 +76,9 @@ public class GalleryFragment extends Fragment {
 
         //Initialize Data
         galleryViewAdapter = new GalleryViewAdapter(getContext());
-        try {
-            LocalDecksLoader loader = new LocalDecksLoader(Settings.localAssets,getContext(),galleryViewAdapter);
-            loader.execute();
-        } catch (IOException e) {
-            //TODO
-            e.printStackTrace();
-        }
+        LocalDecksLoader loader = new LocalDecksLoader(Settings.localAssets,getContext(),galleryViewAdapter);
+        loader.execute();
+
         glm= new GridLayoutManager(getContext(),2);
         llm = new LinearLayoutManager(this.getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);

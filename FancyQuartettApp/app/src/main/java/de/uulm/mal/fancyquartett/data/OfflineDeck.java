@@ -26,8 +26,10 @@ public class OfflineDeck extends Deck {
     }
 
 
-    public OfflineDeck(File folder, String name) throws Exception {
+    public OfflineDeck(String folder, String name) throws Exception {
         super();
+        this.cards = new ArrayList<Card>();
+        this.properties = new ArrayList<Property>();
         File jsonFile = new File(folder, name + ".json");
         BufferedReader br = null;
         StringBuffer buffer = new StringBuffer();
@@ -47,7 +49,7 @@ public class OfflineDeck extends Deck {
             properties.add(new Property(propsJson.getJSONObject(i)));
         }
         for (int i = 0; i < cardsJson.length(); i++) {
-            cards.add(new Card(cardsJson.getJSONObject(i),(Property[]) properties.toArray(),folder.getPath(),name,true));
+            cards.add(new Card(cardsJson.getJSONObject(i), properties,folder,name,true));
         }
 
     }

@@ -37,34 +37,35 @@ public class GalleryModel implements Serializable {
      * Dummy Constructor for empty galleryModel to prevent NullPointerExceptions.
      */
     public GalleryModel() {
-        onlineDecks= new ArrayList<>();
-        offlineDecks= new ArrayList<>();
+        onlineDecks = new ArrayList<>();
+        offlineDecks = new ArrayList<>();
     }
 
-    public GalleryModel(GalleryViewAdapter adapter, String onlineDeckHost, String offlineDeckFolder) throws Exception {
+    public GalleryModel(GalleryViewAdapter adapter, String onlineDeckHost, String offlineDeckFolder) {
+        onlineDecks = new ArrayList<>();
+        offlineDecks = new ArrayList<>();
         this.adapter = adapter;
         this.onlineDeckHost = onlineDeckHost;
         this.offlineDeckFolder = offlineDeckFolder;
-        scanOfflineDecks();
+        //TODO check if needed when LocalDecksLoader is used scanOfflineDecks();
     }
 
     //Override GalleryModel Constructor for use without View
     //TODO remove after Testing
     public GalleryModel(String onlineDeckHost, String offlineDeckFolder) {
-        onlineDecks= new ArrayList<>();
-        offlineDecks= new ArrayList<>();
-        this.onlineDeckHost=onlineDeckHost;
-        this.offlineDeckFolder= offlineDeckFolder;
+        onlineDecks = new ArrayList<>();
+        offlineDecks = new ArrayList<>();
+        this.onlineDeckHost = onlineDeckHost;
+        this.offlineDeckFolder = offlineDeckFolder;
     }
 
 
     /**
-     *
      * @param offlineDeckList
      */
     public GalleryModel(ArrayList<OfflineDeck> offlineDeckList) {
-        offlineDecks=offlineDeckList;
-        onlineDecks= new ArrayList<>();
+        offlineDecks = offlineDeckList;
+        onlineDecks = new ArrayList<>();
     }
 
     public GalleryViewAdapter getAdapter() {
@@ -77,16 +78,24 @@ public class GalleryModel implements Serializable {
 
     // searches for already downloaded decks in local storage and creates OfflineDecks
     public void scanOfflineDecks() throws Exception {
-        File deckFolder = new File(offlineDeckFolder);
-        File[] decks = deckFolder.listFiles();
-        if(decks != null) {
-            for(int i = 0; i < decks.length; i++) {
-                add(new OfflineDeck(deckFolder,decks[i].getName()));
+        File decksDirectory = new File(adapter.getContext().getFilesDir() + Settings.localFolder);
+        String[] decks = decksDirectory.list();
+        if (decks.length > 0) {
+            for (int i = 0; i < decks.length; i++) {
+                String deckPath = decksDirectory + "/" + decks[i];
+                try {
+                    OfflineDeck offlineDeck = new OfflineDeck(deckPath, decks[i]);
+                    offlineDecks.add(offlineDeck);
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                }
             }
         } else {
-            throw new Exception("Path to local deck folder is invalid!");
+            throw new Exception("No Local Decks found");
         }
     }
+
     //Method to provide application Context From Adapter
     public Context getContext() {
         return adapter.getContext();
@@ -95,29 +104,32 @@ public class GalleryModel implements Serializable {
 
     // initiates the download of a json file and the creation of an OnlineDeck
     public void fetchOnlineDeck(String deckname) {
-        new JsonDownloader("http://"+onlineDeckHost+"/"+deckname+".json").execute();
+        new JsonDownloader("http://" + onlineDeckHost + "/" + deckname + ".json").execute();
     }
 
 
     /**
      * Overload of fetch Online Deck for Testing
      * //TODO possibly remove after Testing if not needed
+     *
      * @param host
      * @param deckname
      */
     public void fetchOnlineDeck(String host, String deckname) {
-        this.onlineDeckHost= host;
-        new JsonDownloader("http://"+onlineDeckHost+"/"+deckname+"/"+deckname+".json").execute();
+        this.onlineDeckHost = host;
+        new JsonDownloader("http://" + onlineDeckHost + "/" + deckname + "/" + deckname + ".json").execute();
     }
 
     private void add(OnlineDeck d) {
         onlineDecks.add(d);
         adapter.notifyDataSetChanged();
     }
+
     private void add(OfflineDeck d) {
         offlineDecks.add(d);
         adapter.notifyDataSetChanged();
     }
+
     public void move(OnlineDeck onlineDeck, OfflineDeck offlineDeck) {
         onlineDecks.remove(onlineDeck);
         offlineDecks.add(offlineDeck);
@@ -128,19 +140,18 @@ public class GalleryModel implements Serializable {
         try {
             add(new OnlineDeck(new JSONObject(json), onlineDeckHost, this));
         } catch (JSONException e) {
-            System.out.println("Deck could not be added because downloaded JSON is invalid. "+e);
+            System.out.println("Deck could not be added because downloaded JSON is invalid. " + e);
         }
     }
 
     /**
-     *
      * @return the Amount of Decks in the Model. (onlinedecks+offlinedecks)
      */
-    public int getSize(){
-        return onlineDecks.size()+offlineDecks.size();
+    public int getSize() {
+        return onlineDecks.size() + offlineDecks.size();
     }
 
-    public void addTestDecks(){
+    public void addTestDecks() {
         for (int i = 0; i < 20; i++) {
             onlineDecks.add(new OnlineDeck("Testname" + i, "Testdescription" + i));
             //TODO notify that dataset has changed
@@ -150,28 +161,30 @@ public class GalleryModel implements Serializable {
 
     /**
      * Retruns a Deck Object.
+     *
      * @param i
      * @return deck
      */
     public Deck getDeck(int i) {
-        if (i<offlineDecks.size()){
+        if (i < offlineDecks.size()) {
             return offlineDecks.get(i);
-        }else if(i<getSize()){
-            return onlineDecks.get(i-offlineDecks.size());
-        }else{
+        } else if (i < getSize()) {
+            return onlineDecks.get(i - offlineDecks.size());
+        } else {
             return null;
         }
     }
 
     /**
      * returns null if index is out of Bounds. This means that there are not that many offline Decks available. Possibly getDeck works
+     *
      * @param i
      * @return
      */
     public OfflineDeck getOfflineDeck(int i) {
-        if (i<offlineDecks.size()){
+        if (i < offlineDecks.size()) {
             return offlineDecks.get(i);
-        }else{
+        } else {
             return null;
         }
 
@@ -202,7 +215,9 @@ public class GalleryModel implements Serializable {
                 }
                 in.close();
                 json = response.toString();
-            } catch (IOException e) {System.out.println(e);}
+            } catch (IOException e) {
+                System.out.println(e);
+            }
             return null;
         }
 

@@ -50,7 +50,7 @@ public class OnlineDeck extends Deck {
         }
         OfflineDeck offlineDeck= null;
         try {
-            offlineDeck = new OfflineDeck(new File(gallery.getContext().getFilesDir()+ Settings.localFolder),getName());
+            offlineDeck = new OfflineDeck(gallery.getContext().getFilesDir()+ Settings.localFolder,getName());
         } catch (Exception e) {
             e.printStackTrace();
         }

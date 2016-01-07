@@ -55,7 +55,7 @@ public class Card {
     }
 
     // constructor used by OfflineDecks
-    public Card(JSONObject json, Property[] props, String localFolder,String deckname,  boolean isLocal) throws JSONException {
+    public Card(JSONObject json, ArrayList<Property> props, String localFolder,String deckname,  boolean isLocal) throws JSONException {
         images = new ArrayList<Image>();
         values= new HashMap<>();
         this.id = json.getInt("id");
@@ -73,12 +73,13 @@ public class Card {
             JSONObject pair = valsJson.getJSONObject(i);
             int propId = pair.getInt("propertyId");
             float val = (float) pair.getDouble("value");
-            for(int j = 0; j < props.length; j++) { // search property with given id for each value
-                if(props[j].id()==propId) {
-                    values.put(props[j], val);
+            for (Property prop:props){
+                if(prop.id()==propId) {
+                    values.put(prop, val);
                     break;
                 }
             }
+
         }
     }
 

@@ -68,13 +68,13 @@ public class Image {
     }
 
     public void saveBitmap(Bitmap img) {
-        if (!isLocal) {
+        if (!isLocal&&img!=null) {
             downloadCallback(img);
         }
     }
 
     public Bitmap getBitmap() {
-        Bitmap bitmap = BitmapFactory.decodeFile(localFolder+"/"+deckname+"/"+filename);
+        Bitmap bitmap = BitmapFactory.decodeFile(localFolder+"/"+filename);
         return bitmap;
     }
 
@@ -85,17 +85,20 @@ public class Image {
     }
 
     protected void downloadCallback(Bitmap img) {
-        try {
-            File file = new File(localFolder + "/" + deckname, filename);
-            file.createNewFile();
-            FileOutputStream out = new FileOutputStream(file);
-            img.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            out.flush();
-            out.close();
-        } catch (IOException e) {
-            //TODO provide User Feedback
-            e.printStackTrace();
+        if (img!=null){
+            try {
+                File file = new File(localFolder + "/" + deckname, filename);
+                file.createNewFile();
+                FileOutputStream out = new FileOutputStream(file);
+                img.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                out.flush();
+                out.close();
+            } catch (IOException e) {
+                //TODO provide User Feedback
+                e.printStackTrace();
+            }
         }
+
 
         //TODO save file, change path and set isLocal to true
     }

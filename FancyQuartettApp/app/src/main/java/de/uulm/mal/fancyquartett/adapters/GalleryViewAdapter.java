@@ -16,12 +16,13 @@ import de.uulm.mal.fancyquartett.data.Deck;
 import de.uulm.mal.fancyquartett.data.GalleryModel;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.data.Settings;
-import de.uulm.mal.fancyquartett.utils.OnTaskCompleted;
+import de.uulm.mal.fancyquartett.utils.LocalDecksLoader;
+
 
 /**
  * Created by Snap10 on 04/01/16.
  */
-public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.GalleryViewHolder> implements OnTaskCompleted {
+public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.GalleryViewHolder> implements LocalDecksLoader.OnTaskCompleted {
 
     public static final int LISTLAYOUT = 0;
     public static final int GRIDLAYOUT = 1;
@@ -33,22 +34,21 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
     public GalleryViewAdapter(Context context) {
         this.context = context.getApplicationContext();
         galleryModel = new GalleryModel();
-        layout=0;
+        layout = 0;
     }
 
 
-
-    public GalleryViewAdapter(Context context,GalleryModel galleryModel) {
+    public GalleryViewAdapter(Context context, GalleryModel galleryModel) {
         this.context = context;
         this.galleryModel = galleryModel;
-        layout=0;
+        layout = 0;
 
     }
 
-    public GalleryViewAdapter(Context context,GalleryModel galleryModel,int layout) {
+    public GalleryViewAdapter(Context context, GalleryModel galleryModel, int layout) {
         this.context = context;
         this.galleryModel = galleryModel;
-        this.layout=layout;
+        this.layout = layout;
     }
 
 
@@ -71,7 +71,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
     @Override
     public int getItemCount() {
         //TODO remove in Production, just for testing
-        if (galleryModel.getSize()==0){
+        if (galleryModel.getSize() == 0) {
             galleryModel.addTestDecks();
         }
         //TODO
@@ -79,27 +79,23 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
     }
 
     /**
-     *
      * @param galleryViewHolder
      * @param i
      */
     @Override
     public void onBindViewHolder(final GalleryViewHolder galleryViewHolder, int i) {
-        OfflineDeck offlineDeck=galleryModel.getOfflineDeck(i);
-        if(offlineDeck==null){
+        OfflineDeck offlineDeck = galleryModel.getOfflineDeck(i);
+        if (offlineDeck == null) {
             //No OfflineDeck Information available thus just set Name and Description
             galleryViewHolder.deckName.setText(galleryModel.getDeck(i).getName());
             galleryViewHolder.deckDescription.setText(galleryModel.getDeck(i).getDescription());
-        }else{
+        } else {
             galleryViewHolder.deckName.setText(offlineDeck.getName());
             galleryViewHolder.deckDescription.setText(offlineDeck.getDescription());
             galleryViewHolder.deckIcon.setImageBitmap(offlineDeck.getCards().get(0).getImages().get(0).getBitmap());
-
         }
-        galleryViewHolder.deckName.setText(galleryModel.getDeck(i).getName());
-        galleryViewHolder.deckDescription.setText(galleryModel.getDeck(i).getDescription());
 
-    //TODO implement the and ClickListeners
+        //TODO implement the and ClickListeners
     }
 
     public Context getContext() {
@@ -113,25 +109,24 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
     @Override
     public GalleryViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView;
-        if(GRIDLAYOUT==layout){
+        if (GRIDLAYOUT == layout) {
             itemView = LayoutInflater.
                     from(viewGroup.getContext()).
                     inflate(R.layout.deckgallery_grid_item, viewGroup, false);
-        }else{
+        } else {
             itemView = LayoutInflater.
                     from(viewGroup.getContext()).
                     inflate(R.layout.deckgallery_list_item, viewGroup, false);
         }
 
 
-
         return new GalleryViewHolder(itemView, i, context);
     }
 
 
-
     /**
      * Calculates a given MaxSize of a Picture to resize it with maintained AspectRatio
+     *
      * @param image
      * @param maxSize
      * @return
@@ -151,16 +146,27 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
         return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
+
     /**
      * Method for Callback of LocalDecksLoader, receives an ArrayList<OfflineDecks> when Task is completed.
+     *
      * @param object
      */
     @Override
     public void onTaskCompleted(Object object) {
-        galleryModel=new GalleryModel((ArrayList<OfflineDeck>) object);
-        notifyDataSetChanged();
-        galleryModel.setAdapter(this);
-        galleryModel.fetchOnlineDeck(Settings.serverAdress,"bikes");
+        if (object != null) {
+            galleryModel = new GalleryModel((ArrayList<OfflineDeck>) object);
+            galleryModel.setAdapter(this);
+            notifyDataSetChanged();
+            galleryModel.fetchOnlineDeck(Settings.serverAdress, "bikes");
+        } else {
+            galleryModel=new GalleryModel(this, Settings.serverAdress, context.getFilesDir() + Settings.localFolder);
+            galleryModel.setAdapter(this);
+            notifyDataSetChanged();
+            galleryModel.fetchOnlineDeck(Settings.serverAdress, "bikes");
+        }
+
+
     }
 
     /**
@@ -184,7 +190,6 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
         }
 
         /**
-         *
          * @param v
          * @param index
          * @param context

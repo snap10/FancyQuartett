@@ -4,15 +4,19 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 import de.uulm.mal.fancyquartett.adapters.GalleryViewAdapter;
@@ -34,26 +38,24 @@ import layout.GalleryFragment;
 public class LocalDecksLoader extends AsyncTask<Void, Void, ArrayList<OfflineDeck>> {
     String path;
     String[] deckFolders;
-    AssetManager manager;
     OnTaskCompleted listener;
     Context context;
 
 
-    public LocalDecksLoader(String path, Context context) throws IOException {
+    public LocalDecksLoader(String path, Context context){
         this.path = path;
-        this.context=context.getApplicationContext();
-        manager = context.getAssets();
-        deckFolders = manager.list(path);
-
-
+        this.context = context.getApplicationContext();
     }
 
-    public LocalDecksLoader(String path, Context context, OnTaskCompleted listener) throws IOException {
+
+    public LocalDecksLoader(String path, Context context, OnTaskCompleted listener) {
         this.path = path;
-        this.context=context.getApplicationContext();
-        manager = context.getAssets();
-        deckFolders = manager.list(path);
-        this.listener=listener;
+        this.context = context.getApplicationContext();
+        this.listener = listener;
+    }
+
+    public interface OnTaskCompleted {
+        public void onTaskCompleted(Object object);
     }
 
     /**
@@ -88,56 +90,26 @@ public class LocalDecksLoader extends AsyncTask<Void, Void, ArrayList<OfflineDec
      */
     @Override
     protected ArrayList<OfflineDeck> doInBackground(Void... params) {
+
         ArrayList<OfflineDeck> offlineDecks = new ArrayList<>();
-        String[] jsonStringArray = new String[deckFolders.length];
-        for (int i = 0; i < deckFolders.length; i++) {
-            String deckPath = deckFolders[i];
-            StringBuffer response;
+        File decksDirectory = new File(context.getFilesDir()+Settings.localFolder);
+        String[] decks= decksDirectory.list();
+
+        for (int i = 0; i < decks.length; i++) {
+            String deckPath = decksDirectory+"/"+decks[i];
             try {
-                BufferedReader in = new BufferedReader(new InputStreamReader(manager.open(path + "/"+ deckPath + "/" + deckPath + ".json")));
-                String inputLine;
-                response = new StringBuffer();
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-                    response.append("\n");
-                }
-                //DONE READING
-                in.close();
-                jsonStringArray[i] = response.toString();
-            } catch (IOException e1) {
-                e1.printStackTrace();
+                OfflineDeck offlineDeck = new OfflineDeck(deckPath,decks[i]);
+                offlineDecks.add(offlineDeck);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
             }
 
-        }
-        for (int i = 0; i < jsonStringArray.length; i++) {
-            JSONObject deckJson = null;
-            try {
-                deckJson = new JSONObject(jsonStringArray[i]);
-                JSONArray cardsJson = deckJson.getJSONArray("cards");
-                JSONArray propsJson = deckJson.getJSONArray("properties");
-                Property[] props = new Property[propsJson.length()];
-                for (int j = 0; j < props.length; j++) {
-                    props[j] = new Property(propsJson.getJSONObject(j));
-                }
-                Card[] cards = new Card[cardsJson.length()];
-                for (int k = 0; k < cards.length; k++) {
-                    // creating card objects initiates image downloads
-                    cards[k] = new Card(cardsJson.getJSONObject(k), props, context.getFilesDir()+Settings.localFolder,deckFolders[i],false);
-                    for (Image image: cards[k].getImages()) {
-                        //TODO
-                        //TODO image.saveBitmap(BitmapFactory.decodeFile(manager.(path + "/"+ deckFolders[i] + "/" + image.getFileName())));
 
-                    }
-                }
-
-                offlineDecks.add(new OfflineDeck(deckJson.getString("name"), deckJson.getString("description"), cards, props))
-                ;
-            } catch (JSONException e) {
-                System.out.println("Deck could not be added because downloaded JSON is invalid. " + e);
-            }
         }
         return offlineDecks;
     }
+
 
 }
 
