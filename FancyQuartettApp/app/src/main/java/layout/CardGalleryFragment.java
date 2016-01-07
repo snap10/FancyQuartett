@@ -8,12 +8,20 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import de.uulm.mal.fancyquartett.R;
+import de.uulm.mal.fancyquartett.adapters.DeckGalleryViewAdapter;
 import de.uulm.mal.fancyquartett.adapters.GalleryViewAdapter;
 import de.uulm.mal.fancyquartett.data.Card;
+import de.uulm.mal.fancyquartett.data.OfflineDeck;
+import de.uulm.mal.fancyquartett.utils.LocalDeckLoader;
+
 
 
 /**
@@ -24,8 +32,8 @@ import de.uulm.mal.fancyquartett.data.Card;
  * Use the {@link CardGalleryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CardGalleryFragment extends Fragment {
-    GalleryViewAdapter galleryViewAdapter;
+public class CardGalleryFragment extends Fragment implements LocalDeckLoader.OnLocalDeckLoadedListener {
+
     RecyclerView recList;
     LinearLayoutManager llm;
     GridLayoutManager glm;
@@ -40,6 +48,9 @@ public class CardGalleryFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private OfflineDeck offlineDeck;
+    private Menu menu;
+    private DeckGalleryViewAdapter deckGalleryViewAdapter;
 
     public CardGalleryFragment() {
         // Required empty public constructor
@@ -77,13 +88,23 @@ public class CardGalleryFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        setHasOptionsMenu(true);
+        glm= new GridLayoutManager(getContext(),2);
+        llm = new LinearLayoutManager(this.getContext());
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_card_gallery, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_main_gallery, container, false);
+        recList = (RecyclerView) rootView.findViewById(R.id.recycler_gallery_list);
+        recList.setHasFixedSize(true);
+        recList.setLayoutManager(llm);
+
+
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -111,6 +132,24 @@ public class CardGalleryFragment extends Fragment {
     }
 
     /**
+     * Callback Method for LocalDeckLoader
+     *
+     * @param offlineDeck
+     */
+    @Override
+    public void onDeckLoaded(OfflineDeck offlineDeck) {
+        if (offlineDeck==null){
+            Toast.makeText(this.getContext(),"Deck could not be loaded",Toast.LENGTH_LONG).show();
+        }else{
+            this.offlineDeck = offlineDeck;
+            deckGalleryViewAdapter = new DeckGalleryViewAdapter(getContext().getApplicationContext(),DeckGalleryViewAdapter.LISTLAYOUT);
+            deckGalleryViewAdapter.setOfflineDeck(offlineDeck);
+            recList.setAdapter(deckGalleryViewAdapter);
+
+        }
+    }
+
+    /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
@@ -123,5 +162,62 @@ public class CardGalleryFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+
+    /**
+     * This hook is called whenever an item in your options menu is selected.
+     * The default implementation simply returns false to have the normal
+     * processing happen (calling the item's Runnable or sending a message to
+     * its Handler as appropriate).  You can use this method for any items
+     * for which you would like to do processing without those other
+     * facilities.
+     * <p/>
+     * <p>Derived classes should call through to the base class for it to
+     * perform the default menu handling.
+     *
+     * @param item The menu item that was selected.
+     * @return boolean Return false to allow normal menu processing to
+     * proceed, true to consume it here.
+     * @see #onCreateOptionsMenu
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId()==R.id.listLayoutButton) {
+            recList.setLayoutManager(llm);
+            deckGalleryViewAdapter = new DeckGalleryViewAdapter(getContext().getApplicationContext(),offlineDeck,DeckGalleryViewAdapter.LISTLAYOUT);
+            recList.setAdapter(deckGalleryViewAdapter);
+            item.setVisible(false);
+            MenuItem item2 = menu.findItem(R.id.gridLayoutButton);
+            item2.setVisible(true);
+        }else if(item.getItemId()==R.id.gridLayoutButton){
+            recList.setLayoutManager(glm);
+            deckGalleryViewAdapter = new DeckGalleryViewAdapter(getContext().getApplicationContext(),offlineDeck,DeckGalleryViewAdapter.GRIDLAYOUT);
+            recList.setAdapter(deckGalleryViewAdapter);
+            item.setVisible(false);
+            MenuItem item2=menu.findItem(R.id.listLayoutButton);
+            item2.setVisible(true);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Initialize the contents of the Activity's standard options menu.  You
+     * should place your menu items in to <var>menu</var>.  For this method
+     * to be called, you must have first called {@link #setHasOptionsMenu}.  See
+     * for more information.
+     *
+     * @param menu     The options menu in which you place your items.
+     * @param inflater
+     * @see #setHasOptionsMenu
+     * @see #onPrepareOptionsMenu
+     * @see #onOptionsItemSelected
+     */
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        this.menu=menu;
+        inflater.inflate(R.menu.gallery_menu,menu);
     }
 }

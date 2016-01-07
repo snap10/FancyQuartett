@@ -105,4 +105,20 @@ public class Card {
     public boolean compare(Property prop, float enemyValue) {
         return prop.biggerWins() ? values.get(prop)>enemyValue : values.get(prop)<enemyValue;
     }
+
+    /**
+     *
+     * @return
+     */
+    public CharSequence getName() {
+        return name;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getDescription(){
+        return description;
+    }
 }

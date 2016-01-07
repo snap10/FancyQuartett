@@ -22,12 +22,22 @@ public class LocalDeckLoader extends AsyncTask<Void, Void, OfflineDeck> {
     String deckname;
     OnLocalDeckLoadedListener listener;
 
+    /**
+     *
+     * @param path
+     * @param deckname
+     */
     public LocalDeckLoader(String path, String deckname) {
         this.path = path;
         this.deckname = deckname;
     }
 
-
+    /**
+     *
+     * @param path
+     * @param deckname
+     * @param listener
+     */
     public LocalDeckLoader(String path, String deckname, OnLocalDeckLoadedListener listener) {
         this.path = path;
         this.deckname = deckname;
@@ -76,7 +86,6 @@ public class LocalDeckLoader extends AsyncTask<Void, Void, OfflineDeck> {
     protected OfflineDeck doInBackground(Void... params) {
 
         OfflineDeck offlineDeck = null;
-
         String deckPath = path + "/" + deckname;
         try {
             offlineDeck = new OfflineDeck(deckPath, deckname);

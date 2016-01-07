@@ -35,18 +35,21 @@
                 <RelativeLayout
 
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="#aaff9800">
 
                     <TextView
                         android:id="@+id/deckname"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:padding="5dip"
                         android:text="DeckName"
-
-                        android:textAppearance="?android:attr/textAppearanceLarge" />
+                        style="@style/Base.TextAppearance.AppCompat.Medium.Inverse"
+                        android:layout_centerVertical="true"
+                        android:gravity="center"
+                        android:layout_toLeftOf="@+id/deck_options_button"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
 
                     <ImageButton
                         android:id="@+id/deck_options_button"
@@ -68,12 +71,13 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
-                    android:background="#aaff9800"
+                    android:background="#bbff9800"
                     android:gravity="center"
                     android:padding="5dip"
                     android:text="DeckName"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    android:layout_toLeftOf="@+id/deck_options_button"/>
 
             </LinearLayout>
         </RelativeLayout>

@@ -22,7 +22,7 @@ import layout.GalleryFragment;
 /**
  * Created by mk on 02.01.2016.
  */
-public class GalleryModel implements Serializable, JsonDownloader.OnJasonDownloaderFinished {
+public class GalleryModel implements JsonDownloader.OnJasonDownloaderFinished {
 
     private GalleryViewAdapter adapter;
     private ArrayList<OnlineDeck> onlineDecks;

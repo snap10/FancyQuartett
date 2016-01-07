@@ -21,7 +21,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.GameActivity" />
-        <activity android:name=".activities.CardGalleryActivity"></activity>
+        <activity android:name=".activities.CardGalleryActivity"
+                    android:parentActivityName=".activities.MainActivity"></activity>
     </application>
 
 </manifest>

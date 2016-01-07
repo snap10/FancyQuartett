@@ -117,8 +117,6 @@ public class GalleryFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_main_gallery, container, false);
-        //Create a GallerViewAdapter for the RecyclerList
-
         recList = (RecyclerView) rootView.findViewById(R.id.recycler_gallery_list);
         recList.setHasFixedSize(true);
 
@@ -213,12 +211,6 @@ public class GalleryFragment extends Fragment {
             MenuItem item2=menu.findItem(R.id.listLayoutButton);
             item2.setVisible(true);
         }
-
-
-    
-
-
-
         return super.onOptionsItemSelected(item);
     }
 

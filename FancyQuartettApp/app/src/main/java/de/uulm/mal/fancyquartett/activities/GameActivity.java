@@ -22,7 +22,7 @@ public class GameActivity extends AppCompatActivity implements LocalDeckLoader.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         String deckname = getIntent().getExtras().getString("deckname");
-        new LocalDeckLoader(getFilesDir()+ Settings.localFolder,deckname,this);
+        new LocalDeckLoader(getFilesDir()+ Settings.localFolder,deckname.toLowerCase(),this).execute();
 
 
     }

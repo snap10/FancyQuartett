@@ -1,5 +1,6 @@
 package de.uulm.mal.fancyquartett.adapters;
 
+
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -11,27 +12,28 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.ArrayList;
 
 import de.uulm.mal.fancyquartett.R;
+import de.uulm.mal.fancyquartett.activities.CardDetailViewActivity;
 import de.uulm.mal.fancyquartett.activities.CardGalleryActivity;
+import de.uulm.mal.fancyquartett.data.Card;
 import de.uulm.mal.fancyquartett.data.GalleryModel;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.data.Settings;
+import de.uulm.mal.fancyquartett.utils.LocalDeckLoader;
 import de.uulm.mal.fancyquartett.utils.LocalDecksLoader;
-import layout.CardGalleryFragment;
-
 
 /**
  * Created by Snap10 on 04/01/16.
  */
-public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.GalleryViewHolder> implements LocalDecksLoader.OnLocalDecksLoadedListener {
+public class DeckGalleryViewAdapter extends RecyclerView.Adapter<DeckGalleryViewAdapter.DeckGalleryViewHolder>  {
 
     public static final int LISTLAYOUT = 0;
     public static final int GRIDLAYOUT = 1;
 
-    GalleryModel galleryModel;
+    OfflineDeck offlineDeck;
     Context context;
     int layout;
 
@@ -39,34 +41,27 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
      *
      * @param context
      */
-    public GalleryViewAdapter(Context context) {
-        this.context = context;
-        galleryModel = new GalleryModel();
-        layout = 0;
-    }
-
-    /**
-     *
-     * @param context
-     * @param galleryModel
-     */
-    public GalleryViewAdapter(Context context, GalleryModel galleryModel) {
+    public DeckGalleryViewAdapter(Context context) {
         this.context = context.getApplicationContext();
-        this.galleryModel = galleryModel;
         layout = 0;
-
     }
+
 
     /**
      *
      * @param context
-     * @param galleryModel
      * @param layout
      */
-    public GalleryViewAdapter(Context context, GalleryModel galleryModel, int layout) {
+    public DeckGalleryViewAdapter(Context context, int layout) {
         this.context = context.getApplicationContext();
-        this.galleryModel = galleryModel;
         this.layout = layout;
+    }
+
+    public DeckGalleryViewAdapter(Context context, OfflineDeck offlineDeck, int layout) {
+        this.context=context.getApplicationContext();
+        this.layout=layout;
+        this.offlineDeck=offlineDeck;
+
     }
 
     /**
@@ -85,21 +80,6 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
         this.layout = layout;
     }
 
-    /**
-     *
-     * @return
-     */
-    public GalleryModel getGalleryModel() {
-        return galleryModel;
-    }
-
-    /**
-     *
-     * @param galleryModel
-     */
-    public void setGalleryModel(GalleryModel galleryModel) {
-        this.galleryModel = galleryModel;
-    }
 
     /**
      *
@@ -107,35 +87,32 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
      */
     @Override
     public int getItemCount() {
-        //TODO remove in Production, just for testing
-        if (galleryModel.getSize() == 0) {
-            galleryModel.addTestDecks();
+        if (offlineDeck==null) {
+            return 0;
         }
-        //TODO
-        return galleryModel.getSize();
+        return offlineDeck.getCards().size();
     }
 
     /**
-     * @param galleryViewHolder
+     * @param deckGalleryViewHolder
      * @param i
      */
     @Override
-    public void onBindViewHolder(final GalleryViewHolder galleryViewHolder, int i) {
-        final OfflineDeck offlineDeck = galleryModel.getOfflineDeck(i);
-        if (offlineDeck == null) {
-            //No OfflineDeck Information available thus just set Name and Description
-            galleryViewHolder.deckName.setText(galleryModel.getDeck(i).getName());
-            galleryViewHolder.deckDescription.setText(galleryModel.getDeck(i).getDescription());
+    public void onBindViewHolder(final DeckGalleryViewHolder deckGalleryViewHolder, int i) {
+        final Card card = offlineDeck.getCards().get(i);
+        if (card == null) {
+            Toast.makeText(this.getContext(), "Error:Some Cards failed to load", Toast.LENGTH_SHORT).show();
         } else {
-            galleryViewHolder.deckName.setText(offlineDeck.getName());
-            galleryViewHolder.deckDescription.setText(offlineDeck.getDescription());
-            galleryViewHolder.deckIcon.setImageBitmap(offlineDeck.getCards().get(0).getImages().get(0).getBitmap());
-            galleryViewHolder.view.setOnClickListener(new View.OnClickListener() {
+            deckGalleryViewHolder.deckName.setText(card.getName());
+            deckGalleryViewHolder.deckDescription.setText(card.getDescription());
+            deckGalleryViewHolder.deckIcon.setImageBitmap(card.getImages().get(0).getBitmap());
+            deckGalleryViewHolder.view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    Intent intent = new Intent(context, CardGalleryActivity.class);
-                    intent.putExtra("deckname",offlineDeck.getName());
+                    Intent intent = new Intent(context, CardDetailViewActivity.class);
+                    intent.putExtra("cardname",card.getName());
+
                     v.getContext().startActivity(intent);
                 }
             });
@@ -153,7 +130,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
     }
 
     @Override
-    public GalleryViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public DeckGalleryViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView;
         if (GRIDLAYOUT == layout) {
             itemView = LayoutInflater.
@@ -166,39 +143,18 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
         }
 
 
-        return new GalleryViewHolder(itemView, i, context);
+        return new DeckGalleryViewHolder(itemView, i, context);
     }
 
-
-
-
-
-    /**
-     * Method for Callback of LocalDecksLoader, receives an ArrayList<OfflineDecks> when Task is completed.
-     *
-     * @param object
-     */
-    @Override
-    public void onLocalDecksLoaded(Object object) {
-        if (object != null) {
-            galleryModel = new GalleryModel((ArrayList<OfflineDeck>) object);
-            galleryModel.setAdapter(this);
-            notifyDataSetChanged();
-            galleryModel.fetchOnlineDeck(Settings.serverAdress, "bikes");
-        } else {
-            galleryModel=new GalleryModel(this, Settings.serverAdress, context.getFilesDir() + Settings.localFolder);
-            galleryModel.setAdapter(this);
-            notifyDataSetChanged();
-            galleryModel.fetchOnlineDeck(Settings.serverAdress, "bikes");
-        }
-
-
+    public void setOfflineDeck(OfflineDeck offlineDeck) {
+        this.offlineDeck = offlineDeck;
     }
+
 
     /**
      * InnerClass TimerViewHolder extends RecyclerView.ViewHolder
      */
-    public static class GalleryViewHolder extends RecyclerView.ViewHolder {
+    public static class DeckGalleryViewHolder extends RecyclerView.ViewHolder {
 
         private View view;
         private TextView deckName;
@@ -222,7 +178,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
          * @param index
          * @param context
          */
-        public GalleryViewHolder(View v, int index, final Context context) {
+        public DeckGalleryViewHolder(View v, int index, final Context context) {
             super(v);
             view=v;
             deckName = (TextView) v.findViewById(R.id.deckname);
@@ -238,6 +194,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
             v.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
                 @Override
                 public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+                    //TODO specify right Menu
                     new MenuInflater(context).inflate(R.menu.gallerylist_menu,menu);
                 }
             });
@@ -247,4 +204,5 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
 
 
 }
+
 

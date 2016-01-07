@@ -3,15 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="de.uulm.mal.fancyquartett.activities.CardGalleryActivity">
+    tools:context="de.uulm.mal.fancyquartett.activities.CardGalleryActivity"
+    android:id="@+id/card_gallery_relativelayout">
 
-    <fragment
-        android:id="@+id/cardGalleryFragment"
-        android:name="layout.CardGalleryFragment"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="2"
-        tools:layout="@layout/fragment_main_gallery" />
+
 
 
 </RelativeLayout>
