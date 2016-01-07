@@ -1,6 +1,7 @@
 package de.uulm.mal.fancyquartett.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,6 +21,7 @@ import de.uulm.mal.fancyquartett.data.GalleryModel;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.data.Settings;
 import de.uulm.mal.fancyquartett.utils.LocalDecksLoader;
+import layout.CardGalleryFragment;
 
 
 /**
@@ -86,7 +89,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
      */
     @Override
     public void onBindViewHolder(final GalleryViewHolder galleryViewHolder, int i) {
-        OfflineDeck offlineDeck = galleryModel.getOfflineDeck(i);
+        final OfflineDeck offlineDeck = galleryModel.getOfflineDeck(i);
         if (offlineDeck == null) {
             //No OfflineDeck Information available thus just set Name and Description
             galleryViewHolder.deckName.setText(galleryModel.getDeck(i).getName());
@@ -95,6 +98,14 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
             galleryViewHolder.deckName.setText(offlineDeck.getName());
             galleryViewHolder.deckDescription.setText(offlineDeck.getDescription());
             galleryViewHolder.deckIcon.setImageBitmap(offlineDeck.getCards().get(0).getImages().get(0).getBitmap());
+            galleryViewHolder.view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, CardGalleryFragment.class);
+                    intent.putExtra("deck",offlineDeck);
+                    context.startActivity(intent);
+                }
+            });
         }
 
         //TODO implement the and ClickListeners
@@ -126,27 +137,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
     }
 
 
-    /**
-     * Calculates a given MaxSize of a Picture to resize it with maintained AspectRatio
-     *
-     * @param image
-     * @param maxSize
-     * @return
-     */
-    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
-        int width = image.getWidth();
-        int height = image.getHeight();
 
-        float bitmapRatio = (float) width / (float) height;
-        if (bitmapRatio > 0) {
-            width = maxSize;
-            height = (int) (width / bitmapRatio);
-        } else {
-            height = maxSize;
-            width = (int) (height * bitmapRatio);
-        }
-        return Bitmap.createScaledBitmap(image, width, height, true);
-    }
 
 
     /**
@@ -176,10 +167,11 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
      */
     public static class GalleryViewHolder extends RecyclerView.ViewHolder {
 
+        private View view;
         private TextView deckName;
         private TextView deckDescription;
         private ImageView deckIcon;
-        private ImageView deckContextMenuButton;
+        private ImageButton deckContextMenuButton;
         protected int index;
 
         protected Context context;
@@ -199,10 +191,11 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
          */
         public GalleryViewHolder(View v, int index, final Context context) {
             super(v);
+            view=v;
             deckName = (TextView) v.findViewById(R.id.deckname);
             deckDescription = (TextView) v.findViewById(R.id.deckdescription);
             deckIcon = (ImageView) v.findViewById(R.id.deckicon);
-            deckContextMenuButton= (ImageView)v.findViewById(R.id.deck_options_button);
+            deckContextMenuButton= (ImageButton)v.findViewById(R.id.deck_options_button);
             deckContextMenuButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

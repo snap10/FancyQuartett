@@ -39,7 +39,7 @@ public class GalleryFragment extends Fragment {
     RecyclerView recList;
     LinearLayoutManager llm;
     GridLayoutManager glm;
-    Activity parentActivity;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -88,8 +88,7 @@ public class GalleryFragment extends Fragment {
         glm= new GridLayoutManager(getContext(),2);
         llm = new LinearLayoutManager(this.getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
-        //ListButton
-        //TODO setLayoutButtonClickListener();
+
 
 
 

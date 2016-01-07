@@ -48,7 +48,7 @@
 
                         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-                    <ImageView
+                    <ImageButton
                         android:id="@+id/deck_options_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -58,7 +58,8 @@
                         android:layout_gravity="center"
                         android:adjustViewBounds="false"
                         android:padding="10dip"
-                        android:src="@drawable/ic_more_vert_24dp" />
+                        android:src="@drawable/ic_more_vert_24dp"
+                        android:background="@null"/>
                 </RelativeLayout>
 
                 <TextView

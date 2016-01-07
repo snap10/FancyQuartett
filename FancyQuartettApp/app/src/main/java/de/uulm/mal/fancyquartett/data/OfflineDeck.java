@@ -7,13 +7,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
  * Created by mk on 01.01.2016.
  */
-public class OfflineDeck extends Deck {
+public class OfflineDeck extends Deck implements Serializable {
 
     private ArrayList<Card> cards;
 
