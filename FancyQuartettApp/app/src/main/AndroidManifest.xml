@@ -21,8 +21,19 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.GameActivity" />
-        <activity android:name=".activities.CardGalleryActivity"
-                    android:parentActivityName=".activities.MainActivity"></activity>
+        <activity
+            android:name=".activities.CardGalleryActivity"
+            android:parentActivityName=".activities.MainActivity" />
+        <activity android:name=".activities.NewGameSettingsActivity" />
+        <activity
+            android:name=".activities.DeckGalleryActivity"
+            android:label="@string/title_activity_deck_gallery"
+            android:parentActivityName=".activities.NewGameSettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.uulm.mal.fancyquartett.activities.NewGameSettingsActivity" />
+        </activity>
     </application>
 
 </manifest>

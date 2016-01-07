@@ -14,6 +14,22 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="gamemode_chooser_title">Game Mode</string>
+    <string name="generalsettings_title">General Settings</string>
+    <string name="totheend">To the End</string>
+    <string name="time">Time</string>
+    <string name="points">Points</string>
+    <string name="hotseat">Hotseat</string>
+    <string name="startgame">Start</string>
+    <string name="gamesettings_timeoutforoneround_switch"> Seconds for Timeout of one Round</string>
+    <string name="chosendeck">Chosen Deck</string>
+    <string name="hardai">hard AI level</string>
+    <string name="mediumai">medium AI level</string>
+    <string name="softai">soft AI level</string>
+    <string name="numberofroundstext">Rounds at maximum</string>
+    <string name="totheenddescription">You play until one player has won all cards</string>
+    <string name="timeinminuitesdescription">Maximum Minuites for one Game</string>
+    <string name="title_activity_deck_gallery">DeckGalleryActivity</string>
 
 
 </resources>

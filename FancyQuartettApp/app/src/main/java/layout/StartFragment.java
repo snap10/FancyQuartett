@@ -12,6 +12,7 @@ import android.widget.Button;
 
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.activities.GameActivity;
+import de.uulm.mal.fancyquartett.activities.NewGameSettingsActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -71,6 +72,24 @@ public class StartFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), GameActivity.class);
                 intent.putExtra("deckname","bikes");
+                startActivity(intent);
+            }
+        });
+        Button newSinglePlayerButton = (Button) v.findViewById(R.id.newSingleplayerButton);
+        newSinglePlayerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), NewGameSettingsActivity.class);
+                intent.putExtra("multiplayer",false);
+                startActivity(intent);
+            }
+        });
+        Button newMultiplayerButton = (Button) v.findViewById(R.id.newMultiplayerButton);
+        newMultiplayerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), GameActivity.class);
+                intent.putExtra("multiplayer", true);
                 startActivity(intent);
             }
         });
