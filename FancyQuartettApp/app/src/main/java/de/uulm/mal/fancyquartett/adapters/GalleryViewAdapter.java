@@ -179,6 +179,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
         private TextView deckName;
         private TextView deckDescription;
         private ImageView deckIcon;
+        private ImageView deckContextMenuButton;
         protected int index;
 
         protected Context context;
@@ -201,7 +202,13 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
             deckName = (TextView) v.findViewById(R.id.deckname);
             deckDescription = (TextView) v.findViewById(R.id.deckdescription);
             deckIcon = (ImageView) v.findViewById(R.id.deckicon);
-
+            deckContextMenuButton= (ImageView)v.findViewById(R.id.deck_options_button);
+            deckContextMenuButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    v.showContextMenu();
+                }
+            });
             v.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
                 @Override
                 public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {

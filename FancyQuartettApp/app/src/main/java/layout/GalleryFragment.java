@@ -113,36 +113,6 @@ public class GalleryFragment extends Fragment {
         return rootView;
     }
 
-    /*private void setLayoutButtonClickListener() {
-        parentActivity=getActivity();
-        ImageView imageView = (ImageView) parentActivity.findViewById(R.id.listLayoutButton);
-        if (imageView!=null){
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ImageView imageView = (ImageView) v;
-                    if (imageView.getTag().equals("module")) {
-                        recList.setLayoutManager(llm);
-                        galleryViewAdapter = new GalleryViewAdapter(getContext(),galleryViewAdapter.getGalleryModel(),GalleryViewAdapter.LISTLAYOUT);
-                        recList.setAdapter(galleryViewAdapter);
-                        imageView.setImageResource(R.drawable.ic_view_module_24dp);
-                        imageView.setRotation(90);
-                        imageView.setTag("list");
-
-                    } else {
-                        recList.setLayoutManager(glm);
-
-                        galleryViewAdapter = new GalleryViewAdapter(getContext(),galleryViewAdapter.getGalleryModel(),GalleryViewAdapter.GRIDLAYOUT);
-                        recList.setAdapter(galleryViewAdapter);
-                        imageView.setImageResource(R.drawable.ic_view_list_24dp);
-                        imageView.setRotation(0);
-                        imageView.setTag("module");
-
-                    }
-                }
-            });
-        }
-    }*/
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

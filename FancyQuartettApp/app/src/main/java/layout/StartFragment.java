@@ -1,14 +1,17 @@
 package layout;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import de.uulm.mal.fancyquartett.R;
+import de.uulm.mal.fancyquartett.activities.GameActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,11 +65,20 @@ public class StartFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_main_start, container, false);
+        Button testButton = (Button) v.findViewById(R.id.testGameActivity);
+        testButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), GameActivity.class);
+                startActivity(intent);
+            }
+        });
         return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
+        //TODO Remove after Testing
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
