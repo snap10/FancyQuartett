@@ -6,6 +6,7 @@ import android.widget.LinearLayout;
 import java.security.Timestamp;
 
 import de.uulm.mal.fancyquartett.data.Deck;
+import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.enums.GameMode;
 
 /**
@@ -13,6 +14,7 @@ import de.uulm.mal.fancyquartett.enums.GameMode;
  */
 public class GameEngine {
 
+    private final OfflineDeck offlinedeck;
     // app attributes
     private Context mContext;
 
@@ -27,9 +29,13 @@ public class GameEngine {
     Timestamp startTime, lastPlayed, endTime;
     //Boolean isMultiplayer = false;
 
-    public GameEngine(Context context) {
+    public GameEngine(Context context, OfflineDeck offlineDeck) {
         this.mContext = context;
+        this.offlinedeck = offlineDeck;
     }
+
+    //TODO some stuff with Deckdata
+
 
 }
 

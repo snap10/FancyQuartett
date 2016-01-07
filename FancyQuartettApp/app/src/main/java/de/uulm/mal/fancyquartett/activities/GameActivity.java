@@ -7,11 +7,13 @@ import android.widget.LinearLayout;
 import java.security.Timestamp;
 
 import de.uulm.mal.fancyquartett.R;
-import de.uulm.mal.fancyquartett.data.Card;
-import de.uulm.mal.fancyquartett.data.Deck;
+import de.uulm.mal.fancyquartett.data.OfflineDeck;
+import de.uulm.mal.fancyquartett.data.Settings;
 import de.uulm.mal.fancyquartett.utils.GameEngine;
+import de.uulm.mal.fancyquartett.utils.LocalDeckLoader;
 
-public class GameActivity extends AppCompatActivity {
+
+public class GameActivity extends AppCompatActivity implements LocalDeckLoader.OnLocalDeckLoadedListener{
 
     GameEngine engine;
 
@@ -19,7 +21,19 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        String deckname = getIntent().getExtras().getString("deckname");
+        new LocalDeckLoader(getFilesDir()+ Settings.localFolder,deckname,this);
 
-        engine = new GameEngine(getApplicationContext());
+
+    }
+
+    /**
+     * Callback Method for LocalDeckLoader
+     *
+     * @param offlineDeck
+     */
+    @Override
+    public void onDeckLoaded(OfflineDeck offlineDeck) {
+        engine = new GameEngine(getApplicationContext(),offlineDeck);
     }
 }

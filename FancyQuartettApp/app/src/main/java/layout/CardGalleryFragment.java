@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.adapters.GalleryViewAdapter;
+import de.uulm.mal.fancyquartett.data.Card;
 
 
 /**
@@ -28,6 +29,7 @@ public class CardGalleryFragment extends Fragment {
     RecyclerView recList;
     LinearLayoutManager llm;
     GridLayoutManager glm;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -57,6 +59,13 @@ public class CardGalleryFragment extends Fragment {
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static CardGalleryFragment newInstance(){
+        CardGalleryFragment fragment = new CardGalleryFragment();
+        Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }

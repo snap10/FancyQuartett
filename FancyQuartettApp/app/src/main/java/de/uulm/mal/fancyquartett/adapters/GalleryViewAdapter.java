@@ -2,7 +2,6 @@ package de.uulm.mal.fancyquartett.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -16,7 +15,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import de.uulm.mal.fancyquartett.R;
-import de.uulm.mal.fancyquartett.data.Deck;
 import de.uulm.mal.fancyquartett.data.GalleryModel;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.data.Settings;
@@ -27,7 +25,7 @@ import layout.CardGalleryFragment;
 /**
  * Created by Snap10 on 04/01/16.
  */
-public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.GalleryViewHolder> implements LocalDecksLoader.OnTaskCompleted {
+public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.GalleryViewHolder> implements LocalDecksLoader.OnLocalDecksLoadedListener {
 
     public static final int LISTLAYOUT = 0;
     public static final int GRIDLAYOUT = 1;
@@ -146,7 +144,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
      * @param object
      */
     @Override
-    public void onTaskCompleted(Object object) {
+    public void onLocalDecksLoaded(Object object) {
         if (object != null) {
             galleryModel = new GalleryModel((ArrayList<OfflineDeck>) object);
             galleryModel.setAdapter(this);

@@ -64,10 +64,27 @@ public class GalleryFragment extends Fragment {
      *
      * @return A new instance of fragment GalleryFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static GalleryFragment newInstance() {
         GalleryFragment fragment = new GalleryFragment();
         Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment CardGalleryFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static GalleryFragment newInstance(String param1, String param2) {
+        GalleryFragment fragment = new GalleryFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -82,7 +99,7 @@ public class GalleryFragment extends Fragment {
         setHasOptionsMenu(true);
         //Initialize Data
         galleryViewAdapter = new GalleryViewAdapter(getContext());
-        LocalDecksLoader loader = new LocalDecksLoader(Settings.localAssets,getContext(),galleryViewAdapter);
+        LocalDecksLoader loader = new LocalDecksLoader(getContext().getFilesDir()+Settings.localFolder,galleryViewAdapter);
         loader.execute();
 
         glm= new GridLayoutManager(getContext(),2);

@@ -56,13 +56,14 @@
             android:layout_height="wrap_content"
             android:text="AI: 17"
             android:id="@+id/textView_OpponendsCards"
-            android:layout_alignParentEnd="true"
+            android:layout_alignParentEnd="false"
             android:layout_alignParentRight="true"
             android:layout_marginLeft="10dp"
             android:minWidth="50dp"
             android:maxWidth="75dp"
-            android:textAlignment="textEnd"
-            android:gravity="right" />
+            android:gravity="right"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentLeft="false"/>
     </RelativeLayout>
 
 </LinearLayout>
