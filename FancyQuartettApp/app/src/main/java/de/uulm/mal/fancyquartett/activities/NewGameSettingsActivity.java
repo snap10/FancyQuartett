@@ -18,8 +18,7 @@ public class NewGameSettingsActivity extends AppCompatActivity implements NewGam
         NewGameSettingsFragment fragment= NewGameSettingsFragment.newInstance(null,null);
         android.support.v4.app.FragmentManager manager = getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction transaction = manager.beginTransaction();
-        transaction.add(R.id.new_game_settings_relativelayout, fragment, "newgamesettingsfragment");
-        transaction.addToBackStack("newgamesettingsfragment");
+        transaction.replace(R.id.new_game_settings_relativelayout, fragment, "newgamesettingsfragment");
         transaction.commit();
     }
 

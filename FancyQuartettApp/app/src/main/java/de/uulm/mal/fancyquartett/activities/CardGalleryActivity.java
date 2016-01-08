@@ -26,7 +26,7 @@ public class CardGalleryActivity extends AppCompatActivity implements CardGaller
         loader.execute();
         android.support.v4.app.FragmentManager manager = getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction transaction = manager.beginTransaction();
-        transaction.add(R.id.card_gallery_relativelayout,fragment,"cardgalleryfragment");
+        transaction.replace(R.id.card_gallery_relativelayout,fragment,"cardgalleryfragment");
         transaction.addToBackStack("cardgalleryfragment");
         transaction.commit();
 
