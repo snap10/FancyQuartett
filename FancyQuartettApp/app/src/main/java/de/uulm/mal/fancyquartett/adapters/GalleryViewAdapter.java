@@ -34,6 +34,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
     GalleryModel galleryModel;
     Context context;
     int layout;
+    private View.OnClickListener itemClickListener;
 
     /**
      *
@@ -130,15 +131,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
             galleryViewHolder.deckName.setText(offlineDeck.getName());
             galleryViewHolder.deckDescription.setText(offlineDeck.getDescription());
             galleryViewHolder.deckIcon.setImageBitmap(offlineDeck.getCards().get(0).getImages().get(0).getBitmap());
-            galleryViewHolder.view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Intent intent = new Intent(context, CardGalleryActivity.class);
-                    intent.putExtra("deckname",offlineDeck.getName());
-                    v.getContext().startActivity(intent);
-                }
-            });
+            galleryViewHolder.view.setOnClickListener(getItemClickListener(offlineDeck));
         }
 
         //TODO implement the and ClickListeners
@@ -193,6 +186,19 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
         }
 
 
+    }
+
+    public View.OnClickListener getItemClickListener(final OfflineDeck offlineDeck) {
+        View.OnClickListener itemClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(context, CardGalleryActivity.class);
+                intent.putExtra("deckname",offlineDeck.getName());
+                v.getContext().startActivity(intent);
+            }
+        };
+        return itemClickListener;
     }
 
     /**

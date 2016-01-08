@@ -2,6 +2,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="de.uulm.mal.fancyquartett.activities.DeckGalleryActivity">
+
+    <item
+        android:id="@+id/listLayoutButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_view_list_24dp"
+        android:title="@string/change_content_layout"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/gridLayoutButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_view_module_24dp"
+        android:title="@string/change_content_layout"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

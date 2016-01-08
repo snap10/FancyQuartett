@@ -14,8 +14,6 @@ public class NewGameSettingsActivity extends AppCompatActivity implements NewGam
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_game_settings);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         NewGameSettingsFragment fragment= NewGameSettingsFragment.newInstance(null,null);
         android.support.v4.app.FragmentManager manager = getSupportFragmentManager();

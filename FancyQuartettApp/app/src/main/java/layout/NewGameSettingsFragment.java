@@ -15,13 +15,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import de.uulm.mal.fancyquartett.R;
-import de.uulm.mal.fancyquartett.activities.MainActivity;
+import de.uulm.mal.fancyquartett.activities.DeckGalleryActivity;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.data.Settings;
 import de.uulm.mal.fancyquartett.utils.LocalDeckLoader;
-
 
 
 /**
@@ -96,7 +97,7 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v=inflater.inflate(R.layout.fragment_new_game_settings, container, false);
+        View v = inflater.inflate(R.layout.fragment_new_game_settings, container, false);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mGameModePagerAdapter = new GameModePagerAdapter(getActivity().getSupportFragmentManager());
@@ -106,7 +107,6 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
         mViewPager.setAdapter(mGameModePagerAdapter);
 
 
-
         TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
@@ -114,8 +114,8 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
         cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(),GalleryFragment.class);
-                startActivityForResult(intent,0);
+                Intent intent = new Intent(getContext(), DeckGalleryActivity.class);
+                startActivityForResult(intent, 0);
             }
         });
         return v;
@@ -136,8 +136,7 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        new LocalDeckLoader(getContext().getFilesDir()+ Settings.localFolder,data.getExtras().getString("deckname").toLowerCase(),this).execute();
-        super.onActivityResult(requestCode, resultCode, data);
+        new LocalDeckLoader(getContext().getFilesDir() + Settings.localFolder, data.getExtras().getString("deckname").toLowerCase(), this).execute();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -173,8 +172,12 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
     public void onDeckLoaded(OfflineDeck offlineDeck) {
 
         this.offlineDeck = offlineDeck;
-        //TODO show Deck Information in Chosen Deck Card
-
+        ImageView imageview = (ImageView) getActivity().findViewById(R.id.deckicon);
+        imageview.setImageBitmap(offlineDeck.getCards().get(0).getImages().get(0).getBitmap());
+        TextView deckname = (TextView) getActivity().findViewById(R.id.deckname);
+        deckname.setText(offlineDeck.getName());
+        TextView deckdescription = (TextView) getActivity().findViewById(R.id.deckdescription);
+        deckdescription.setText(offlineDeck.getName());
     }
 
     /**
@@ -208,8 +211,8 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
-        this.menu=menu;
-        inflater.inflate(R.menu.newgamesettings_optionsmenu,menu);
+        this.menu = menu;
+        inflater.inflate(R.menu.newgamesettings_optionsmenu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -227,7 +230,7 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new  GameModeToTheEndFragment().newInstance();
+                    return new GameModeToTheEndFragment().newInstance();
                 case 1:
                     return new GameModeTimeFragment().newInstance();
                 case 2:
@@ -260,228 +263,6 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
                     throw new IllegalArgumentException("Wrong Fragment ID chosen");
             }
 
-        }
-    }
-
-    private class GameModeToTheEndFragment extends Fragment {
-        public GameModeToTheEndFragment() {
-        }
-
-        public Fragment newInstance() {
-            Fragment fragment = new GameModeToTheEndFragment();
-            return fragment;
-        }
-        /**
-         * Called to do initial creation of a fragment.  This is called after
-         * {@link #onAttach(Activity)} and before
-         * {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
-         * <p/>
-         * <p>Note that this can be called while the fragment's activity is
-         * still in the process of being created.  As such, you can not rely
-         * on things like the activity's content view hierarchy being initialized
-         * at this point.  If you want to do work once the activity itself is
-         * created, see {@link #onActivityCreated(Bundle)}.
-         *
-         * @param savedInstanceState If the fragment is being re-created from
-         *                           a previous saved state, this is the state.
-         */
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-        }
-
-        /**
-         * Called to have the fragment instantiate its user interface view.
-         * This is optional, and non-graphical fragments can return null (which
-         * is the default implementation).  This will be called between
-         * {@link #onCreate(Bundle)} and {@link #onActivityCreated(Bundle)}.
-         * <p/>
-         * <p>If you return a View from here, you will later be called in
-         * {@link #onDestroyView} when the view is being released.
-         *
-         * @param inflater           The LayoutInflater object that can be used to inflate
-         *                           any views in the fragment,
-         * @param container          If non-null, this is the parent view that the fragment's
-         *                           UI should be attached to.  The fragment should not add the view itself,
-         *                           but this can be used to generate the LayoutParams of the view.
-         * @param savedInstanceState If non-null, this fragment is being re-constructed
-         *                           from a previous saved state as given here.
-         * @return Return the View for the fragment's UI, or null.
-         */
-        @Nullable
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            // Inflate the layout for this fragment
-            View v=inflater.inflate(R.layout.fragment_gamemode_totheend, container, false);
-            return v;
-        }
-    }
-
-    private class GameModeTimeFragment extends Fragment {
-        public GameModeTimeFragment() {
-        }
-
-        public Fragment newInstance() {
-            Fragment fragment = new GameModeTimeFragment();
-            return fragment;
-        }
-
-        /**
-         * Called to do initial creation of a fragment.  This is called after
-         * {@link #onAttach(Activity)} and before
-         * {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
-         * <p/>
-         * <p>Note that this can be called while the fragment's activity is
-         * still in the process of being created.  As such, you can not rely
-         * on things like the activity's content view hierarchy being initialized
-         * at this point.  If you want to do work once the activity itself is
-         * created, see {@link #onActivityCreated(Bundle)}.
-         *
-         * @param savedInstanceState If the fragment is being re-created from
-         *                           a previous saved state, this is the state.
-         */
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-        }
-
-        /**
-         * Called to have the fragment instantiate its user interface view.
-         * This is optional, and non-graphical fragments can return null (which
-         * is the default implementation).  This will be called between
-         * {@link #onCreate(Bundle)} and {@link #onActivityCreated(Bundle)}.
-         * <p/>
-         * <p>If you return a View from here, you will later be called in
-         * {@link #onDestroyView} when the view is being released.
-         *
-         * @param inflater           The LayoutInflater object that can be used to inflate
-         *                           any views in the fragment,
-         * @param container          If non-null, this is the parent view that the fragment's
-         *                           UI should be attached to.  The fragment should not add the view itself,
-         *                           but this can be used to generate the LayoutParams of the view.
-         * @param savedInstanceState If non-null, this fragment is being re-constructed
-         *                           from a previous saved state as given here.
-         * @return Return the View for the fragment's UI, or null.
-         */
-        @Nullable
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            // Inflate the layout for this fragment
-            View v=inflater.inflate(R.layout.fragment_gamemode_time, container, false);
-           return v;
-        }
-    }
-
-    private class GameModePointsFragment extends Fragment {
-        public GameModePointsFragment() {
-
-        }
-
-        public Fragment newInstance() {
-            Fragment fragment = new GameModePointsFragment();
-            return fragment;
-        }
-        /**
-         * Called to do initial creation of a fragment.  This is called after
-         * {@link #onAttach(Activity)} and before
-         * {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
-         * <p/>
-         * <p>Note that this can be called while the fragment's activity is
-         * still in the process of being created.  As such, you can not rely
-         * on things like the activity's content view hierarchy being initialized
-         * at this point.  If you want to do work once the activity itself is
-         * created, see {@link #onActivityCreated(Bundle)}.
-         *
-         * @param savedInstanceState If the fragment is being re-created from
-         *                           a previous saved state, this is the state.
-         */
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-        }
-
-        /**
-         * Called to have the fragment instantiate its user interface view.
-         * This is optional, and non-graphical fragments can return null (which
-         * is the default implementation).  This will be called between
-         * {@link #onCreate(Bundle)} and {@link #onActivityCreated(Bundle)}.
-         * <p/>
-         * <p>If you return a View from here, you will later be called in
-         * {@link #onDestroyView} when the view is being released.
-         *
-         * @param inflater           The LayoutInflater object that can be used to inflate
-         *                           any views in the fragment,
-         * @param container          If non-null, this is the parent view that the fragment's
-         *                           UI should be attached to.  The fragment should not add the view itself,
-         *                           but this can be used to generate the LayoutParams of the view.
-         * @param savedInstanceState If non-null, this fragment is being re-constructed
-         *                           from a previous saved state as given here.
-         * @return Return the View for the fragment's UI, or null.
-         */
-        @Nullable
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            // Inflate the layout for this fragment
-            View v=inflater.inflate(R.layout.fragment_gamemode_points, container, false);
-            return v;
-        }
-    }
-
-    private class GameModeHotSeatFragment extends Fragment{
-        public GameModeHotSeatFragment() {
-        }
-
-        public Fragment newInstance() {
-            Fragment fragment = new GameModeHotSeatFragment();
-            return fragment;
-        }
-        /**
-         * Called to do initial creation of a fragment.  This is called after
-         * {@link #onAttach(Activity)} and before
-         * {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
-         * <p/>
-         * <p>Note that this can be called while the fragment's activity is
-         * still in the process of being created.  As such, you can not rely
-         * on things like the activity's content view hierarchy being initialized
-         * at this point.  If you want to do work once the activity itself is
-         * created, see {@link #onActivityCreated(Bundle)}.
-         *
-         * @param savedInstanceState If the fragment is being re-created from
-         *                           a previous saved state, this is the state.
-         */
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-        }
-
-        /**
-         * Called to have the fragment instantiate its user interface view.
-         * This is optional, and non-graphical fragments can return null (which
-         * is the default implementation).  This will be called between
-         * {@link #onCreate(Bundle)} and {@link #onActivityCreated(Bundle)}.
-         * <p/>
-         * <p>If you return a View from here, you will later be called in
-         * {@link #onDestroyView} when the view is being released.
-         *
-         * @param inflater           The LayoutInflater object that can be used to inflate
-         *                           any views in the fragment,
-         * @param container          If non-null, this is the parent view that the fragment's
-         *                           UI should be attached to.  The fragment should not add the view itself,
-         *                           but this can be used to generate the LayoutParams of the view.
-         * @param savedInstanceState If non-null, this fragment is being re-constructed
-         *                           from a previous saved state as given here.
-         * @return Return the View for the fragment's UI, or null.
-         */
-        @Nullable
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            // Inflate the layout for this fragment
-            View v=inflater.inflate(R.layout.fragment_gamemode_hotseat, container, false);
-            return v;
         }
     }
 }

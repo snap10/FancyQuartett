@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.adapters.GalleryViewAdapter;
+import de.uulm.mal.fancyquartett.adapters.NewGameGalleryViewAdapter;
 import de.uulm.mal.fancyquartett.data.Settings;
 import de.uulm.mal.fancyquartett.utils.LocalDecksLoader;
 
@@ -24,7 +25,8 @@ import de.uulm.mal.fancyquartett.utils.LocalDecksLoader;
  */
 public class DeckGalleryActivityFragment extends Fragment {
 
-    private GalleryViewAdapter galleryViewAdapter;    RecyclerView recList;
+    private NewGameGalleryViewAdapter newGameGalleryViewAdapter;
+    RecyclerView recList;
     LinearLayoutManager llm;
     GridLayoutManager glm;
     private Menu menu;
@@ -51,11 +53,11 @@ public class DeckGalleryActivityFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         //Initialize Data
-        galleryViewAdapter = new GalleryViewAdapter(getContext());
-        LocalDecksLoader loader = new LocalDecksLoader(getContext().getFilesDir()+ Settings.localFolder,galleryViewAdapter);
+        newGameGalleryViewAdapter = new NewGameGalleryViewAdapter(getActivity());
+        LocalDecksLoader loader = new LocalDecksLoader(getContext().getFilesDir() + Settings.localFolder, newGameGalleryViewAdapter);
         loader.execute();
 
-        glm= new GridLayoutManager(getContext(),2);
+        glm = new GridLayoutManager(getContext(), 2);
         llm = new LinearLayoutManager(this.getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
     }
@@ -69,7 +71,7 @@ public class DeckGalleryActivityFragment extends Fragment {
         recList.setHasFixedSize(true);
 
         recList.setLayoutManager(llm);
-        recList.setAdapter(galleryViewAdapter);
+        recList.setAdapter(newGameGalleryViewAdapter);
 
 
         return rootView;
@@ -90,11 +92,15 @@ public class DeckGalleryActivityFragment extends Fragment {
      */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        this.menu=menu;
-        if (recList.getLayoutManager().equals(llm)){
-            menu.findItem(R.id.gridLayoutButton).setVisible(true);
-        }else{
-            menu.findItem(R.id.listLayoutButton).setVisible(true);
+        menu.clear();
+        this.menu = menu;
+        inflater.inflate(R.menu.menu_deck_gallery, menu);
+        if (menu != null) {
+            if (recList.getLayoutManager().equals(llm)) {
+                menu.findItem(R.id.gridLayoutButton).setVisible(true);
+            } else {
+                menu.findItem(R.id.listLayoutButton).setVisible(true);
+            }
         }
     }
 
@@ -117,19 +123,19 @@ public class DeckGalleryActivityFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if (item.getItemId()==R.id.listLayoutButton) {
+        if (item.getItemId() == R.id.listLayoutButton) {
             recList.setLayoutManager(llm);
-            galleryViewAdapter = new GalleryViewAdapter(getContext(), galleryViewAdapter.getGalleryModel(), GalleryViewAdapter.LISTLAYOUT);
-            recList.setAdapter(galleryViewAdapter);
+            newGameGalleryViewAdapter = new NewGameGalleryViewAdapter(getActivity(), newGameGalleryViewAdapter.getGalleryModel(), GalleryViewAdapter.LISTLAYOUT);
+            recList.setAdapter(newGameGalleryViewAdapter);
             item.setVisible(false);
             MenuItem item2 = menu.findItem(R.id.gridLayoutButton);
             item2.setVisible(true);
-        }else if(item.getItemId()==R.id.gridLayoutButton){
+        } else if (item.getItemId() == R.id.gridLayoutButton) {
             recList.setLayoutManager(glm);
-            galleryViewAdapter = new GalleryViewAdapter(getContext(),galleryViewAdapter.getGalleryModel(),GalleryViewAdapter.GRIDLAYOUT);
-            recList.setAdapter(galleryViewAdapter);
+            newGameGalleryViewAdapter = new NewGameGalleryViewAdapter(getActivity(), newGameGalleryViewAdapter.getGalleryModel(), GalleryViewAdapter.GRIDLAYOUT);
+            recList.setAdapter(newGameGalleryViewAdapter);
             item.setVisible(false);
-            MenuItem item2=menu.findItem(R.id.listLayoutButton);
+            MenuItem item2 = menu.findItem(R.id.listLayoutButton);
             item2.setVisible(true);
         }
         return super.onOptionsItemSelected(item);
