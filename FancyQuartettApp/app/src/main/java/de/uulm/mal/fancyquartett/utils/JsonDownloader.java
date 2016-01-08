@@ -39,6 +39,7 @@ public class JsonDownloader extends AsyncTask<Void, Void, Exception> {
         try {
             URL u = new URL(url);
             HttpURLConnection c = (HttpURLConnection) u.openConnection();
+            c.setConnectTimeout(2000);
             BufferedReader in = new BufferedReader(new InputStreamReader(c.getInputStream()));
             String inputLine;
             StringBuffer response = new StringBuffer();

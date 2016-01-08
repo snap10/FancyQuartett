@@ -2,6 +2,7 @@ package de.uulm.mal.fancyquartett.data;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -191,10 +192,14 @@ public class GalleryModel implements JsonDownloader.OnJasonDownloaderFinished {
      */
     @Override
     public void onDownloadFinished(Exception possibleException, String json) {
-        try {
-            add(new OnlineDeck(new JSONObject(json), onlineDeckHost, this));
-        } catch (JSONException e) {
-            System.out.println("Deck could not be added because downloaded JSON is invalid. " + e);
+        if (possibleException==null) {
+            try {
+                add(new OnlineDeck(new JSONObject(json), onlineDeckHost, this));
+            } catch (JSONException e) {
+                System.out.println("Deck could not be added because downloaded JSON is invalid. " + e);
+            }
+        } else{
+            Toast.makeText(getContext(),"No Connection to ServerRessource"+ possibleException.getMessage(),Toast.LENGTH_LONG).show();
         }
     }
 }
