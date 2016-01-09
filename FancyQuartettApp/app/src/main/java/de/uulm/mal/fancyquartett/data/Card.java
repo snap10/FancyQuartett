@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -104,6 +105,20 @@ public class Card {
     // compare with other card's respective property and return true if this card wins
     public boolean compare(Property prop, float enemyValue) {
         return prop.biggerWins() ? values.get(prop)>enemyValue : values.get(prop)<enemyValue;
+    }
+
+    /**
+     * This function converts Map<Property,Float> into List<CardAttribute>
+     * @param values
+     * @return
+     */
+    private List<CardAttribute> makeAttrList(Map<Property, Float> values) {
+        List<CardAttribute> list = new ArrayList<CardAttribute>();
+        for(Property property : values.keySet()) {
+            float value = values.get(property);
+            list.add(new CardAttribute(property, value));
+        }
+        return list;
     }
 
     /**

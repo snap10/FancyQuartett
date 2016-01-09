@@ -23,6 +23,9 @@ public class Property {
     // (?)
     private int precision = 0;
 
+    // TODO:
+    //private Bitmap icon;
+
     public Property(JSONObject json) throws JSONException {
         this.id = json.getInt("id");
         this.text = json.getString("text");
@@ -42,4 +45,6 @@ public class Property {
     public int id() { return id; }
 
     public boolean biggerWins() { return biggerWins; }
+
+    public String getText() { return text; }
 }
