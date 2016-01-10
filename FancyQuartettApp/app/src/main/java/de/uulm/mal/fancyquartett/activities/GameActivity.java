@@ -1,5 +1,6 @@
 package de.uulm.mal.fancyquartett.activities;
 
+import android.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.LinearLayout;
@@ -27,7 +28,7 @@ public class GameActivity extends AppCompatActivity implements LocalDeckLoader.O
 
         // TODO: delete the following lines (temp)
         // add card fragment
-        CardFragment fragment = new CardFragment();
+        CardFragment fragment = CardFragment.newInstance();
         //LinearLayout container = (LinearLayout) findViewById(R.id.linLayout_Container);
         getSupportFragmentManager().beginTransaction().add(R.id.linLayout_Container,fragment).commit();
     }

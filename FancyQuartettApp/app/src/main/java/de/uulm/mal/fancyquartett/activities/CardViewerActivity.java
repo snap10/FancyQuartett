@@ -3,14 +3,11 @@ package de.uulm.mal.fancyquartett.activities;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import de.uulm.mal.fancyquartett.R;
 import layout.CardViewerFragment;
-import layout.CardGalleryFragment;
-import layout.CardViewerDetailFragment;
 
-public class CardViewerActivity extends AppCompatActivity implements  CardViewerFragment.OnFragmentInteractionListener, CardViewerDetailFragment.OnFragmentInteractionListener {
+public class CardViewerActivity extends AppCompatActivity implements  CardViewerFragment.OnFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -121,6 +121,10 @@ public class Card {
         return list;
     }
 
+    public List<CardAttribute> getAttributeList(){
+        return makeAttrList(values);
+    }
+
     /**
      *
      * @return
@@ -139,5 +143,37 @@ public class Card {
 
     public int getID() {
         return id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDeckname() {
+        return deckname;
+    }
+
+    public void setDeckname(String deckname) {
+        this.deckname = deckname;
+    }
+
+    public Map<Property, Float> getValues() {
+        return values;
+    }
+
+    public void setValues(Map<Property, Float> values) {
+        this.values = values;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

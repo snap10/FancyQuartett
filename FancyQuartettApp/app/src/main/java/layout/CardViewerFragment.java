@@ -18,7 +18,7 @@ import de.uulm.mal.fancyquartett.utils.LocalDeckLoader;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class CardViewerFragment extends Fragment implements CardViewerDetailFragment.OnFragmentInteractionListener {
+public class CardViewerFragment extends Fragment{
 
     private int cardnumber = 0;
     private int decksize;
@@ -89,14 +89,11 @@ public class CardViewerFragment extends Fragment implements CardViewerDetailFrag
         return fragment;
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
 
-    }
 
     private class CardPagerAdapter extends FragmentPagerAdapter {
         LocalDeckLoader loader;
-
+    //TODO solve Problem when scrolling backwards
         public CardPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -107,8 +104,8 @@ public class CardViewerFragment extends Fragment implements CardViewerDetailFrag
          * @param position
          */
         @Override
-        public CardViewerDetailFragment getItem(int position) {
-            CardViewerDetailFragment fragment = CardViewerDetailFragment.newInstance(position, deckname);
+        public CardFragment getItem(int position) {
+            CardFragment fragment = CardFragment.newInstance(position, deckname);
             loader = new LocalDeckLoader(getContext().getFilesDir() + Settings.localFolder, deckname.toLowerCase(), fragment);
             loader.execute();
             //get CardFragment showing the position-th Card of the Deck

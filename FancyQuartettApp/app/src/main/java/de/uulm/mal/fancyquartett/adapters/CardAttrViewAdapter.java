@@ -12,6 +12,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import de.uulm.mal.fancyquartett.R;
+import de.uulm.mal.fancyquartett.data.Card;
 import de.uulm.mal.fancyquartett.data.CardAttribute;
 import de.uulm.mal.fancyquartett.data.Property;
 
@@ -22,6 +23,7 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
 
     private Context context;
     private List<CardAttribute> attrList;
+    private Card card;
 
     /**
      *
@@ -86,6 +88,12 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
      */
     public Context getContext() {
         return context;
+    }
+
+    public void setCard(Card card) {
+        this.card = card;
+        attrList=card.getAttributeList();
+        notifyDataSetChanged();
     }
 
     /**

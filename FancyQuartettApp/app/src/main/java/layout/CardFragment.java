@@ -1,8 +1,8 @@
 package layout;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.adapters.CardAttrViewAdapter;
+import de.uulm.mal.fancyquartett.adapters.CardImagesPagerAdapter;
 import de.uulm.mal.fancyquartett.data.Card;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.utils.LocalDeckLoader;
@@ -22,6 +23,7 @@ import de.uulm.mal.fancyquartett.utils.LocalDeckLoader;
 public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDeckLoadedListener {
 
     private static final String ARG_CARDID = "cardId";
+    private static final java.lang.String ARG_DECKNAME = "deckname";
 
     // view attributes
     private RecyclerView recList;
@@ -31,6 +33,9 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
     // other attributes
     OfflineDeck offlineDeck;
     Card card;
+    private int cardID;
+    private String deckname;
+    private View cardFragmentView;
 
     public CardFragment() {
         // required empty public constructor
@@ -38,6 +43,7 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
 
     /**
      * Creates a new instance of this fragment.
+     *
      * @return
      */
     public static CardFragment newInstance() {
@@ -49,6 +55,7 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
 
     /**
      * Creates a new instance of this fragment using the provided prameters.
+     *
      * @param cardId
      * @return
      */
@@ -60,38 +67,73 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
         return fragment;
     }
 
+    /**
+     * Creates a new instance of this fragment using the provided prameters.
+     *
+     * @param cardId
+     * @param deckname
+     * @return
+     */
+    public static CardFragment newInstance(int cardId, String deckname) {
+        CardFragment fragment = new CardFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_CARDID, cardId);
+        args.putString(ARG_DECKNAME, deckname);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            cardID = getArguments().getInt(ARG_CARDID);
+            deckname = getArguments().getString(ARG_DECKNAME);
+        }
         // create GridLayoutManager for RecyclerView
-        glm = new GridLayoutManager(getContext(),2);
+        glm = new GridLayoutManager(getContext(), 2);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_card, container, false);
+        cardFragmentView = inflater.inflate(R.layout.fragment_card, container, false);
         // initialise RecyclerView
-        recList = (RecyclerView) rootView.findViewById(R.id.recycler_card_attributes);
+        recList = (RecyclerView) cardFragmentView.findViewById(R.id.recycler_card_attributes);
         recList.setHasFixedSize(true);
-        recList.setLayoutManager(glm);
+        if(recList.getLayoutManager()==null){
+            recList.setLayoutManager(glm);
+        }
 
         // TODO: delete tabbed lines (they're only temporary)
-            cardAttrViewAdapter = new CardAttrViewAdapter(getContext(), null);
-            recList.setAdapter(cardAttrViewAdapter);
+        cardAttrViewAdapter = new CardAttrViewAdapter(getContext(), null);
+        recList.setAdapter(cardAttrViewAdapter);
 
-        return rootView;
+        return cardFragmentView;
     }
 
+
+    /**
+     * Callback Method for LocalDeckLoader
+     * Doas collect the Images of the Card and setup the View of the Card
+     *
+     * @param offlineDeck
+     */
     @Override
     public void onDeckLoaded(OfflineDeck offlineDeck) {
-        if(offlineDeck == null) {
-            Toast.makeText(this.getContext(), "Deck could not be loaded", Toast.LENGTH_LONG).show();
-        } else {
-            this.offlineDeck = offlineDeck;
-            // TODO: some cardAttrViewAdapter stuff
+        if (offlineDeck == null) {
+            Toast.makeText(getContext(), "Error while loading Card", Toast.LENGTH_SHORT);
         }
+        this.offlineDeck = offlineDeck;
+        card = offlineDeck.getCards().get(cardID);
+        ViewPager viewPager = (ViewPager) cardFragmentView.findViewById(R.id.viewPager_SlideShow);
+        //Providing the ViewPager with the ImageViews
+        CardImagesPagerAdapter pagerAdapter = new CardImagesPagerAdapter(cardFragmentView.getContext(), card);
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setCurrentItem(1);
+        cardAttrViewAdapter.setCard(card);
     }
+
 
     // TODO: load Card from offlineDeck and display it (cardId is in Bundle (args))
 }
