@@ -6,4 +6,6 @@
     tools:context="de.uulm.mal.fancyquartett.activities.DeckGalleryActivity">
 
 
+    <include layout="@layout/content_deck_gallery" />
+
 </RelativeLayout>
