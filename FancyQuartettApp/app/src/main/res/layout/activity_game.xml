@@ -66,8 +66,4 @@
             android:layout_alignParentLeft="false"/>
     </RelativeLayout>
 
-    <include layout="@layout/card">
-
-    </include>
-
 </LinearLayout>

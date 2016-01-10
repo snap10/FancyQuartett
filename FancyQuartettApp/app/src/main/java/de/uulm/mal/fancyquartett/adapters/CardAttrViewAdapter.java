@@ -9,9 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.data.CardAttribute;
@@ -48,7 +46,7 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
         View itemView;
         itemView = LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.card_attribute_grid_item, parent, false);
+                .inflate(R.layout.card_attribute, parent, false);
         return new CardAttrViewHolder(itemView, viewType, context);
     }
 
@@ -75,7 +73,7 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
 
     @Override
     public int getItemCount() {
-        if(attrList.size() == 0) {
+        if(attrList == null) {
             return 0;
         } else {
             return attrList.size();
