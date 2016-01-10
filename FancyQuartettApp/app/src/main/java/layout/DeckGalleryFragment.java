@@ -1,4 +1,4 @@
-package de.uulm.mal.fancyquartett.activities;
+package layout;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -23,7 +23,7 @@ import de.uulm.mal.fancyquartett.utils.LocalDecksLoader;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class DeckGalleryActivityFragment extends Fragment {
+public class DeckGalleryFragment extends Fragment {
 
     private NewGameGalleryViewAdapter newGameGalleryViewAdapter;
     RecyclerView recList;
@@ -31,7 +31,7 @@ public class DeckGalleryActivityFragment extends Fragment {
     GridLayoutManager glm;
     private Menu menu;
 
-    public DeckGalleryActivityFragment() {
+    public DeckGalleryFragment() {
     }
 
     /**

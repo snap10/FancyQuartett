@@ -6,9 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 
 
 import de.uulm.mal.fancyquartett.R;
-import de.uulm.mal.fancyquartett.adapters.DeckGalleryViewAdapter;
+import layout.DeckGalleryFragment;
 
-public class DeckGalleryActivity extends AppCompatActivity implements DeckGalleryActivityFragment.OnFragmentInteractionListener {
+public class DeckGalleryActivity extends AppCompatActivity implements DeckGalleryFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

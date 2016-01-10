@@ -30,6 +30,7 @@
     <string name="totheenddescription">You play until one player has won all cards</string>
     <string name="timeinminuitesdescription">Maximum Minuites for one Game</string>
     <string name="title_activity_deck_gallery">DeckGalleryActivity</string>
+    <string name="title_activity_card_detail_viewer">CardDetailViewerActivity</string>
 
 
 </resources>

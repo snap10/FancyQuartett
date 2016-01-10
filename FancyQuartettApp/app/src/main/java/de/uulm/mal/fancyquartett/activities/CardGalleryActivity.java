@@ -13,13 +13,19 @@ import layout.CardGalleryFragment;
 import layout.StartFragment;
 
 public class CardGalleryActivity extends AppCompatActivity implements CardGalleryFragment.OnFragmentInteractionListener {
-
+    String deckname;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_gallery);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        String deckname = getIntent().getExtras().getString("deckname");
+        if (getIntent().getExtras()!=null){
+           deckname = getIntent().getExtras().getString("deckname");
+        }else{
+            //TODO decide what to do...
+            finish();
+        }
+
         //TODO saveLayoutInstance in instanceState and pass it to the fragment on creation
         CardGalleryFragment fragment= CardGalleryFragment.newInstance(deckname, null);
         LocalDeckLoader loader = new LocalDeckLoader(getFilesDir()+ Settings.localFolder,deckname.toLowerCase(),fragment);

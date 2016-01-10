@@ -177,6 +177,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
             galleryModel = new GalleryModel((ArrayList<OfflineDeck>) object);
             galleryModel.setAdapter(this);
             notifyDataSetChanged();
+            //TODO only fetch one time or when user want to refresh
             galleryModel.fetchOnlineDeck(Settings.serverAdress, "bikes");
         } else {
             galleryModel=new GalleryModel(this, Settings.serverAdress, context.getFilesDir() + Settings.localFolder);

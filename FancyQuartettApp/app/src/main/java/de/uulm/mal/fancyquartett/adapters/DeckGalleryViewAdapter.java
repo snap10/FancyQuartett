@@ -16,14 +16,9 @@ import android.widget.Toast;
 
 
 import de.uulm.mal.fancyquartett.R;
-import de.uulm.mal.fancyquartett.activities.CardDetailViewActivity;
-import de.uulm.mal.fancyquartett.activities.CardGalleryActivity;
+import de.uulm.mal.fancyquartett.activities.CardViewerActivity;
 import de.uulm.mal.fancyquartett.data.Card;
-import de.uulm.mal.fancyquartett.data.GalleryModel;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
-import de.uulm.mal.fancyquartett.data.Settings;
-import de.uulm.mal.fancyquartett.utils.LocalDeckLoader;
-import de.uulm.mal.fancyquartett.utils.LocalDecksLoader;
 
 /**
  * Created by Snap10 on 04/01/16.
@@ -110,8 +105,10 @@ public class DeckGalleryViewAdapter extends RecyclerView.Adapter<DeckGalleryView
                 @Override
                 public void onClick(View v) {
 
-                    Intent intent = new Intent(context, CardDetailViewActivity.class);
-                    intent.putExtra("cardname",card.getName());
+                    Intent intent = new Intent(context, CardViewerActivity.class);
+                    intent.putExtra("deckname",offlineDeck.getName());
+                    intent.putExtra("cardnumber",card.getID());
+                    intent.putExtra("decksize",offlineDeck.getCards().size());
 
                     v.getContext().startActivity(intent);
                 }

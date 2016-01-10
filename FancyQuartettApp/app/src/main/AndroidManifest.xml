@@ -24,8 +24,9 @@
         <activity
             android:name=".activities.CardGalleryActivity"
             android:parentActivityName=".activities.MainActivity" />
-        <activity android:name=".activities.NewGameSettingsActivity"
-            android:parentActivityName=".activities.MainActivity"/>
+        <activity
+            android:name=".activities.NewGameSettingsActivity"
+            android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.DeckGalleryActivity"
             android:label="@string/title_activity_deck_gallery"
@@ -33,6 +34,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.uulm.mal.fancyquartett.activities.NewGameSettingsActivity" />
+        </activity>
+        <activity
+            android:name=".activities.CardViewerActivity"
+            android:label="@string/title_activity_card_detail_viewer"
+            android:parentActivityName=".activities.CardGalleryActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.uulm.mal.fancyquartett.activities.CardGalleryActivity" />
         </activity>
     </application>
 
