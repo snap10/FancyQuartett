@@ -20,7 +20,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.GameActivity" />
+        <activity
+            android:name=".activities.GameActivity"
+            android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.CardGalleryActivity"
             android:parentActivityName=".activities.MainActivity" />
