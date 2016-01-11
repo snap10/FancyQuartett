@@ -106,8 +106,15 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
             recList.setLayoutManager(glm);
         }
         // create cardAttrViewAdapter
-        CardAttrViewAdapter cardAttrViewAdapter = new CardAttrViewAdapter(getContext(), this.card.getAttributeList());
+        CardAttrViewAdapter cardAttrViewAdapter = new CardAttrViewAdapter(getContext(), card.getAttributeList());
         recList.setAdapter(cardAttrViewAdapter);
+        // create ViewPager
+        ViewPager viewPager = (ViewPager) cardFragmentView.findViewById(R.id.viewPager_SlideShow);
+        // providing the ViewPager with the ImageViews
+        CardImagesPagerAdapter pagerAdapter = new CardImagesPagerAdapter(cardFragmentView.getContext(), card);
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setCurrentItem(1);
+        cardAttrViewAdapter.setCard(card);
 
         return cardFragmentView;
     }
