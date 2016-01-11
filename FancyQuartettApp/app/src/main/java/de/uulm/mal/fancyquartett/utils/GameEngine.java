@@ -3,6 +3,7 @@ package de.uulm.mal.fancyquartett.utils;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import java.security.Timestamp;
 import java.util.List;
@@ -26,6 +27,7 @@ public class GameEngine{
 
     // app attributes
     private final Context context;
+    private ProgressBar progressBar;
 
     // game attributes
     private final OfflineDeck gameDeck;

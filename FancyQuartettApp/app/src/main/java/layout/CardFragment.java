@@ -22,17 +22,17 @@ import de.uulm.mal.fancyquartett.utils.LocalDeckLoader;
  */
 public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDeckLoadedListener {
 
-    private static final String ARG_CARDID = "cardId";
-    private static final java.lang.String ARG_DECKNAME = "deckname";
+    private static final String ARG_CARDID = "card_id";
+    private static final String ARG_CARD = "card";
+    private static final String ARG_DECKNAME = "deck_name";
 
     // view attributes
     private RecyclerView recList;
     private GridLayoutManager glm;
-    private CardAttrViewAdapter cardAttrViewAdapter;
 
     // other attributes
-    OfflineDeck offlineDeck;
-    Card card;
+    private OfflineDeck offlineDeck;
+    private Card card;
     private int cardID;
     private String deckname;
     private View cardFragmentView;
@@ -56,13 +56,13 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
     /**
      * Creates a new instance of this fragment using the provided prameters.
      *
-     * @param cardId
+     * @param  card
      * @return
      */
-    public static CardFragment newInstance(int cardId) {
+    public static CardFragment newInstance(Card card) {
         CardFragment fragment = new CardFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_CARDID, cardId);
+        args.putSerializable(ARG_CARD, card);
         fragment.setArguments(args);
         return fragment;
     }
@@ -104,18 +104,12 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
         if(recList.getLayoutManager()==null){
             recList.setLayoutManager(glm);
         }
-
-        // TODO: delete tabbed lines (they're only temporary)
-        cardAttrViewAdapter = new CardAttrViewAdapter(getContext(), null);
-        recList.setAdapter(cardAttrViewAdapter);
-
         return cardFragmentView;
     }
 
-
     /**
      * Callback Method for LocalDeckLoader
-     * Doas collect the Images of the Card and setup the View of the Card
+     * Does collect the Images of the Card and setup the View of the Card
      *
      * @param offlineDeck
      */
@@ -125,9 +119,13 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
             Toast.makeText(getContext(), "Error while loading Card", Toast.LENGTH_SHORT);
         }
         this.offlineDeck = offlineDeck;
-        card = offlineDeck.getCards().get(cardID);
+        this.card = offlineDeck.getCards().get(cardID);
+        // create cardAttrViewAdapter
+        CardAttrViewAdapter cardAttrViewAdapter = new CardAttrViewAdapter(getContext(), card.getAttributeList());
+        recList.setAdapter(cardAttrViewAdapter);
+        // create ViewPager
         ViewPager viewPager = (ViewPager) cardFragmentView.findViewById(R.id.viewPager_SlideShow);
-        //Providing the ViewPager with the ImageViews
+        // providing the ViewPager with the ImageViews
         CardImagesPagerAdapter pagerAdapter = new CardImagesPagerAdapter(cardFragmentView.getContext(), card);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(1);

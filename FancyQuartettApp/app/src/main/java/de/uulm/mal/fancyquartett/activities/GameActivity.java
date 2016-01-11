@@ -23,14 +23,16 @@ public class GameActivity extends AppCompatActivity implements LocalDeckLoader.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        // create cardFragment
+        CardFragment fragment = CardFragment.newInstance();
+        getSupportFragmentManager().beginTransaction().add(R.id.linLayout_Container,fragment).commit();
+
+        // load gameDeck
         String deckname = getIntent().getExtras().getString("deckname");
         new LocalDeckLoader(getFilesDir()+ Settings.localFolder,deckname.toLowerCase(),this).execute();
 
-        // TODO: delete the following lines (temp)
-        // add card fragment
-        CardFragment fragment = CardFragment.newInstance();
-        //LinearLayout container = (LinearLayout) findViewById(R.id.linLayout_Container);
-        getSupportFragmentManager().beginTransaction().add(R.id.linLayout_Container,fragment).commit();
+
     }
 
     /**
@@ -40,6 +42,7 @@ public class GameActivity extends AppCompatActivity implements LocalDeckLoader.O
      */
     @Override
     public void onDeckLoaded(OfflineDeck offlineDeck) {
+        // create gameEngine
         engine = new GameEngine(getApplicationContext(),offlineDeck);
     }
 }

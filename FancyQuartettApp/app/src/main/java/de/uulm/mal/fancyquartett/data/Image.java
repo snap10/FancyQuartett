@@ -12,17 +12,18 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
  * Created by mk on 01.01.2016.
  */
-public class Image {
+public class Image implements Serializable{
 
     private int id = 0;
     private String filename;
-    private Context context;
+    private transient Context context;
     // path that can point to web or local resource
     private String localFolder;
     private String hostadress;
