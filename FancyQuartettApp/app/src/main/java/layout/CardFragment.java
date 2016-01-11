@@ -88,6 +88,7 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             cardID = getArguments().getInt(ARG_CARDID);
+            card = (Card) getArguments().getSerializable(ARG_CARD);
             deckname = getArguments().getString(ARG_DECKNAME);
         }
         // create GridLayoutManager for RecyclerView
@@ -101,9 +102,13 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
         // initialise RecyclerView
         recList = (RecyclerView) cardFragmentView.findViewById(R.id.recycler_card_attributes);
         recList.setHasFixedSize(true);
-        if(recList.getLayoutManager()==null){
+        if(recList.getLayoutManager() == null){
             recList.setLayoutManager(glm);
         }
+        // create cardAttrViewAdapter
+        CardAttrViewAdapter cardAttrViewAdapter = new CardAttrViewAdapter(getContext(), this.card.getAttributeList());
+        recList.setAdapter(cardAttrViewAdapter);
+
         return cardFragmentView;
     }
 

@@ -3,6 +3,7 @@ package de.uulm.mal.fancyquartett.activities;
 import android.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import java.security.Timestamp;
@@ -17,16 +18,15 @@ import layout.CardFragment;
 
 public class GameActivity extends AppCompatActivity implements LocalDeckLoader.OnLocalDeckLoadedListener{
 
-    GameEngine engine;
+    private GameEngine engine;
+    private View rootView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        // create cardFragment
-        CardFragment fragment = CardFragment.newInstance();
-        getSupportFragmentManager().beginTransaction().add(R.id.linLayout_Container,fragment).commit();
+        rootView = findViewById(R.id.linLayout_Container);
 
         // load gameDeck
         String deckname = getIntent().getExtras().getString("deckname");
@@ -43,6 +43,9 @@ public class GameActivity extends AppCompatActivity implements LocalDeckLoader.O
     @Override
     public void onDeckLoaded(OfflineDeck offlineDeck) {
         // create gameEngine
-        engine = new GameEngine(getApplicationContext(),offlineDeck);
+        engine = new GameEngine(getApplicationContext(),rootView, offlineDeck);
+        // create cardFragment
+        CardFragment fragment = CardFragment.newInstance(offlineDeck.getCards().get(0));
+        getSupportFragmentManager().beginTransaction().add(R.id.linLayout_Container,fragment).commit();
     }
 }

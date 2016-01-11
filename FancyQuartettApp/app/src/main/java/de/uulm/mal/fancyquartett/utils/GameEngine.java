@@ -2,6 +2,8 @@ package de.uulm.mal.fancyquartett.utils;
 
 import android.app.FragmentManager;
 import android.content.Context;
+import android.graphics.Color;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
@@ -27,6 +29,7 @@ public class GameEngine{
 
     // app attributes
     private final Context context;
+    private View rootView;
     private ProgressBar progressBar;
 
     // game attributes
@@ -54,8 +57,9 @@ public class GameEngine{
      * @param context
      * @param gameDeck
      */
-    public GameEngine(Context context, OfflineDeck gameDeck) {
+    public GameEngine(Context context, View rootView, OfflineDeck gameDeck) {
         this.context = context;
+        this.rootView = rootView;
         this.gameDeck = gameDeck;
     }
 
@@ -97,7 +101,8 @@ public class GameEngine{
     }
 
     public void initialiseGUI() {
-
+        progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
+        progressBar.setProgress(50);
     }
 
     /*
