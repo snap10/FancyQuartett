@@ -109,7 +109,7 @@ public class DeckGalleryViewAdapter extends RecyclerView.Adapter<DeckGalleryView
                     intent.putExtra("deckname",offlineDeck.getName());
                     intent.putExtra("cardnumber",card.getID());
                     intent.putExtra("decksize",offlineDeck.getCards().size());
-                    intent.putExtra("offlineDeck",offlineDeck);
+                    intent.putExtra("offlinedeck",offlineDeck);
 
                     v.getContext().startActivity(intent);
                 }

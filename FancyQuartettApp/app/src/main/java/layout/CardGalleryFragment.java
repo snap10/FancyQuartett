@@ -38,14 +38,8 @@ public class CardGalleryFragment extends Fragment implements LocalDeckLoader.OnL
     LinearLayoutManager llm;
     GridLayoutManager glm;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String ARG_PARAM1 = "deckname";
+    private static final String ARG_PARAM2 = "offlinedeck";
 
     private OnFragmentInteractionListener mListener;
     private OfflineDeck offlineDeck;
@@ -60,23 +54,20 @@ public class CardGalleryFragment extends Fragment implements LocalDeckLoader.OnL
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param deckname
      * @return A new instance of fragment CardGalleryFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static CardGalleryFragment newInstance(String param1, String param2) {
+    public static CardGalleryFragment newInstance(String deckname) {
         CardGalleryFragment fragment = new CardGalleryFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM1, deckname);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public static CardGalleryFragment newInstance(){
+    public static CardGalleryFragment newInstance(Bundle bundle){
         CardGalleryFragment fragment = new CardGalleryFragment();
-        Bundle args = new Bundle();
+        Bundle args = bundle;
         fragment.setArguments(args);
         return fragment;
     }
@@ -85,8 +76,7 @@ public class CardGalleryFragment extends Fragment implements LocalDeckLoader.OnL
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            offlineDeck = (OfflineDeck)getArguments().getSerializable(ARG_PARAM2);
         }
         setHasOptionsMenu(true);
         glm= new GridLayoutManager(getContext(),2);
@@ -102,6 +92,12 @@ public class CardGalleryFragment extends Fragment implements LocalDeckLoader.OnL
         recList = (RecyclerView) rootView.findViewById(R.id.recycler_gallery_list);
         recList.setHasFixedSize(true);
         recList.setLayoutManager(llm);
+        if (offlineDeck!=null){
+            deckGalleryViewAdapter = new DeckGalleryViewAdapter(getContext().getApplicationContext(),DeckGalleryViewAdapter.LISTLAYOUT);
+            deckGalleryViewAdapter.setOfflineDeck(offlineDeck);
+            recList.setAdapter(deckGalleryViewAdapter);
+
+        }
 
 
         return rootView;

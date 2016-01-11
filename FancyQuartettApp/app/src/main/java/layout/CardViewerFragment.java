@@ -48,7 +48,7 @@ public class CardViewerFragment extends Fragment{
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             cardnumber = getArguments().getInt("cardnumber");
-            offlineDeck = (OfflineDeck)getArguments().getSerializable("offlineDeck");
+            offlineDeck = (OfflineDeck)getArguments().getSerializable("offlinedeck");
             if (offlineDeck!=null) {
                 decksize = offlineDeck.getCards().size();
                 deckname = offlineDeck.getName();

@@ -196,6 +196,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
 
                 Intent intent = new Intent(context, CardGalleryActivity.class);
                 intent.putExtra("deckname",offlineDeck.getName());
+                intent.putExtra("offlinedeck",offlineDeck);
                 v.getContext().startActivity(intent);
             }
         };
