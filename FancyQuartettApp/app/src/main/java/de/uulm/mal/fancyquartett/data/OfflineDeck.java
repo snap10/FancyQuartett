@@ -14,7 +14,7 @@ import java.util.Arrays;
 /**
  * Created by mk on 01.01.2016.
  */
-public class OfflineDeck extends Deck{
+public class OfflineDeck extends Deck implements Serializable{
 
     private ArrayList<Card> cards;
 

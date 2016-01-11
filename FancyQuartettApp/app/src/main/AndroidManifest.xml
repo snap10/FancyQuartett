@@ -28,7 +28,7 @@
             android:name=".activities.NewGameSettingsActivity"
             android:parentActivityName=".activities.MainActivity" />
         <activity
-            android:name=".activities.DeckGalleryActivity"
+            android:name=".activities.NewGameGalleryActivity"
             android:label="@string/title_activity_deck_gallery"
             android:parentActivityName=".activities.NewGameSettingsActivity">
             <meta-data

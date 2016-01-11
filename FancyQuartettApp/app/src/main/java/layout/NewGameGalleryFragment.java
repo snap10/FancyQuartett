@@ -23,7 +23,7 @@ import de.uulm.mal.fancyquartett.utils.LocalDecksLoader;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class DeckGalleryFragment extends Fragment {
+public class NewGameGalleryFragment extends Fragment {
 
     private NewGameGalleryViewAdapter newGameGalleryViewAdapter;
     RecyclerView recList;
@@ -31,7 +31,7 @@ public class DeckGalleryFragment extends Fragment {
     GridLayoutManager glm;
     private Menu menu;
 
-    public DeckGalleryFragment() {
+    public NewGameGalleryFragment() {
     }
 
     /**
