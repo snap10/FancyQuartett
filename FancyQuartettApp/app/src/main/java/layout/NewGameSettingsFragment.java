@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,7 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import de.uulm.mal.fancyquartett.R;
-import de.uulm.mal.fancyquartett.activities.DeckGalleryActivity;
+import de.uulm.mal.fancyquartett.activities.NewGameGalleryActivity;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.data.Settings;
 import de.uulm.mal.fancyquartett.utils.LocalDeckLoader;
@@ -114,7 +113,7 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
         cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), DeckGalleryActivity.class);
+                Intent intent = new Intent(getContext(), NewGameGalleryActivity.class);
                 startActivityForResult(intent, 0);
             }
         });

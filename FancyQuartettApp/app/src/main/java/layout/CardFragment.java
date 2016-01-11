@@ -104,6 +104,18 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
         if(recList.getLayoutManager()==null){
             recList.setLayoutManager(glm);
         }
+        if (card!=null){
+            // create cardAttrViewAdapter
+            CardAttrViewAdapter cardAttrViewAdapter = new CardAttrViewAdapter(getContext(), card.getAttributeList());
+            recList.setAdapter(cardAttrViewAdapter);
+            // create ViewPager
+            ViewPager viewPager = (ViewPager) cardFragmentView.findViewById(R.id.viewPager_SlideShow);
+            // providing the ViewPager with the ImageViews
+            CardImagesPagerAdapter pagerAdapter = new CardImagesPagerAdapter(cardFragmentView.getContext(), card);
+            viewPager.setAdapter(pagerAdapter);
+            viewPager.setCurrentItem(1);
+            cardAttrViewAdapter.setCard(card);
+        }
         return cardFragmentView;
     }
 
@@ -132,6 +144,4 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
         cardAttrViewAdapter.setCard(card);
     }
 
-
-    // TODO: load Card from offlineDeck and display it (cardId is in Bundle (args))
 }

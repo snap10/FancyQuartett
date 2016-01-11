@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import de.uulm.mal.fancyquartett.R;
+import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.data.Settings;
 import de.uulm.mal.fancyquartett.utils.LocalDeckLoader;
 
@@ -23,6 +24,7 @@ public class CardViewerFragment extends Fragment{
     private int cardnumber = 0;
     private int decksize;
     private String deckname;
+    private OfflineDeck offlineDeck;
 
     public CardViewerFragment() {
     }
@@ -45,9 +47,15 @@ public class CardViewerFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            decksize = getArguments().getInt("decksize");
             cardnumber = getArguments().getInt("cardnumber");
-            deckname = getArguments().getString("deckname");
+            offlineDeck = (OfflineDeck)getArguments().getSerializable("offlineDeck");
+            if (offlineDeck!=null) {
+                decksize = offlineDeck.getCards().size();
+                deckname = offlineDeck.getName();
+            }else{
+                decksize = getArguments().getInt("decksize");
+                deckname = getArguments().getString("deckname");
+            }
         }
     }
 
@@ -61,21 +69,6 @@ public class CardViewerFragment extends Fragment{
         return v;
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param cardnumber .
-     * @return A new instance of fragment CardGalleryFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static CardViewerFragment newInstance(int cardnumber) {
-        CardViewerFragment fragment = new CardViewerFragment();
-        Bundle args = new Bundle();
-        args.putInt("cardnumber", cardnumber);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     public static CardViewerFragment newInstance() {
         CardViewerFragment fragment = new CardViewerFragment();
@@ -105,10 +98,16 @@ public class CardViewerFragment extends Fragment{
          */
         @Override
         public CardFragment getItem(int position) {
-            CardFragment fragment = CardFragment.newInstance(position, deckname);
-            loader = new LocalDeckLoader(getContext().getFilesDir() + Settings.localFolder, deckname.toLowerCase(), fragment);
-            loader.execute();
-            //get CardFragment showing the position-th Card of the Deck
+            CardFragment fragment;
+            if (offlineDeck==null){
+                fragment= CardFragment.newInstance(cardnumber,deckname);
+                loader = new LocalDeckLoader(getContext().getFilesDir() + Settings.localFolder, deckname.toLowerCase(), fragment);
+                loader.execute();
+                //get CardFragment showing the position-th Card of the Deck
+            }else{
+                fragment = CardFragment.newInstance(offlineDeck.getCards().get(position));
+
+            }
             return fragment;
         }
 
