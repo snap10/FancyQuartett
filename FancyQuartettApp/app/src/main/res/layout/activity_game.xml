@@ -5,13 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+android:padding="5dp"
     tools:context="de.uulm.mal.fancyquartett.activities.GameActivity"
     android:background="#fbfbfb">
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,28 +15,12 @@
         android:id="@+id/textView_BalanceTitle"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressBar_Balance"
-        android:layout_alignBottom="@+id/textView_YourCards"
-        android:layout_toLeftOf="@+id/textView_OpponendsCards"
-        android:layout_toRightOf="@+id/textView_YourCards"
-        android:layout_toEndOf="@+id/textView_YourCards"
-        android:layout_toStartOf="@+id/textView_OpponendsCards"
-        android:progress="50"
-        android:background="#ebebeb"
-        android:max="100"
-        android:indeterminate="false" />
-
-    <RelativeLayout
+        android:layout_alignParentStart="true"
+        android:layout_gravity="center" />
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/relLayout_Balance"
-        android:layout_marginBottom="10dp">
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
@@ -49,25 +29,34 @@
             android:id="@+id/textView_YourCards"
             android:minWidth="50dp"
             android:maxWidth="75dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_weight="0.1"/>
+
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBar_Balance"
+            android:progress="50"
+            android:max="100"
+            android:indeterminate="false"
+            android:layout_weight="0.8"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="AI: 17"
             android:id="@+id/textView_OpponendsCards"
-            android:layout_alignParentEnd="false"
-            android:layout_alignParentRight="true"
-            android:layout_marginLeft="10dp"
             android:minWidth="50dp"
             android:maxWidth="75dp"
             android:gravity="right"
-            android:layout_alignParentStart="false"
-            android:layout_alignParentLeft="false"
-            android:layout_gravity="right" />
+            android:layout_gravity="right"
+            android:layout_weight="0.1"/>
 
-    </RelativeLayout>
+    </LinearLayout>
+
+
 
 </LinearLayout>

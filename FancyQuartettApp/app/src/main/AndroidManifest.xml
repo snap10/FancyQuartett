@@ -25,7 +25,11 @@
             android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.CardGalleryActivity"
-            android:parentActivityName=".activities.MainActivity" />
+            android:parentActivityName=".activities.MainActivity">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="de.uulm.mal.fancyquartett.activities.MainActivity" />
+        </activity>
         <activity
             android:name=".activities.NewGameSettingsActivity"
             android:parentActivityName=".activities.MainActivity" />
