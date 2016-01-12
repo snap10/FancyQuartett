@@ -96,6 +96,16 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
         attrList=card.getAttributeList();
         notifyDataSetChanged();
     }
+    /*
+     * Listener-Interface for CardAttr-OnClick forwarding
+     */
+    public interface OnCardAttrClickListener {
+        /**
+         * TODO: bei klick auf ein attritub soll die game engine oder besser der thread die property gepusht
+         * bekommen die geklickt wurde, damit die dann verglichen werden kann.
+         */
+        public void onCardAttrClicked(Property property);
+    }
 
     /**
      * InnerClass CardAttrViewHolder extends RecyclerView.ViewHolder
@@ -103,6 +113,7 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
     public static class CardAttrViewHolder extends RecyclerView.ViewHolder {
 
         private View view;
+
         public TextView cardAttrName;
         public TextView cardAttrValue;
         public TextView cardAttrUnit;
@@ -110,8 +121,8 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
         public ImageView cardAttrArrow;
 
         protected int index;
-
         protected Context context;
+
 
         public int getIndex() {
             return index;

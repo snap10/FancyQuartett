@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -30,7 +31,7 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
     // view attributes
     private RecyclerView recList;
     private GridLayoutManager glm;
-    TextView cardName;
+    private TextView cardName;
 
     // other attributes
     private OfflineDeck offlineDeck;
@@ -155,6 +156,4 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
         cardAttrViewAdapter.setCard(card);
     }
 
-
-    // TODO: load Card from offlineDeck and display it (cardId is in Bundle (args))
 }
