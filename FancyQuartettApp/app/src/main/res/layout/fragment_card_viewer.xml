@@ -1,14 +1,33 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:showIn="@layout/activity_card_viewer">
+    android:orientation="vertical">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/card_pager"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="5dp"/>
+        android:layout_height="wrap_content"
+        android:layout_weight="0.9">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/card_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp" />
+    </FrameLayout>
+
+    <ProgressBar
+        android:id="@+id/pagerprogress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.1"
+        android:indeterminate="false"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp" />
 
 
-</FrameLayout>
+</LinearLayout>

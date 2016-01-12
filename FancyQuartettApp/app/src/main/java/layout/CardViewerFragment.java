@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
@@ -25,6 +26,7 @@ public class CardViewerFragment extends Fragment{
     private int decksize;
     private String deckname;
     private OfflineDeck offlineDeck;
+    private ProgressBar pagerProgress;
 
     public CardViewerFragment() {
     }
@@ -66,6 +68,28 @@ public class CardViewerFragment extends Fragment{
         ViewPager viewPager = (ViewPager) v.findViewById(R.id.card_pager);
         CardPagerAdapter pagerAdapter = new CardPagerAdapter(getActivity().getSupportFragmentManager());
         viewPager.setAdapter(pagerAdapter);
+        pagerProgress = (ProgressBar) v.findViewById(R.id.pagerprogress);
+        pagerProgress.setMax(offlineDeck.getCards().size()-1);
+        pagerProgress.setProgress(cardnumber);
+        viewPager.setCurrentItem(cardnumber);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                pagerProgress.setProgress(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+
         return v;
     }
 

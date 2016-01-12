@@ -49,4 +49,8 @@ public class Property implements Serializable{
     public boolean biggerWins() { return biggerWins; }
 
     public String getText() { return text; }
+
+    public String getUnit() {
+        return unit;
+    }
 }

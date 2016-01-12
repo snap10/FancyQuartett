@@ -35,14 +35,27 @@
             android:gravity="center_vertical"
             android:text="AttrName"
             android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/textView_attrValue"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="AttrValue"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true">
+            <TextView
+                android:id="@+id/textView_attrValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AttrValue"
+                 />
+            <TextView
+                android:layout_marginLeft="5dp"
+                android:id="@+id/textView_attrUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AttrUnit"
+ />
+
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/imageView_attrArrow"

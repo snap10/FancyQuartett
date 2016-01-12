@@ -56,7 +56,7 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
     /**
      * Creates a new instance of this fragment using the provided prameters.
      *
-     * @param  card
+     * @param card
      * @return
      */
     public static CardFragment newInstance(Card card) {
@@ -91,20 +91,29 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
             card = (Card) getArguments().getSerializable(ARG_CARD);
             deckname = getArguments().getString(ARG_DECKNAME);
         }
-        // create GridLayoutManager for RecyclerView
-        glm = new GridLayoutManager(getContext(), 2);
+        if (card != null) {
+            cardID = card.getID();
+            deckname = card.getDeckname();
+        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+
         // inflate the layout for this fragment
         cardFragmentView = inflater.inflate(R.layout.fragment_card, container, false);
         // initialise RecyclerView
         recList = (RecyclerView) cardFragmentView.findViewById(R.id.recycler_card_attributes);
         recList.setHasFixedSize(true);
-        if(recList.getLayoutManager() == null){
+        // create GridLayoutManager for RecyclerView
+        glm = new GridLayoutManager(getContext(), 2);
+        if (recList.getLayoutManager() == null) {
             recList.setLayoutManager(glm);
+
         }
+
         // create cardAttrViewAdapter
         CardAttrViewAdapter cardAttrViewAdapter = new CardAttrViewAdapter(getContext(), card.getAttributeList());
         recList.setAdapter(cardAttrViewAdapter);

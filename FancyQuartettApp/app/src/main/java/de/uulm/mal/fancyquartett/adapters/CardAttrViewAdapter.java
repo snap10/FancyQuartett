@@ -63,6 +63,7 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
             // set holder attributes
             holder.cardAttrName.setText(property.getText());
             holder.cardAttrValue.setText("" + value);
+            holder.cardAttrUnit.setText(property.getUnit());
             // TODO: set right icons
             holder.cardAttrIcon.setImageResource(android.R.drawable.ic_menu_report_image);
             if(property.biggerWins()) {
@@ -104,8 +105,10 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
         private View view;
         public TextView cardAttrName;
         public TextView cardAttrValue;
+        public TextView cardAttrUnit;
         public ImageView cardAttrIcon;
         public ImageView cardAttrArrow;
+
         protected int index;
 
         protected Context context;
@@ -128,6 +131,7 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
             this.view = v;
             this.cardAttrName = (TextView) v.findViewById(R.id.textView_attrName);
             this.cardAttrValue = (TextView) v.findViewById(R.id.textView_attrValue);
+            this.cardAttrUnit = (TextView) v.findViewById(R.id.textView_attrUnit);
             this.cardAttrIcon = (ImageView) v.findViewById(R.id.imageView_attrIcon);
             this.cardAttrArrow = (ImageView) v.findViewById(R.id.imageView_attrArrow);
         }
