@@ -16,8 +16,8 @@ public class GameModeTimeFragment extends Fragment {
     public GameModeTimeFragment() {
     }
 
-    public Fragment newInstance() {
-        Fragment fragment = new GameModeTimeFragment();
+    public  static GameModeTimeFragment newInstance() {
+        GameModeTimeFragment fragment = new GameModeTimeFragment();
         return fragment;
     }
 

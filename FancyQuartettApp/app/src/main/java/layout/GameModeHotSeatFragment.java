@@ -16,8 +16,8 @@ public class GameModeHotSeatFragment extends Fragment {
     public GameModeHotSeatFragment() {
     }
 
-    public Fragment newInstance() {
-        Fragment fragment = new GameModeHotSeatFragment();
+    public static GameModeHotSeatFragment newInstance() {
+        GameModeHotSeatFragment fragment = new GameModeHotSeatFragment();
         return fragment;
     }
 

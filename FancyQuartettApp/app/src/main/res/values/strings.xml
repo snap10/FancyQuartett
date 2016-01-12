@@ -41,6 +41,8 @@
     <string name="cancel">Cancel</string>
     <string name="downloadandsavedialogtext">Do you want to Download and save the Deck locally?</string>
     <string name="downloaddialogtitle">Download Deck?</string>
+    <string name="playername1">Name of Player 1</string>
+    <string name="playername2">Name of Player 2</string>
 
 
 </resources>

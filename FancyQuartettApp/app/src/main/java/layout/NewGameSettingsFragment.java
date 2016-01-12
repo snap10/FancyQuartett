@@ -72,6 +72,7 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
     private SwitchCompat numberOfRoundsSwitch;
     private CompoundButton.OnCheckedChangeListener numberOfRoundsSwitchListener;
     private int maxrounds =0;
+    private boolean multiplayer;
 
 
     public NewGameSettingsFragment() {
@@ -102,6 +103,7 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
         super.onSaveInstanceState(outState);
         if (offlineDeck != null) {
             outState.putSerializable("offlinedeck", offlineDeck);
+            outState.putBoolean("multiplayer",multiplayer);
         }
     }
 
@@ -126,6 +128,9 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             offlineDeck = (OfflineDeck) savedInstanceState.getSerializable("offlinedeck");
+        }
+        if (getArguments()!=null){
+            multiplayer =getArguments().getBoolean("multiplayer");
         }
         setHasOptionsMenu(true);
         intitalizeListeners();
@@ -221,13 +226,19 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
         // primary sections of the activity.
         View cardview = v.findViewById(R.id.chosendecktitem);
         cardview.setOnClickListener(cardViewClickListener);
-        // Set up the ViewPager with the sections adapter.
         mGameModePagerAdapter = new GameModePagerAdapter(getActivity().getSupportFragmentManager());
         mViewPager = (ViewPager) v.findViewById(R.id.container);
-        mViewPager.setAdapter(mGameModePagerAdapter);
-        mViewPager.addOnPageChangeListener(viewPagerChangeListener);
-        TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
+
+            // Set up the ViewPager with the sections adapter.
+            mViewPager.setAdapter(mGameModePagerAdapter);
+            mViewPager.addOnPageChangeListener(viewPagerChangeListener);
+            TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tabs);
+            tabLayout.setupWithViewPager(mViewPager);
+
+        if (multiplayer){
+            GameModeHotSeatFragment fragment = GameModeHotSeatFragment.newInstance();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.multiplayerFragmentContainer,fragment).commit();
+        }
 
 
         RadioGroup aibuttongroup = (RadioGroup) v.findViewById(R.id.aibuttongroup);
@@ -402,6 +413,13 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
                 intent.putExtra("offlinedeck", offlineDeck);
                 intent.putExtra("gamemode", gameMode);
                 intent.putExtra("kilevel", kilevel);
+                intent.putExtra("multiplayer", multiplayer);
+                if (multiplayer){
+                    EditText player1 = (EditText)v.findViewById(R.id.playername1);
+                    EditText player2 = (EditText)v.findViewById(R.id.playername2);
+                    intent.putExtra("playername1",player1.getText().toString());
+                    intent.putExtra("playername2",player2.getText().toString());
+                }
                 if (timeoutSwitch.isChecked()) {
                     EditText editText = (EditText) v.findViewById(R.id.timoutsecondedittext);
                     roundtimeoutseconds = Integer.parseInt(editText.getText().toString());
@@ -461,11 +479,11 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new GameModeToTheEndFragment().newInstance();
+                    return GameModeToTheEndFragment.newInstance();
                 case 1:
-                    return new GameModeTimeFragment().newInstance();
+                    return GameModeTimeFragment.newInstance();
                 case 2:
-                    return new GameModePointsFragment().newInstance();
+                    return GameModePointsFragment.newInstance();
 
                 default:
                     throw new IllegalArgumentException("Wrong Fragment ID chosen");

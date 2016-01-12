@@ -17,8 +17,8 @@ public class GameModePointsFragment extends Fragment {
 
     }
 
-    public Fragment newInstance() {
-        Fragment fragment = new GameModePointsFragment();
+    public static GameModePointsFragment newInstance() {
+        GameModePointsFragment fragment = new GameModePointsFragment();
         return fragment;
     }
 

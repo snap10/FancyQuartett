@@ -17,8 +17,8 @@ public class GameModeToTheEndFragment extends Fragment {
         public GameModeToTheEndFragment() {
         }
 
-        public Fragment newInstance() {
-            Fragment fragment = new GameModeToTheEndFragment();
+        public static GameModeToTheEndFragment newInstance() {
+            GameModeToTheEndFragment fragment = new GameModeToTheEndFragment();
             return fragment;
         }
         /**

@@ -22,7 +22,7 @@ public class NewGameSettingsActivity extends AppCompatActivity implements NewGam
 
         }else{
 
-            fragment = NewGameSettingsFragment.newInstance(null);
+            fragment = NewGameSettingsFragment.newInstance(getIntent().getExtras());
         }
         android.support.v4.app.FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.new_game_settings_relativelayout, fragment, "newgamesettingsfragment");
