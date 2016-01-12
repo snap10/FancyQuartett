@@ -21,11 +21,12 @@ import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.data.Player;
 import de.uulm.mal.fancyquartett.data.Settings;
 import de.uulm.mal.fancyquartett.enums.GameMode;
+import de.uulm.mal.fancyquartett.enums.KILevel;
 import de.uulm.mal.fancyquartett.utils.LocalDeckLoader;
 import layout.CardFragment;
 
 
-public class GameActivity extends AppCompatActivity implements LocalDeckLoader.OnLocalDeckLoadedListener{
+public class GameActivity extends AppCompatActivity implements LocalDeckLoader.OnLocalDeckLoadedListener {
 
     // view components
     public TextView cardQuantityP1, cardQuantityP2;
@@ -33,6 +34,13 @@ public class GameActivity extends AppCompatActivity implements LocalDeckLoader.O
 
     // game components
     private GameEngine engine;
+    private OfflineDeck offlineDeck;
+    private GameMode gameMode;
+    private KILevel kilevel;
+    private int roundtimeout;
+    private int maxrounds;
+    private int gameTime;
+    private int gamePoints;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +51,28 @@ public class GameActivity extends AppCompatActivity implements LocalDeckLoader.O
         cardQuantityP1 = (TextView) findViewById(R.id.textView_YourCards);
         cardQuantityP2 = (TextView) findViewById(R.id.textView_OpponendsCards);
         progressBar = (ProgressBar) findViewById(R.id.progressBar_Balance);
-
-        // load gameDeck
-        String deckname = getIntent().getExtras().getString("deckname");
-        new LocalDeckLoader(getFilesDir()+ Settings.localFolder,deckname.toLowerCase(),this).execute();
+        Bundle intentbundle = getIntent().getExtras();
+        offlineDeck = (OfflineDeck) intentbundle.getSerializable("offlinedeck");
+        if (offlineDeck != null) {
+            gameMode = (GameMode) intentbundle.get("gamemode");
+            kilevel = (KILevel) intentbundle.get("kilevel");
+            roundtimeout = intentbundle.getInt("roundtimeout");
+            maxrounds = intentbundle.getInt("maxrounds");
+            if (gameMode == GameMode.Time) {
+                gameTime = intentbundle.getInt("gametime");
+            } else if (gameMode == GameMode.Points) {
+                gamePoints = intentbundle.getInt("gamepoints");
+            }
+            /**
+             * TODO @Lukas please do sth with that stuff ;-)
+             * {@link NewGameSettingsFragment.#onOptionItemSelected } for more information
+             */
+            onDeckLoaded(offlineDeck);
+        } else {
+            //sth went wrong with the Intent or an old Method is used ...
+            String deckname = getIntent().getExtras().getString("deckname");
+            new LocalDeckLoader(getFilesDir() + Settings.localFolder, deckname.toLowerCase(), this).execute();
+        }
     }
 
     /**
@@ -61,14 +87,14 @@ public class GameActivity extends AppCompatActivity implements LocalDeckLoader.O
         engine.initialiseGUI();
         // create cardFragment
         CardFragment fragment = CardFragment.newInstance(offlineDeck.getCards().get(0));
-        getSupportFragmentManager().beginTransaction().add(R.id.linLayout_Container,fragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.linLayout_Container, fragment).commit();
     }
 
 
     /**
      * Inner Class of GameActivity - GameEngine
      */
-    public class GameEngine{
+    public class GameEngine {
 
         private final String PLAYER1 = "player1";
         private final String PLAYER2 = "player2";
@@ -97,7 +123,6 @@ public class GameActivity extends AppCompatActivity implements LocalDeckLoader.O
 
 
         /**
-         *
          * @param context
          * @param gameDeck
          */
@@ -107,7 +132,6 @@ public class GameActivity extends AppCompatActivity implements LocalDeckLoader.O
         }
 
         /**
-         *
          * @param maxRounds
          * @param maxPoints
          * @param timeout
@@ -126,7 +150,6 @@ public class GameActivity extends AppCompatActivity implements LocalDeckLoader.O
         }
 
         /**
-         *
          * @param p1
          * @param p2
          * @param p1Points

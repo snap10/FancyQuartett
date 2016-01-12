@@ -1,11 +1,13 @@
 package de.uulm.mal.fancyquartett.data;
 
+import java.io.Serializable;
+
 import de.uulm.mal.fancyquartett.adapters.CardAttrViewAdapter;
 
 /**
  * Created by Lukas on 09.01.2016.
  */
-public class CardAttribute {
+public class CardAttribute implements Serializable{
 
     private Property property;
     private float value;

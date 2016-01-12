@@ -3,10 +3,12 @@ package de.uulm.mal.fancyquartett.data;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by mk on 01.01.2016.
  */
-public class Property {
+public class Property implements Serializable{
 
     // id maps properties to card values
     private int id = 0;

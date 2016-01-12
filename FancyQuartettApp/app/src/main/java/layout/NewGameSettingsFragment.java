@@ -1,5 +1,6 @@
 package layout;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -9,18 +10,26 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import de.uulm.mal.fancyquartett.R;
+import de.uulm.mal.fancyquartett.activities.GameActivity;
 import de.uulm.mal.fancyquartett.activities.NewGameGalleryActivity;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
-import de.uulm.mal.fancyquartett.data.Settings;
+import de.uulm.mal.fancyquartett.enums.GameMode;
+import de.uulm.mal.fancyquartett.enums.KILevel;
 import de.uulm.mal.fancyquartett.utils.LocalDeckLoader;
 
 
@@ -47,37 +56,67 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private OnFragmentInteractionListener mListener;
     private Menu menu;
     private OfflineDeck offlineDeck;
+    private View v;
+    //Gamevariables
+    private int roundtimeoutseconds = 0;
+    private KILevel kilevel = KILevel.Medium;
+    private GameMode gameMode = GameMode.ToTheEnd;
+    private CompoundButton.OnCheckedChangeListener timeoutSwitchListener;
+    private ViewPager.OnPageChangeListener viewPagerChangeListener;
+    private View.OnClickListener cardViewClickListener;
+    private SwitchCompat timeoutSwitch;
+    private RadioGroup.OnCheckedChangeListener aiButtonListener;
+    private SwitchCompat numberOfRoundsSwitch;
+    private CompoundButton.OnCheckedChangeListener numberOfRoundsSwitchListener;
+    private int maxrounds =0;
+
 
     public NewGameSettingsFragment() {
         // Required empty public constructor
     }
 
     /**
+     * Called to ask the fragment to save its current dynamic state, so it
+     * can later be reconstructed in a new instance of its process is
+     * restarted.  If a new instance of the fragment later needs to be
+     * created, the data you place in the Bundle here will be available
+     * in the Bundle given to {@link #onCreate(Bundle)},
+     * {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}, and
+     * {@link #onActivityCreated(Bundle)}.
+     * <p/>
+     * <p>This corresponds to {@link Activity#onSaveInstanceState(Bundle)
+     * Activity.onSaveInstanceState(Bundle)} and most of the discussion there
+     * applies here as well.  Note however: <em>this method may be called
+     * at any time before {@link #onDestroy()}</em>.  There are many situations
+     * where a fragment may be mostly torn down (such as when placed on the
+     * back stack with no UI showing), but its state will not be saved until
+     * its owning activity actually needs to save its state.
+     *
+     * @param outState Bundle in which to place your saved state.
+     */
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (offlineDeck != null) {
+            outState.putSerializable("offlinedeck", offlineDeck);
+        }
+    }
+
+
+    /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param bundle
      * @return A new instance of fragment NewGameSettingsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static NewGameSettingsFragment newInstance(String param1, String param2) {
+    public static NewGameSettingsFragment newInstance(Bundle bundle) {
         NewGameSettingsFragment fragment = new NewGameSettingsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        Bundle args = bundle;
         fragment.setArguments(args);
         return fragment;
     }
@@ -85,38 +124,154 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+        if (savedInstanceState != null) {
+            offlineDeck = (OfflineDeck) savedInstanceState.getSerializable("offlinedeck");
         }
         setHasOptionsMenu(true);
+        intitalizeListeners();
+    }
+
+    private void intitalizeListeners() {
+        aiButtonListener = new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.radioButton:
+                        kilevel = KILevel.Soft;
+                        break;
+                    case R.id.radioButton2:
+                        kilevel = KILevel.Medium;
+                        break;
+                    case R.id.radioButton3:
+                        kilevel = KILevel.Hard;
+                        break;
+                }
+            }
+        };
+        timeoutSwitchListener = new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    EditText editRoundTimout = (EditText) v.findViewById(R.id.timoutsecondedittext);
+                    editRoundTimout.setEnabled(true);
+                } else {
+                    EditText editRoundTimout = (EditText) v.findViewById(R.id.timoutsecondedittext);
+                    editRoundTimout.setEnabled(false);
+                }
+            }
+        };
+        numberOfRoundsSwitchListener = new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    EditText roundsEditText = (EditText) v.findViewById(R.id.maximumroundsedittext);
+                    roundsEditText.setEnabled(true);
+                } else {
+                    EditText roundsEditText = (EditText) v.findViewById(R.id.maximumroundsedittext);
+                    roundsEditText.setEnabled(false);
+                }
+            }
+        };
+
+        viewPagerChangeListener = new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position) {
+                    case 0:
+                        gameMode = GameMode.ToTheEnd;
+                        break;
+                    case 1:
+                        gameMode = GameMode.Time;
+                        break;
+                    case 2:
+                        gameMode = GameMode.Points;
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Wrong Fragment ID chosen");
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        };
+        cardViewClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), NewGameGalleryActivity.class);
+                startActivityForResult(intent, 0);
+            }
+        };
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_new_game_settings, container, false);
+        v = inflater.inflate(R.layout.fragment_new_game_settings, container, false);
+        v.requestFocus();
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mGameModePagerAdapter = new GameModePagerAdapter(getActivity().getSupportFragmentManager());
-
+        View cardview = v.findViewById(R.id.chosendecktitem);
+        cardview.setOnClickListener(cardViewClickListener);
         // Set up the ViewPager with the sections adapter.
+        mGameModePagerAdapter = new GameModePagerAdapter(getActivity().getSupportFragmentManager());
         mViewPager = (ViewPager) v.findViewById(R.id.container);
         mViewPager.setAdapter(mGameModePagerAdapter);
-
-
+        mViewPager.addOnPageChangeListener(viewPagerChangeListener);
         TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        View cardview = v.findViewById(R.id.chosendecktitem);
-        cardview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), NewGameGalleryActivity.class);
-                startActivityForResult(intent, 0);
-            }
-        });
+
+        RadioGroup aibuttongroup = (RadioGroup) v.findViewById(R.id.aibuttongroup);
+        switch (aibuttongroup.getCheckedRadioButtonId()) {
+            case R.id.radioButton:
+                kilevel = KILevel.Soft;
+                break;
+            case R.id.radioButton2:
+                kilevel = KILevel.Medium;
+                break;
+            case R.id.radioButton3:
+                kilevel = KILevel.Hard;
+                break;
+        }
+        aibuttongroup.setOnCheckedChangeListener(aiButtonListener);
+
+        timeoutSwitch = (SwitchCompat) v.findViewById(R.id.timeout_switch);
+        timeoutSwitch.setOnCheckedChangeListener(timeoutSwitchListener);
+        if (timeoutSwitch.isChecked()) {
+            EditText editRoundTimout = (EditText) v.findViewById(R.id.timoutsecondedittext);
+            editRoundTimout.setEnabled(true);
+        } else {
+            EditText editRoundTimout = (EditText) v.findViewById(R.id.timoutsecondedittext);
+            editRoundTimout.setEnabled(false);
+        }
+        numberOfRoundsSwitch = (SwitchCompat) v.findViewById(R.id.numberofrounds_switch);
+        numberOfRoundsSwitch.setOnCheckedChangeListener(numberOfRoundsSwitchListener);
+        if (timeoutSwitch.isChecked()) {
+            EditText editmaxrounds= (EditText) v.findViewById(R.id.maximumroundsedittext);
+            editmaxrounds.setEnabled(true);
+        } else {
+            EditText editmaxrounds = (EditText) v.findViewById(R.id.maximumroundsedittext);
+            editmaxrounds.setEnabled(false);
+        }
+
+        if (offlineDeck != null) {
+            ImageView imageview = (ImageView) v.findViewById(R.id.deckicon);
+            imageview.setImageBitmap(offlineDeck.getCards().get(0).getImages().get(0).getBitmap());
+            TextView deckname = (TextView) v.findViewById(R.id.deckname);
+            deckname.setText(offlineDeck.getName());
+            TextView deckdescription = (TextView) v.findViewById(R.id.deckdescription);
+            deckdescription.setText(offlineDeck.getName());
+        }
+
         return v;
     }
 
@@ -124,7 +279,6 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
      * Receive the result from a previous call to
      * {@link #startActivityForResult(Intent, int)}.  This follows the
      * related Activity API as described there in
-     * {@link Activity#onActivityResult(int, int, Intent)}.
      *
      * @param requestCode The integer request code originally supplied to
      *                    startActivityForResult(), allowing you to identify who this
@@ -135,7 +289,15 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        new LocalDeckLoader(getContext().getFilesDir() + Settings.localFolder, data.getExtras().getString("deckname").toLowerCase(), this).execute();
+        if (requestCode == 0 && resultCode == Activity.RESULT_OK && v != null) {
+            offlineDeck = (OfflineDeck) data.getSerializableExtra("offlinedeck");
+            ImageView imageview = (ImageView) v.findViewById(R.id.deckicon);
+            imageview.setImageBitmap(offlineDeck.getCards().get(0).getImages().get(0).getBitmap());
+            TextView deckname = (TextView) v.findViewById(R.id.deckname);
+            deckname.setText(offlineDeck.getName());
+            TextView deckdescription = (TextView) v.findViewById(R.id.deckdescription);
+            deckdescription.setText(offlineDeck.getName());
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -164,6 +326,7 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
 
     /**
      * Callback Method for LocalDeckLoader
+     * //TODO check if need, possibly not needed anymore
      *
      * @param offlineDeck
      */
@@ -216,6 +379,74 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
     }
 
     /**
+     * This hook is called whenever an item in your options menu is selected.
+     * The default implementation simply returns false to have the normal
+     * processing happen (calling the item's Runnable or sending a message to
+     * its Handler as appropriate).  You can use this method for any items
+     * for which you would like to do processing without those other
+     * facilities.
+     * <p/>
+     * <p>Derived classes should call through to the base class for it to
+     * perform the default menu handling.
+     *
+     * @param item The menu item that was selected.
+     * @return boolean Return false to allow normal menu processing to
+     * proceed, true to consume it here.
+     * @see #onCreateOptionsMenu
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.startGameButton) {
+            if (offlineDeck != null) {
+                Intent intent = new Intent(getContext(), GameActivity.class);
+                intent.putExtra("offlinedeck", offlineDeck);
+                intent.putExtra("gamemode", gameMode);
+                intent.putExtra("kilevel", kilevel);
+                if (timeoutSwitch.isChecked()) {
+                    EditText editText = (EditText) v.findViewById(R.id.timoutsecondedittext);
+                    roundtimeoutseconds = Integer.parseInt(editText.getText().toString());
+                } else {
+                    roundtimeoutseconds = 0;
+                }
+                /**
+                 * 0 if deactivated
+                 * integer > 0 if activated
+                 */
+                intent.putExtra("roundtimeout", roundtimeoutseconds);
+                SwitchCompat numberOfRoundsSwitch = (SwitchCompat) v.findViewById(R.id.numberofrounds_switch);
+                if (numberOfRoundsSwitch.isChecked()) {
+                    EditText numberofmaximumrounds = (EditText) v.findViewById(R.id.maximumroundsedittext);
+                   maxrounds =Integer.parseInt(numberofmaximumrounds.getText().toString());
+                } else {
+                    maxrounds =0;
+                }
+                intent.putExtra("maxrounds", maxrounds);
+                //Gamemodespecific
+                switch (gameMode) {
+                    case ToTheEnd:
+                        break;
+                    case Time:
+                        EditText timeText = (EditText) v.findViewById(R.id.gametimeedittext);
+                        int gametime = Integer.parseInt(timeText.getText().toString());
+                        intent.putExtra("gametime", gametime);
+                        break;
+                    case Points:
+                        EditText pointsText = (EditText) v.findViewById(R.id.winpointsedittext);
+                        int gamepoints = Integer.parseInt(pointsText.getText().toString());
+                        intent.putExtra("gamepoints", gamepoints);
+                        break;
+                }
+                startActivity(intent);
+            }else {
+                Toast.makeText(getContext(),R.string.noDeckSelectedForGame,Toast.LENGTH_SHORT).show();
+            }
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
@@ -224,6 +455,7 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
         public GameModePagerAdapter(FragmentManager fm) {
             super(fm);
         }
+
 
         @Override
         public Fragment getItem(int position) {
@@ -234,8 +466,7 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
                     return new GameModeTimeFragment().newInstance();
                 case 2:
                     return new GameModePointsFragment().newInstance();
-                case 3:
-                    return new GameModeHotSeatFragment().newInstance();
+
                 default:
                     throw new IllegalArgumentException("Wrong Fragment ID chosen");
             }
@@ -244,7 +475,7 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 4;
+            return 3;
         }
 
         @Override
@@ -256,8 +487,7 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
                     return getString(R.string.time);
                 case 2:
                     return getString(R.string.points);
-                case 3:
-                    return getString(R.string.hotseat);
+
                 default:
                     throw new IllegalArgumentException("Wrong Fragment ID chosen");
             }

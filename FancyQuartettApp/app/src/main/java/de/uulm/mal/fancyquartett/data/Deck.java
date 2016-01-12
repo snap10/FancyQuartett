@@ -1,9 +1,11 @@
 package de.uulm.mal.fancyquartett.data;
 
+import java.io.Serializable;
+
 /**
  * Created by mk on 01.01.2016.
  */
-public class Deck {
+public class Deck implements Serializable {
 
 
     protected String name = null;

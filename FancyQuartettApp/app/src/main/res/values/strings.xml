@@ -28,9 +28,11 @@
     <string name="softai">soft AI level</string>
     <string name="numberofroundstext">Rounds at maximum</string>
     <string name="totheenddescription">You play until one player has won all cards</string>
-    <string name="timeinminuitesdescription">Maximum Minuites for one Game</string>
+    <string name="timeinminuitesdescription">Minutes maximum for one Game</string>
     <string name="title_activity_deck_gallery">DeckGalleryActivity</string>
     <string name="title_activity_card_detail_viewer">CardDetailViewerActivity</string>
+    <string name="pointdescription">Points for one Player to win</string>
+    <string name="noDeckSelectedForGame">You have to choose a Deck to start the Game!</string>
 
 
 </resources>

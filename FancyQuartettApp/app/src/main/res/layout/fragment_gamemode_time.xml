@@ -1,35 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dip">
+
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/timeinminuitesdescription"
-            android:id="@+id/totheenddescription"
-            />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <EditText
+            android:id="@+id/gametimeedittext"
             android:layout_width="40dip"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:numeric="integer"
-            android:text="20"
-            android:inputType="number"
-            android:gravity="center_horizontal"
-            android:selectAllOnFocus="true"
             android:focusable="false"
-            android:id="@+id/editText" />
+            android:gravity="center_horizontal"
+            android:inputType="number"
+            android:numeric="integer"
+            android:selectAllOnFocus="true"
+            android:text="20" />
+
+        <TextView
+            android:id="@+id/timedescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/timeinminuitesdescription" />
+
 
     </LinearLayout>
 
-    <android.support.v7.widget.SwitchCompat
-        android:id="@+id/numberofrounds_switch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/numberofroundstext" />
 </LinearLayout>

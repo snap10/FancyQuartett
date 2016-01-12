@@ -38,7 +38,7 @@ public class NewGameGalleryViewAdapter extends GalleryViewAdapter {
             @Override
             public void onClick(View v) {
                 Bundle conData = new Bundle();
-                conData.putString("deckname", offlineDeck.getName());
+                conData.putSerializable("offlinedeck",offlineDeck);
                 Intent intent = new Intent();
                 intent.putExtras(conData);
                 activity.setResult(Activity.RESULT_OK, intent);

@@ -1,8 +1,11 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/new_game_settings_framecontainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context="layout.NewGameSettingsFragment">
 
 
@@ -10,8 +13,7 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="0dip"
-        >
+        android:layout_margin="0dip">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,8 +41,9 @@
                         android:text="@string/chosendeck"
                         android:textSize="14sp" />
 
-                    <include layout="@layout/newgamesettingsdeckitem"
-                        android:id="@+id/chosendecktitem"/>
+                    <include
+                        android:id="@+id/chosendecktitem"
+                        layout="@layout/newgamesettingsdeckitem" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
@@ -66,12 +69,15 @@
                     <android.support.design.widget.TabLayout
                         android:id="@+id/tabs"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:background="@color/primary"
+                        app:tabSelectedTextColor="@android:color/white"
+                        app:tabTextColor="@color/secondary_text" />
 
                     <android.support.v4.view.ViewPager
                         android:id="@+id/container"
                         android:layout_width="match_parent"
-                        android:layout_height="200dip"
+                        android:layout_height="80dip"
                         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
@@ -97,6 +103,32 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/maximumroundsedittext"
+                            android:layout_width="40dip"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:enabled="false"
+                            android:gravity="center_horizontal"
+                            android:inputType="number"
+                            android:nextFocusForward="@id/new_game_settings_framecontainer"
+                            android:numeric="integer"
+                            android:selectAllOnFocus="true"
+                            android:text="20" />
+
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/numberofrounds_switch"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            android:text="@string/numberofroundstext" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
@@ -105,26 +137,27 @@
                             android:layout_width="40dip"
                             android:layout_height="wrap_content"
                             android:ems="10"
-                            android:numeric="integer"
-                            android:text="20"
-                            android:inputType="number"
+                            android:enabled="false"
                             android:gravity="center_horizontal"
+                            android:inputType="number"
+                            android:nextFocusForward="@id/new_game_settings_framecontainer"
+                            android:numeric="integer"
                             android:selectAllOnFocus="true"
-                            android:focusable="false"
-                            />
+                            android:text="20" />
 
                         <android.support.v7.widget.SwitchCompat
                             android:id="@+id/timeout_switch"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_gravity="end|top"
-                            android:checked="true"
+                            android:checked="false"
                             android:text="@string/gamesettings_timeoutforoneround_switch" />
 
 
                     </LinearLayout>
 
                     <RadioGroup
+                        android:id="@+id/aibuttongroup"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
 
