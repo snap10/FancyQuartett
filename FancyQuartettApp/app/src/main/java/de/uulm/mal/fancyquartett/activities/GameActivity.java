@@ -41,7 +41,9 @@ public class GameActivity extends AppCompatActivity implements LocalDeckLoader.O
     private int maxrounds;
     private int gameTime;
     private int gamePoints;
-
+    private boolean multiplayer;
+    private String playername1;
+    private String playername2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +58,11 @@ public class GameActivity extends AppCompatActivity implements LocalDeckLoader.O
         if (offlineDeck != null) {
             gameMode = (GameMode) intentbundle.get("gamemode");
             kilevel = (KILevel) intentbundle.get("kilevel");
+            multiplayer= intentbundle.getBoolean("multiplayer");
+            if(multiplayer){
+                playername1=intentbundle.getString("playername1");
+                playername2=intentbundle.getString("playername2");
+            }
             roundtimeout = intentbundle.getInt("roundtimeout");
             maxrounds = intentbundle.getInt("maxrounds");
             if (gameMode == GameMode.Time) {
