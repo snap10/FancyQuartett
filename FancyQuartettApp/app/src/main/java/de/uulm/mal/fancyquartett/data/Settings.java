@@ -12,6 +12,7 @@ public class Settings {
     public static String serverAdress = "192.168.0.40/fancyquartetttest";
     public static String localAssets = "decks";
     public static String localFolder = "/decks/";
+    public static String serverDecklistJsonFilename = "decks.json";
     //TODO
 
 

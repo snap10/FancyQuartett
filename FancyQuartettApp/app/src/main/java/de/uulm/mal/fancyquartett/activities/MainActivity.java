@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
                 case STARTPOSITION:
                     return new StartFragment().newInstance();
                 case GALLERYPOSITION:
-                    return new GalleryFragment().newInstance();
+                    return new GalleryFragment().newInstance(null);
                 case STATISTICSPOSITION:
                     return new StatisticFragment().newInstance();
                 default:

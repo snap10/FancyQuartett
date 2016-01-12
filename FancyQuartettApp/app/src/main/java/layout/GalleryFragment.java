@@ -22,8 +22,10 @@ import java.io.IOException;
 
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.adapters.GalleryViewAdapter;
+import de.uulm.mal.fancyquartett.data.OnlineDeck;
 import de.uulm.mal.fancyquartett.data.Settings;
 import de.uulm.mal.fancyquartett.utils.LocalDecksLoader;
+import de.uulm.mal.fancyquartett.utils.OnlineDecksLoader;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,15 +42,6 @@ public class GalleryFragment extends Fragment {
     LinearLayoutManager llm;
     GridLayoutManager glm;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private OnFragmentInteractionListener mListener;
     private Menu menu;
 
@@ -57,57 +50,34 @@ public class GalleryFragment extends Fragment {
     }
 
 
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
      * @return A new instance of fragment GalleryFragment.
      */
-    public static GalleryFragment newInstance() {
+    public static GalleryFragment newInstance(Bundle bundle) {
         GalleryFragment fragment = new GalleryFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CardGalleryFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static GalleryFragment newInstance(String param1, String param2) {
-        GalleryFragment fragment = new GalleryFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
         setHasOptionsMenu(true);
         //Initialize Data
         galleryViewAdapter = new GalleryViewAdapter(getContext());
-        LocalDecksLoader loader = new LocalDecksLoader(getContext().getFilesDir()+Settings.localFolder,galleryViewAdapter);
+        LocalDecksLoader loader = new LocalDecksLoader(getContext().getFilesDir() + Settings.localFolder, galleryViewAdapter);
         loader.execute();
 
-        glm= new GridLayoutManager(getContext(),2);
+        new OnlineDecksLoader(Settings.serverAdress, Settings.serverDecklistJsonFilename, galleryViewAdapter).execute();
+
+        glm = new GridLayoutManager(getContext(), 2);
         llm = new LinearLayoutManager(this.getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
-
-
-
 
 
     }
@@ -127,13 +97,6 @@ public class GalleryFragment extends Fragment {
         return rootView;
     }
 
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -169,10 +132,10 @@ public class GalleryFragment extends Fragment {
      */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        this.menu=menu;
-        if (recList.getLayoutManager().equals(llm)){
+        this.menu = menu;
+        if (recList.getLayoutManager().equals(llm)) {
             menu.findItem(R.id.gridLayoutButton).setVisible(true);
-        }else{
+        } else {
             menu.findItem(R.id.listLayoutButton).setVisible(true);
         }
     }
@@ -195,20 +158,20 @@ public class GalleryFragment extends Fragment {
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        
-        if (item.getItemId()==R.id.listLayoutButton) {
+
+        if (item.getItemId() == R.id.listLayoutButton) {
             recList.setLayoutManager(llm);
             galleryViewAdapter = new GalleryViewAdapter(getContext(), galleryViewAdapter.getGalleryModel(), GalleryViewAdapter.LISTLAYOUT);
             recList.setAdapter(galleryViewAdapter);
             item.setVisible(false);
             MenuItem item2 = menu.findItem(R.id.gridLayoutButton);
             item2.setVisible(true);
-        }else if(item.getItemId()==R.id.gridLayoutButton){
+        } else if (item.getItemId() == R.id.gridLayoutButton) {
             recList.setLayoutManager(glm);
-            galleryViewAdapter = new GalleryViewAdapter(getContext(),galleryViewAdapter.getGalleryModel(),GalleryViewAdapter.GRIDLAYOUT);
+            galleryViewAdapter = new GalleryViewAdapter(getContext(), galleryViewAdapter.getGalleryModel(), GalleryViewAdapter.GRIDLAYOUT);
             recList.setAdapter(galleryViewAdapter);
             item.setVisible(false);
-            MenuItem item2=menu.findItem(R.id.listLayoutButton);
+            MenuItem item2 = menu.findItem(R.id.listLayoutButton);
             item2.setVisible(true);
         }
         return super.onOptionsItemSelected(item);
@@ -225,7 +188,6 @@ public class GalleryFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }

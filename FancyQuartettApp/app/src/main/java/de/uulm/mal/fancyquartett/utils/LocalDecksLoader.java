@@ -32,8 +32,15 @@ public class LocalDecksLoader extends AsyncTask<Void, Void, ArrayList<OfflineDec
         this.listener = listener;
     }
 
+    /**
+     *
+     */
     public interface OnLocalDecksLoadedListener {
-        public void onLocalDecksLoaded(Object object);
+        /**
+         *
+         * @param offlineDecks
+         */
+        public void onLocalDecksLoaded(ArrayList<OfflineDeck> offlineDecks);
     }
 
     /**

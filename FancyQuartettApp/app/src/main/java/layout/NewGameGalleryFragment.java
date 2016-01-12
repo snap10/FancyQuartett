@@ -19,6 +19,7 @@ import de.uulm.mal.fancyquartett.adapters.GalleryViewAdapter;
 import de.uulm.mal.fancyquartett.adapters.NewGameGalleryViewAdapter;
 import de.uulm.mal.fancyquartett.data.Settings;
 import de.uulm.mal.fancyquartett.utils.LocalDecksLoader;
+import de.uulm.mal.fancyquartett.utils.OnlineDecksLoader;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -56,6 +57,8 @@ public class NewGameGalleryFragment extends Fragment {
         newGameGalleryViewAdapter = new NewGameGalleryViewAdapter(getActivity());
         LocalDecksLoader loader = new LocalDecksLoader(getContext().getFilesDir() + Settings.localFolder, newGameGalleryViewAdapter);
         loader.execute();
+
+        new OnlineDecksLoader(Settings.serverAdress,Settings.serverDecklistJsonFilename,newGameGalleryViewAdapter).execute();
 
         glm = new GridLayoutManager(getContext(), 2);
         llm = new LinearLayoutManager(this.getContext());

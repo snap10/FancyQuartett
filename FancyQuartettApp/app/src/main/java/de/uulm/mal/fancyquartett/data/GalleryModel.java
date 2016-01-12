@@ -1,29 +1,21 @@
 package de.uulm.mal.fancyquartett.data;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Serializable;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 
 import de.uulm.mal.fancyquartett.adapters.GalleryViewAdapter;
-import de.uulm.mal.fancyquartett.utils.JsonDownloader;
-import layout.GalleryFragment;
+import de.uulm.mal.fancyquartett.utils.OnlineDeckLoader;
 
 /**
  * Created by mk on 02.01.2016.
  */
-public class GalleryModel implements JsonDownloader.OnJasonDownloaderFinished {
+public class GalleryModel implements OnlineDeckLoader.OnOnlineDeckLoaded {
 
     private GalleryViewAdapter adapter;
     private ArrayList<OnlineDeck> onlineDecks;
@@ -83,6 +75,7 @@ public class GalleryModel implements JsonDownloader.OnJasonDownloaderFinished {
 
     /**
      * //TODO check if needed when LocalDecksLoader is used
+     *
      * @throws Exception
      */
     public void scanOfflineDecks() throws Exception {
@@ -118,17 +111,7 @@ public class GalleryModel implements JsonDownloader.OnJasonDownloaderFinished {
      */
     public void fetchOnlineDeck(String host, String deckname) {
         this.onlineDeckHost = host;
-        new JsonDownloader("http://" + onlineDeckHost + "/" + deckname + "/" + deckname + ".json",this).execute();
-    }
-
-    private void add(OnlineDeck d) {
-        onlineDecks.add(d);
-        adapter.notifyDataSetChanged();
-    }
-
-    private void add(OfflineDeck d) {
-        offlineDecks.add(d);
-        adapter.notifyDataSetChanged();
+        new OnlineDeckLoader(onlineDeckHost, deckname, this).execute();
     }
 
     public void move(OnlineDeck onlineDeck, OfflineDeck offlineDeck) {
@@ -144,13 +127,6 @@ public class GalleryModel implements JsonDownloader.OnJasonDownloaderFinished {
         return onlineDecks.size() + offlineDecks.size();
     }
 
-    public void addTestDecks() {
-        for (int i = 0; i < 20; i++) {
-            onlineDecks.add(new OnlineDeck("Testname" + i, "Testdescription" + i));
-            //TODO notify that dataset has changed
-        }
-
-    }
 
     /**
      * Retruns a Deck Object.
@@ -161,6 +137,22 @@ public class GalleryModel implements JsonDownloader.OnJasonDownloaderFinished {
     public Deck getDeck(int i) {
         if (i < offlineDecks.size()) {
             return offlineDecks.get(i);
+        } else if (i < getSize()) {
+            return onlineDecks.get(i - offlineDecks.size());
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Retruns a Deck Object.
+     *
+     * @param i
+     * @return deck
+     */
+    public OnlineDeck getOnlineDeck(int i) {
+        if (i < offlineDecks.size()) {
+            return onlineDecks.get(i);
         } else if (i < getSize()) {
             return onlineDecks.get(i - offlineDecks.size());
         } else {
@@ -183,23 +175,61 @@ public class GalleryModel implements JsonDownloader.OnJasonDownloaderFinished {
 
     }
 
+
+    public void addOfflineDecks(ArrayList<OfflineDeck> offlineDecks) {
+        if (this.offlineDecks.size() == 0) {
+            this.offlineDecks = offlineDecks;
+            for (OfflineDeck offlineDeck : offlineDecks) {
+                if (onlineDecks.contains(offlineDeck)) onlineDecks.remove(offlineDeck);
+            }
+        } else {
+            for (OfflineDeck oD : offlineDecks) {
+                if (!this.offlineDecks.contains(oD)) {
+                    this.offlineDecks.add(oD);
+                    if (onlineDecks.contains(oD)) onlineDecks.remove(oD);
+                }
+            }
+        }
+    }
+
+    public void addOfflineDeck(OfflineDeck offlineDeck) {
+
+        if (!this.offlineDecks.contains(offlineDeck)) {
+            this.offlineDecks.add(offlineDeck);
+            if (onlineDecks.contains(offlineDeck)) onlineDecks.remove(offlineDeck);
+        }
+    }
+
+    public void addOnlineDecks(ArrayList<OnlineDeck> onlineDecks) {
+        for (OnlineDeck oD : onlineDecks) {
+            if (!this.onlineDecks.contains(oD) && !this.offlineDecks.contains(oD)) {
+                this.onlineDecks.add(oD);
+            }
+        }
+    }
+
+
+    public void addOnlineDeck(OnlineDeck onlineDeck) {
+        if (!this.onlineDecks.contains(onlineDeck) && !this.offlineDecks.contains(onlineDeck)) {
+            this.onlineDecks.add(onlineDeck);
+        }
+    }
+
     /**
-     * Callback Method for JsonDownloader, called when finished or exception is thrown.
+     * Callback Method for OnlineDeckLoader, called when finished or exception is thrown.
      * Possible Exception is deliverd as parameter. Equals null if no exception was thrown
      *
      * @param possibleException
-     * @param json The JsonString
+     * @param onlineDeck
      */
     @Override
-    public void onDownloadFinished(Exception possibleException, String json) {
-        if (possibleException==null) {
-            try {
-                add(new OnlineDeck(new JSONObject(json), onlineDeckHost, this));
-            } catch (JSONException e) {
-                System.out.println("Deck could not be added because downloaded JSON is invalid. " + e);
-            }
-        } else{
-            Toast.makeText(getContext(),"No Connection to ServerRessource"+ possibleException.getMessage(),Toast.LENGTH_LONG).show();
+    public void onDownloadFinished(Exception possibleException, OnlineDeck onlineDeck) {
+        if (possibleException == null) {
+            addOnlineDeck(onlineDeck);
+        } else {
+            Toast.makeText(getContext(), "No Connection to ServerRessource" + possibleException.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 }
+
+

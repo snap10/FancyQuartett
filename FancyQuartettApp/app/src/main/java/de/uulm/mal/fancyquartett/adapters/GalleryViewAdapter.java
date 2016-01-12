@@ -1,6 +1,9 @@
 package de.uulm.mal.fancyquartett.adapters;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
@@ -11,22 +14,28 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.activities.CardGalleryActivity;
+import de.uulm.mal.fancyquartett.data.Deck;
 import de.uulm.mal.fancyquartett.data.GalleryModel;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
+import de.uulm.mal.fancyquartett.data.OnlineDeck;
 import de.uulm.mal.fancyquartett.data.Settings;
 import de.uulm.mal.fancyquartett.utils.LocalDecksLoader;
+import de.uulm.mal.fancyquartett.utils.OnlineDecksLoader;
 import layout.CardGalleryFragment;
 
 
 /**
  * Created by Snap10 on 04/01/16.
  */
-public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.GalleryViewHolder> implements LocalDecksLoader.OnLocalDecksLoadedListener {
+public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.GalleryViewHolder> implements OnlineDecksLoader.OnOnlineDecksLoaded, LocalDecksLoader.OnLocalDecksLoadedListener {
 
     public static final int LISTLAYOUT = 0;
     public static final int GRIDLAYOUT = 1;
@@ -108,12 +117,11 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
      */
     @Override
     public int getItemCount() {
-        //TODO remove in Production, just for testing
-        if (galleryModel.getSize() == 0) {
-            galleryModel.addTestDecks();
+        if (galleryModel==null){
+            return 0;
+        }else{
+            return galleryModel.getSize();
         }
-        //TODO
-        return galleryModel.getSize();
     }
 
     /**
@@ -125,8 +133,10 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
         final OfflineDeck offlineDeck = galleryModel.getOfflineDeck(i);
         if (offlineDeck == null) {
             //No OfflineDeck Information available thus just set Name and Description
-            galleryViewHolder.deckName.setText(galleryModel.getDeck(i).getName());
-            galleryViewHolder.deckDescription.setText(galleryModel.getDeck(i).getDescription());
+            final OnlineDeck onlineDeck = galleryModel.getOnlineDeck(i);
+            galleryViewHolder.deckName.setText(onlineDeck.getName());
+            galleryViewHolder.deckDescription.setText(onlineDeck.getDescription());
+            galleryViewHolder.view.setOnClickListener(getItemClickListener(onlineDeck));
         } else {
             galleryViewHolder.deckName.setText(offlineDeck.getName());
             galleryViewHolder.deckDescription.setText(offlineDeck.getDescription());
@@ -136,6 +146,8 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
 
         //TODO implement the and ClickListeners
     }
+
+
 
     public Context getContext() {
         return context;
@@ -169,27 +181,48 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
     /**
      * Method for Callback of LocalDecksLoader, receives an ArrayList<OfflineDecks> when Task is completed.
      *
-     * @param object
+     * @param offlineDecks
      */
     @Override
-    public void onLocalDecksLoaded(Object object) {
-        if (object != null) {
-            galleryModel = new GalleryModel((ArrayList<OfflineDeck>) object);
+    public void onLocalDecksLoaded(ArrayList<OfflineDeck> offlineDecks) {
+        if (offlineDecks != null) {
+            galleryModel.addOfflineDecks(offlineDecks);
             galleryModel.setAdapter(this);
             notifyDataSetChanged();
-            //TODO only fetch one time or when user want to refresh
-            galleryModel.fetchOnlineDeck(Settings.serverAdress, "bikes");
-        } else {
-            galleryModel=new GalleryModel(this, Settings.serverAdress, context.getFilesDir() + Settings.localFolder);
-            galleryModel.setAdapter(this);
-            notifyDataSetChanged();
-            galleryModel.fetchOnlineDeck(Settings.serverAdress, "bikes");
+        }else {
+            Toast.makeText(getContext(), R.string.noLocalDecksFound, Toast.LENGTH_SHORT).show();
         }
+    }
 
+    /**
+     * Callback Method for OnlineDecksLoader, called when finished or exception is thrown.
+     * Possible Exception is deliverd as parameter. Equals null if no exception was thrown
+     *
+     * @param possibleException
+     * @param onlineDecks
+     */
+    @Override
+    public void onDownloadFinished(Exception possibleException, ArrayList<OnlineDeck> onlineDecks) {
+            if (possibleException==null){
+                if (onlineDecks!=null){
+                    galleryModel.addOnlineDecks(onlineDecks);
+                    notifyDataSetChanged();
+                }else {
+                    Toast.makeText(getContext(), R.string.noOnlineDecksFound, Toast.LENGTH_SHORT).show();
+                }
+            }
+            else {
+                Toast.makeText(getContext(), possibleException.getMessage() , Toast.LENGTH_SHORT).show();
+            }
 
     }
 
-    public View.OnClickListener getItemClickListener(final OfflineDeck offlineDeck) {
+    /**
+     *
+     * @param offlineDeck
+     * @return itemClickListener
+     */
+    protected View.OnClickListener getItemClickListener(final OfflineDeck offlineDeck) {
         View.OnClickListener itemClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -203,6 +236,53 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
         return itemClickListener;
     }
 
+
+    /**
+     *
+     * @param onlineDeck
+     * @return itemClickListener
+     */
+    protected View.OnClickListener getItemClickListener(final OnlineDeck onlineDeck) {
+        View.OnClickListener itemClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDownloadAlertDialog(onlineDeck);
+            }
+        };
+        return itemClickListener;
+    }
+
+    /**
+     *
+     * @param onlinedeck
+     */
+    protected void showDownloadAlertDialog(final OnlineDeck onlinedeck) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(R.string.downloadandsavedialogtext).setTitle(R.string.downloaddialogtitle);
+
+        // Add the buttons
+        builder.setPositiveButton(R.string.download, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                try {
+                    //TODO CHOOSE RIGHT METHOD TO DOWNLOAD
+                    onlinedeck.download();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    //TODO REMOVE TOAST
+                    Toast.makeText(context,e.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //DO nothing
+
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
     /**
      * InnerClass TimerViewHolder extends RecyclerView.ViewHolder
      */
