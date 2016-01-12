@@ -8,20 +8,20 @@
         android:id="@+id/cardView_card"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_margin="15dip"
-        android:padding="6dip"
+        android:layout_margin="5dp"
+        android:padding="6dp"
         cardview:cardBackgroundColor="@color/colorPrimaryDark"
-        cardview:cardCornerRadius="2dip"
-        cardview:cardElevation="2dip">
+        cardview:cardCornerRadius="2dp"
+        cardview:cardElevation="2dp">
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textView_CardName"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
@@ -34,15 +34,15 @@
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/viewPager_SlideShow"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:background="@color/primary" />
 
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_card_attributes"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
 
         </LinearLayout>
 

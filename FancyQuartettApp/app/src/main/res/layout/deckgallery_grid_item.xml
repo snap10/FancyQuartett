@@ -4,11 +4,11 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:cardview="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
-    android:layout_height="250dip"
-    android:layout_margin="3dip"
-    android:padding="6dip"
-    android:paddingBottom="0dip"
-    cardview:cardElevation="4dip">
+    android:layout_height="250dp"
+    android:layout_margin="3dp"
+    android:padding="6dp"
+    android:paddingBottom="0dp"
+    cardview:cardElevation="4dp">
 
     <FrameLayout
         android:layout_width="fill_parent"
@@ -42,7 +42,7 @@
                         android:id="@+id/deckname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="5dip"
+                        android:padding="5dp"
                         android:text="DeckName"
                         style="@style/Base.TextAppearance.AppCompat.Medium.Inverse"
                         android:layout_centerVertical="true"
@@ -60,7 +60,7 @@
                         android:layout_centerInParent="true"
                         android:layout_gravity="center"
                         android:adjustViewBounds="false"
-                        android:padding="10dip"
+                        android:padding="10dp"
                         android:src="@drawable/ic_more_vert_24dp"
                         android:background="@null"/>
                 </RelativeLayout>
@@ -73,7 +73,7 @@
                     android:layout_centerHorizontal="true"
                     android:background="#bbff9800"
                     android:gravity="center"
-                    android:padding="5dip"
+                    android:padding="5dp"
                     android:text="DeckName"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:visibility="gone"

@@ -5,9 +5,9 @@
     android:id="@+id/cardView_attr"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="2dip"
-    cardview:cardCornerRadius="2dip"
-    cardview:cardElevation="2dip">
+    android:layout_margin="2dp"
+    cardview:cardCornerRadius="2dp"
+    cardview:cardElevation="2dp">
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -17,8 +17,8 @@
 
         <ImageView
             android:id="@+id/imageView_attrIcon"
-            android:layout_width="35dip"
-            android:layout_height="35dip"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_alignLeft="@+id/textView_attrName"
             android:layout_alignStart="@+id/textView_attrName"
             android:layout_below="@+id/textView_attrName"

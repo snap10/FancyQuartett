@@ -21,8 +21,8 @@
             android:scaleType="centerCrop"
             android:id="@+id/resumeGameCard"
             android:layout_margin="3dp"
-            cardview:cardCornerRadius="8dip"
-            cardview:cardElevation="4dip">
+            cardview:cardCornerRadius="8dp"
+            cardview:cardElevation="4dp">
 
 
             <FrameLayout
@@ -48,7 +48,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:padding="5dip"
+                        android:padding="5dp"
                         android:text="DeckName"
                         android:id="@+id/lastgame_deckname"
 
@@ -58,7 +58,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:padding="5dip"
+                        android:padding="5dp"
                         android:text="DeckName"
                         android:id="@+id/lastgame_deckdescription"
                         android:layout_alignParentBottom="true"

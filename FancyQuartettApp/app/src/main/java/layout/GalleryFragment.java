@@ -132,12 +132,13 @@ public class GalleryFragment extends Fragment {
      */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        this.menu = menu;
+       inflater.inflate(R.menu.gallery_menu,menu);
         if (recList.getLayoutManager().equals(llm)) {
             menu.findItem(R.id.gridLayoutButton).setVisible(true);
         } else {
             menu.findItem(R.id.listLayoutButton).setVisible(true);
         }
+        this.menu = menu;
     }
 
     /**
