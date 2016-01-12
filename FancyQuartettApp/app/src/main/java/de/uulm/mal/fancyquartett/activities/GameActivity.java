@@ -12,6 +12,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.security.Timestamp;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.uulm.mal.fancyquartett.R;
@@ -178,6 +180,21 @@ public class GameActivity extends AppCompatActivity implements LocalDeckLoader.O
         }
 
     /*
+        GAME - CONTROLLING
+    */
+
+        public void startGame() {
+
+        }
+
+        public void pauseGame() {
+
+        }
+
+        public void stopGame() {
+
+        }
+    /*
         GUI - CONTROLLING
     */
 
@@ -187,8 +204,11 @@ public class GameActivity extends AppCompatActivity implements LocalDeckLoader.O
         CARD - CONTROLLING
     */
 
-        public void mixDeck() {
+        public ArrayList<Card> shuffleOfflineDeck() {
             // TODO: implement some random sorting algorithm that mix the gameDeck
+            //Collections.shuffle(gameDeck);
+            return null;
+
         }
 
         public void spreadCards() {

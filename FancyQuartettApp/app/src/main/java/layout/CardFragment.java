@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import de.uulm.mal.fancyquartett.R;
@@ -29,6 +30,7 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
     // view attributes
     private RecyclerView recList;
     private GridLayoutManager glm;
+    TextView cardName;
 
     // other attributes
     private OfflineDeck offlineDeck;
@@ -100,10 +102,11 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-
         // inflate the layout for this fragment
         cardFragmentView = inflater.inflate(R.layout.fragment_card, container, false);
+        // set cardName
+        cardName = (TextView) cardFragmentView.findViewById(R.id.textView_CardName);
+        cardName.setText(card.getName());
         // initialise RecyclerView
         recList = (RecyclerView) cardFragmentView.findViewById(R.id.recycler_card_attributes);
         recList.setHasFixedSize(true);
@@ -113,7 +116,6 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
             recList.setLayoutManager(glm);
 
         }
-
         // create cardAttrViewAdapter
         CardAttrViewAdapter cardAttrViewAdapter = new CardAttrViewAdapter(getContext(), card.getAttributeList());
         recList.setAdapter(cardAttrViewAdapter);
