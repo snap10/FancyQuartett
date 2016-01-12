@@ -104,6 +104,8 @@
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="serveradress">Serveraddress</string>
     <string name="pref_default_display_serveraddress">Enter Serveraddress here</string>
+    <string name="downloadProgressText">Deck is downloading, please wait!</string>
+    <string name="canceledDownload">Canceled Download</string>
 
 
 </resources>

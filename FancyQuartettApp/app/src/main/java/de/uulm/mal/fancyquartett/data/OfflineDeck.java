@@ -1,5 +1,7 @@
 package de.uulm.mal.fancyquartett.data;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -14,19 +16,31 @@ import java.util.Arrays;
 /**
  * Created by mk on 01.01.2016.
  */
-public class OfflineDeck extends Deck implements Serializable{
+public class OfflineDeck extends Deck implements Serializable {
 
     private ArrayList<Card> cards;
 
     private ArrayList<Property> properties;
 
-    public OfflineDeck(String name, String description, Card[] cards, Property[] properties) {
+    /**
+     * @param name
+     * @param description
+     * @param cards
+     * @param properties
+     */
+    public OfflineDeck(String name, String description, ArrayList<Card> cards, ArrayList<Property> properties) {
         super(name, description);
-        this.cards = new ArrayList<Card>(Arrays.asList(cards));
-        this.properties = new ArrayList<Property>(Arrays.asList(properties));
+        this.cards = cards;
+        this.properties = properties;
     }
 
-
+    /**
+     * Used by LocalDecksLoader and LocalDeckLoader
+     *
+     * @param folder
+     * @param name
+     * @throws Exception
+     */
     public OfflineDeck(String folder, String name) throws Exception {
         super();
         this.cards = new ArrayList<Card>();
@@ -46,11 +60,13 @@ public class OfflineDeck extends Deck implements Serializable{
         super.description = json.getString("description");
         JSONArray cardsJson = json.getJSONArray("cards");
         JSONArray propsJson = json.getJSONArray("properties");
+
         for (int i = 0; i < propsJson.length(); i++) {
             properties.add(new Property(propsJson.getJSONObject(i)));
         }
+
         for (int i = 0; i < cardsJson.length(); i++) {
-            cards.add(new Card(cardsJson.getJSONObject(i), properties,folder,name,true));
+            cards.add(new Card(cardsJson.getJSONObject(i), properties, folder, name, true));
         }
 
     }

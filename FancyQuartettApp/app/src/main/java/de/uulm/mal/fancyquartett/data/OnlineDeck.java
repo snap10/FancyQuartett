@@ -36,7 +36,7 @@ public class OnlineDeck extends Deck {
 
     //TODO probably do Async
     // creates a full offline deck. includes download of images.
-    public OfflineDeck download() throws JSONException {
+    public OfflineDeck download() throws Exception {
         JSONArray cardsJson = deckJson.getJSONArray("cards");
         JSONArray propsJson = deckJson.getJSONArray("properties");
         Property[] props = new Property[propsJson.length()];
@@ -46,7 +46,7 @@ public class OnlineDeck extends Deck {
         Card[] cards = new Card[cardsJson.length()];
         for(int i = 0; i < cards.length; i++) {
             // creating card objects initiates image downloads
-            cards[i] = new Card(cardsJson.getJSONObject(i), props, host,gallery.getContext().getFilesDir()+Settings.localFolder, getName(), false);
+            //TODO cards[i] = new Card(cardsJson.getJSONObject(i), props, host,gallery.getContext().getFilesDir()+Settings.localFolder, getName(), false);
         }
         OfflineDeck offlineDeck= null;
         try {

@@ -21,6 +21,7 @@ public class Property implements Serializable{
 
     // unit string displayed after numeric value
     private String unit = null;
+    private double median;
 
     // (?)
     private int precision = 0;
@@ -34,6 +35,9 @@ public class Property implements Serializable{
         this.unit = json.getString("unit");
         this.biggerWins = (json.getInt("compare")==1);
         this.precision = json.getInt("precision");
+        if (json.has("median")){
+            this.median = json.getDouble("median");
+        }
     }
 
     public Property(String text, boolean biggerWins, int id, String unit, int precision) {
@@ -52,5 +56,13 @@ public class Property implements Serializable{
 
     public String getUnit() {
         return unit;
+    }
+
+    public double getMedian() {
+        return median;
+    }
+
+    public void setMedian(double median) {
+        this.median = median;
     }
 }

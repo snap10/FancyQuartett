@@ -6,14 +6,24 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 
+import de.uulm.mal.fancyquartett.data.Card;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
+import de.uulm.mal.fancyquartett.data.Property;
 import de.uulm.mal.fancyquartett.data.Settings;
 
 /**
@@ -25,7 +35,7 @@ public class AssetsInstaller extends AsyncTask<Void, Void, Exception> {
     String path;
     OnAssetsInstallerCompletedListener listener;
 
-    public AssetsInstaller(String path, Context context,OnAssetsInstallerCompletedListener listener) throws IOException {
+    public AssetsInstaller(String path, Context context, OnAssetsInstallerCompletedListener listener) throws IOException {
         this.path = path;
         this.context = context.getApplicationContext();
         this.listener = listener;
@@ -36,6 +46,7 @@ public class AssetsInstaller extends AsyncTask<Void, Void, Exception> {
     public interface OnAssetsInstallerCompletedListener {
         /**
          * Callback method for onPostExecute of AsyncTask
+         *
          * @param possibleException
          */
         public void onAssetsInstallerCompleted(Exception possibleException);
@@ -98,6 +109,7 @@ public class AssetsInstaller extends AsyncTask<Void, Void, Exception> {
 
 
             if (files != null) for (String filename : files) {
+
                 InputStream in = null;
                 OutputStream out = null;
 
@@ -107,12 +119,35 @@ public class AssetsInstaller extends AsyncTask<Void, Void, Exception> {
                 File outFile = new File(outDir, filename);
                 outFile.createNewFile();
                 out = new FileOutputStream(outFile);
-                copyFile(in, out);
-                if (in != null) {
-                    in.close();
-                }
-                if (out != null) {
-                    out.close();
+                if (filename.endsWith(".json")) {
+                    BufferedReader inbuff = new BufferedReader(new InputStreamReader(in));
+                    String inputLine;
+                    StringBuffer response = new StringBuffer();
+                    while ((inputLine = inbuff.readLine()) != null) {
+                        response.append(inputLine);
+                        response.append("\n");
+                    }
+                    inbuff.close();
+                    String json = response.toString();
+                    try {
+                        JSONObject deckjson = new JSONObject(json);
+                        deckjson=calculateMedianOfJson(deckjson);
+                        out = new FileOutputStream(outFile);
+                        out.write(deckjson.toString().getBytes(Charset.forName("UTF-8")));
+                        out.flush();
+                        out.close();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                }else{
+                    copyFile(in, out);
+                    if (in != null) {
+                        in.close();
+                    }
+                    if (out != null) {
+                        out.close();
+                    }
                 }
             }
         }
@@ -125,5 +160,45 @@ public class AssetsInstaller extends AsyncTask<Void, Void, Exception> {
         while ((read = in.read(buffer)) != -1) {
             out.write(buffer, 0, read);
         }
+    }
+
+    private JSONObject calculateMedianOfJson(JSONObject deckjson) throws JSONException {
+        JSONArray cardsjson = deckjson.getJSONArray("cards");
+        JSONArray propertyjson = deckjson.getJSONArray("properties");
+        ArrayList<Property> properties = new ArrayList<>();
+        ArrayList<Card> cards = new ArrayList<>();
+        for (int i = 0; i < propertyjson.length(); i++) {
+            properties.add(new Property(propertyjson.getJSONObject(i)));
+        }
+        for (int i = 0; i < cardsjson.length(); i++) {
+            Card card = new Card(cardsjson.getJSONObject(i), properties, context.getFilesDir() + Settings.localFolder, deckjson.get("name").toString().toLowerCase(), true);
+            cards.add(card);
+        }
+        for (int i = 0; i < properties.size(); i++) {
+            Property prop = properties.get(i);
+            float[] medArray = new float[cards.size()];
+            for (int j = 0; j < cards.size(); j++) {
+                Card card = cards.get(j);
+                medArray[j] = card.getValue(prop);
+            }
+            prop.setMedian(calculateMedian(medArray));
+            JSONObject propjson = propertyjson.getJSONObject(i);
+            propjson.put("median", prop.getMedian());
+            propertyjson.put(i, propjson);
+        }
+
+        deckjson.put("properties", propertyjson);
+        return deckjson;
+    }
+
+    private float calculateMedian(float[] medArray) {
+        float median;
+        Arrays.sort(medArray);
+        if (medArray.length % 2 == 0) {
+            median = (medArray[medArray.length / 2] + medArray[medArray.length / 2 - 1]) / 2;
+        } else {
+            median = medArray[medArray.length / 2];
+        }
+        return median;
     }
 }

@@ -26,13 +26,24 @@ public class Card implements Serializable{
     private String deckname;
 
     // map properties onto card values. Use float for all value types.
-    private Map<Property, Float> values;
+    private HashMap<Property, Float> values;
 
     private String name = null;
 
 
     // constructor used by OnlineDecks when downloading
-    public Card(JSONObject json, Property[] props, String pathToOnlinePictures, String localFolder, String deckname, boolean isLocal) throws JSONException {
+
+    /**
+     *
+     * @param json
+     * @param props
+     * @param hostadress
+     * @param localFolder
+     * @param deckname
+     * @param isLocal
+     * @throws JSONException
+     */
+    public Card(JSONObject json, ArrayList<Property> props, String hostadress, String localFolder, String deckname, boolean isLocal) throws JSONException {
         images = new ArrayList<Image>();
         values = new HashMap<>();
         this.id = json.getInt("id");
@@ -41,7 +52,7 @@ public class Card implements Serializable{
         this.deckname = deckname;
         JSONArray imgsJson = json.getJSONArray("images");
         for (int i = 0; i < imgsJson.length(); i++) {
-            Image img = new Image(imgsJson.getJSONObject(i), pathToOnlinePictures, localFolder, deckname, isLocal);
+            Image img = new Image(imgsJson.getJSONObject(i), hostadress, localFolder, deckname, isLocal);
             if (!isLocal) img.download();
             images.add(img);
         }
@@ -50,9 +61,10 @@ public class Card implements Serializable{
             JSONObject pair = valsJson.getJSONObject(i);
             int propId = pair.getInt("propertyId");
             float val = (float) pair.getDouble("value");
-            for (int j = 0; j < props.length; j++) { // search property with given id for each value
-                if (props[j].id() == propId) {
-                    values.put(props[j], val);
+            for (int j = 0; j < props.size(); j++) {
+            // search property with given id for each value
+                if (props.get(j).id() == propId) {
+                    values.put(props.get(j), val);
                     break;
                 }
             }
@@ -60,7 +72,17 @@ public class Card implements Serializable{
     }
 
     // constructor used by OfflineDecks
-    public Card(JSONObject json, ArrayList<Property> props, String localFolder, String deckname, boolean isLocal) throws JSONException {
+
+    /**
+     *
+     * @param json
+     * @param props
+     * @param localDeckFolder
+     * @param deckname
+     * @param isLocal
+     * @throws JSONException
+     */
+    public Card(JSONObject json, ArrayList<Property> props, String localDeckFolder, String deckname, boolean isLocal) throws JSONException {
         images = new ArrayList<Image>();
         values = new HashMap<>();
         this.id = json.getInt("id");
@@ -69,7 +91,7 @@ public class Card implements Serializable{
         this.deckname = deckname;
         JSONArray imgsJson = json.getJSONArray("images");
         for (int i = 0; i < imgsJson.length(); i++) {
-            Image img = new Image(imgsJson.getJSONObject(i), localFolder, deckname, isLocal);
+            Image img = new Image(imgsJson.getJSONObject(i), localDeckFolder, deckname, isLocal);
             if (!isLocal) img.download();
             images.add(img);
         }
@@ -186,15 +208,19 @@ public class Card implements Serializable{
         this.deckname = deckname;
     }
 
-    public Map<Property, Float> getValues() {
+    public HashMap<Property, Float> getValues() {
         return values;
     }
 
-    public void setValues(Map<Property, Float> values) {
+    public void setValues(HashMap<Property, Float> values) {
         this.values = values;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public float getValue(Property prop) {
+        return values.get(prop);
     }
 }

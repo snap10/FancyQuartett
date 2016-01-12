@@ -41,7 +41,7 @@ public class OnlineDeckLoader extends AsyncTask<Void, Void, Exception> {
 
     public interface OnOnlineDeckLoaded {
         /**
-         * Callback Method for OnlineDeckLoader, called when finished or exception is thrown.
+         * Callback Method for DeckDownloader, called when finished or exception is thrown.
          * Possible Exception is deliverd as parameter. Equals null if no exception was thrown
          * @param possibleException
          * @param onlineDeck

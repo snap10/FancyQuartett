@@ -27,15 +27,17 @@ import de.uulm.mal.fancyquartett.data.GalleryModel;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.data.OnlineDeck;
 import de.uulm.mal.fancyquartett.data.Settings;
+import de.uulm.mal.fancyquartett.utils.DeckDownloader;
 import de.uulm.mal.fancyquartett.utils.LocalDecksLoader;
 import de.uulm.mal.fancyquartett.utils.OnlineDecksLoader;
 import layout.CardGalleryFragment;
 
 
+
 /**
  * Created by Snap10 on 04/01/16.
  */
-public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.GalleryViewHolder> implements OnlineDecksLoader.OnOnlineDecksLoaded, LocalDecksLoader.OnLocalDecksLoadedListener {
+public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.GalleryViewHolder> implements OnlineDecksLoader.OnOnlineDecksLoaded, LocalDecksLoader.OnLocalDecksLoadedListener, DeckDownloader.OnDeckDownloadedListener {
 
     public static final int LISTLAYOUT = 0;
     public static final int GRIDLAYOUT = 1;
@@ -136,7 +138,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
             final OnlineDeck onlineDeck = galleryModel.getOnlineDeck(i);
             galleryViewHolder.deckName.setText(onlineDeck.getName());
             galleryViewHolder.deckDescription.setText(onlineDeck.getDescription());
-            galleryViewHolder.view.setOnClickListener(getItemClickListener(onlineDeck));
+            galleryViewHolder.view.setOnClickListener(getItemClickListener(onlineDeck,this));
         } else {
             galleryViewHolder.deckName.setText(offlineDeck.getName());
             galleryViewHolder.deckDescription.setText(offlineDeck.getDescription());
@@ -242,11 +244,11 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
      * @param onlineDeck
      * @return itemClickListener
      */
-    protected View.OnClickListener getItemClickListener(final OnlineDeck onlineDeck) {
+    protected View.OnClickListener getItemClickListener(final OnlineDeck onlineDeck,final DeckDownloader.OnDeckDownloadedListener listener) {
         View.OnClickListener itemClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDownloadAlertDialog(onlineDeck);
+                showDownloadAlertDialog(onlineDeck,listener, v);
             }
         };
         return itemClickListener;
@@ -256,7 +258,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
      *
      * @param onlinedeck
      */
-    protected void showDownloadAlertDialog(final OnlineDeck onlinedeck) {
+    protected void showDownloadAlertDialog(final OnlineDeck onlinedeck, final DeckDownloader.OnDeckDownloadedListener listener,View v) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(R.string.downloadandsavedialogtext).setTitle(R.string.downloaddialogtitle);
 
@@ -264,12 +266,11 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
         builder.setPositiveButton(R.string.download, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 try {
-                    //TODO CHOOSE RIGHT METHOD TO DOWNLOAD
-                    onlinedeck.download();
+                    new DeckDownloader(Settings.serverAdress,  getContext().getFilesDir()+Settings.localFolder, onlinedeck.getName().toLowerCase(), listener).execute();
                 } catch (Exception e) {
                     e.printStackTrace();
                     //TODO REMOVE TOAST
-                    Toast.makeText(context,e.getMessage(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -283,6 +284,24 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
         dialog.show();
 
     }
+
+    /**
+     * Callback Method for DeckDownloader, called when finished or exception is thrown.
+     * Possible Exception is deliverd as parameter. Equals null if no exception was thrown
+     *
+     * @param possibleException
+     * @param offlineDeck
+     */
+    @Override
+    public void onDeckDownloadFinished(Exception possibleException, OfflineDeck offlineDeck) {
+        if (possibleException==null){
+            galleryModel.addOfflineDeck(offlineDeck);
+
+        }else {
+            Toast.makeText(getContext(), possibleException.getMessage(),Toast.LENGTH_SHORT).show();
+        }
+    }
+
     /**
      * InnerClass TimerViewHolder extends RecyclerView.ViewHolder
      */
