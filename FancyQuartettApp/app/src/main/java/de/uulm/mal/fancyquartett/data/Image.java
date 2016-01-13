@@ -17,7 +17,7 @@ import java.net.URL;
 /**
  * Created by mk on 01.01.2016.
  */
-public class Image implements Serializable{
+public class Image implements Serializable {
 
     private int id = 0;
     private String filename;
@@ -30,7 +30,7 @@ public class Image implements Serializable{
     private boolean isLocal = false;
 
 
-    public Image(JSONObject json, String hostaddress,String localDeckFolder, String deckname, boolean isLocal) throws JSONException {
+    public Image(JSONObject json, String hostaddress, String localDeckFolder, String deckname, boolean isLocal) throws JSONException {
         ;
         this.id = json.getInt("id");
         this.filename = json.getString("filename");
@@ -41,7 +41,7 @@ public class Image implements Serializable{
     }
 
     //Overload Constructor
-    public Image(JSONObject json,String localDeckfolder, String deckname, boolean isLocal) throws JSONException {
+    public Image(JSONObject json, String localDeckfolder, String deckname, boolean isLocal) throws JSONException {
         ;
         this.id = json.getInt("id");
         this.filename = json.getString("filename");
@@ -59,14 +59,38 @@ public class Image implements Serializable{
         return isLocal;
     }
 
-    public void download(){
+    /**
+     * download the Image from the stored Source
+     * Decide if you want to load asyncrounous or not
+     *
+     * @param asyncronous
+     */
+    public void download(boolean asyncronous) {
         if (!isLocal) {
-            new ImgDownloader("http://" + hostadress + "/" + deckname + "/" + filename).execute();
+            if (asyncronous) {
+                new ImgDownloader("http://" + hostadress + "/" + deckname + "/" + filename).execute();
+            } else {
+                try {
+                    Bitmap img;
+                    URL u = new URL("http://" + hostadress + "/" + deckname + "/" + filename);
+                    HttpURLConnection c = (HttpURLConnection) u.openConnection();
+                    img = BitmapFactory.decodeStream(c.getInputStream());
+                    File file = new File(localDeckfolder, filename);
+                    file.createNewFile();
+                    FileOutputStream out = new FileOutputStream(file);
+                    img.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                    out.flush();
+                    out.close();
+                    isLocal = true;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
     public Bitmap getBitmap() {
-        Bitmap bitmap = BitmapFactory.decodeFile(localDeckfolder +"/"+filename);
+        Bitmap bitmap = BitmapFactory.decodeFile(localDeckfolder + "/" + filename);
         return bitmap;
     }
 
@@ -77,7 +101,7 @@ public class Image implements Serializable{
     }
 
     protected void downloadCallback() {
-        isLocal=true;
+        isLocal = true;
     }
 
     public String getFileName() {

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -58,7 +59,7 @@ public class NewGameGalleryFragment extends Fragment {
         LocalDecksLoader loader = new LocalDecksLoader(getContext().getFilesDir() + Settings.localFolder, newGameGalleryViewAdapter);
         loader.execute();
 
-        new OnlineDecksLoader(Settings.serverAdress,Settings.serverDecklistJsonFilename,newGameGalleryViewAdapter).execute();
+        new OnlineDecksLoader(Settings.serverAdress, Settings.serverDecklistJsonFilename, newGameGalleryViewAdapter).execute();
 
         glm = new GridLayoutManager(getContext(), 2);
         llm = new LinearLayoutManager(this.getContext());
@@ -70,6 +71,15 @@ public class NewGameGalleryFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_main_gallery, container, false);
+        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefreshlayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                newGameGalleryViewAdapter.setRefreshLayout(swipeRefreshLayout);
+                new OnlineDecksLoader(Settings.serverAdress, Settings.serverDecklistJsonFilename, newGameGalleryViewAdapter).execute();
+                new LocalDecksLoader(getContext().getFilesDir() + Settings.localFolder, newGameGalleryViewAdapter).execute();
+            }
+        });
         recList = (RecyclerView) rootView.findViewById(R.id.recycler_gallery_list);
         recList.setHasFixedSize(true);
 

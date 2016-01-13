@@ -23,7 +23,7 @@ import de.uulm.mal.fancyquartett.data.OfflineDeck;
 /**
  * Created by Snap10 on 04/01/16.
  */
-public class DeckGalleryViewAdapter extends RecyclerView.Adapter<DeckGalleryViewAdapter.DeckGalleryViewHolder>  {
+public class CardGalleryViewAdapter extends RecyclerView.Adapter<CardGalleryViewAdapter.DeckGalleryViewHolder>  {
 
     public static final int LISTLAYOUT = 0;
     public static final int GRIDLAYOUT = 1;
@@ -36,7 +36,7 @@ public class DeckGalleryViewAdapter extends RecyclerView.Adapter<DeckGalleryView
      *
      * @param context
      */
-    public DeckGalleryViewAdapter(Context context) {
+    public CardGalleryViewAdapter(Context context) {
         this.context = context.getApplicationContext();
         layout = 0;
     }
@@ -47,12 +47,12 @@ public class DeckGalleryViewAdapter extends RecyclerView.Adapter<DeckGalleryView
      * @param context
      * @param layout
      */
-    public DeckGalleryViewAdapter(Context context, int layout) {
+    public CardGalleryViewAdapter(Context context, int layout) {
         this.context = context.getApplicationContext();
         this.layout = layout;
     }
 
-    public DeckGalleryViewAdapter(Context context, OfflineDeck offlineDeck, int layout) {
+    public CardGalleryViewAdapter(Context context, OfflineDeck offlineDeck, int layout) {
         this.context=context.getApplicationContext();
         this.layout=layout;
         this.offlineDeck=offlineDeck;

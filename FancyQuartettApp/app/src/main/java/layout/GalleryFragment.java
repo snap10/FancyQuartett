@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -87,6 +88,15 @@ public class GalleryFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_main_gallery, container, false);
+        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefreshlayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                galleryViewAdapter.setRefreshLayout(swipeRefreshLayout);
+                new OnlineDecksLoader(Settings.serverAdress, Settings.serverDecklistJsonFilename, galleryViewAdapter).execute();
+                new LocalDecksLoader(getContext().getFilesDir() + Settings.localFolder, galleryViewAdapter).execute();
+            }
+        });
         recList = (RecyclerView) rootView.findViewById(R.id.recycler_gallery_list);
         recList.setHasFixedSize(true);
 
@@ -132,7 +142,7 @@ public class GalleryFragment extends Fragment {
      */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-       inflater.inflate(R.menu.gallery_menu,menu);
+        inflater.inflate(R.menu.gallery_menu, menu);
         if (recList.getLayoutManager().equals(llm)) {
             menu.findItem(R.id.gridLayoutButton).setVisible(true);
         } else {

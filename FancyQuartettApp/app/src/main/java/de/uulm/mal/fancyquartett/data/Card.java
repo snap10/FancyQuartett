@@ -53,7 +53,7 @@ public class Card implements Serializable{
         JSONArray imgsJson = json.getJSONArray("images");
         for (int i = 0; i < imgsJson.length(); i++) {
             Image img = new Image(imgsJson.getJSONObject(i), hostadress, localFolder, deckname, isLocal);
-            if (!isLocal) img.download();
+            if (!isLocal) img.download(false);
             images.add(img);
         }
         JSONArray valsJson = json.getJSONArray("values");
@@ -92,7 +92,7 @@ public class Card implements Serializable{
         JSONArray imgsJson = json.getJSONArray("images");
         for (int i = 0; i < imgsJson.length(); i++) {
             Image img = new Image(imgsJson.getJSONObject(i), localDeckFolder, deckname, isLocal);
-            if (!isLocal) img.download();
+            if (!isLocal) img.download(false);
             images.add(img);
         }
         JSONArray valsJson = json.getJSONArray("values");

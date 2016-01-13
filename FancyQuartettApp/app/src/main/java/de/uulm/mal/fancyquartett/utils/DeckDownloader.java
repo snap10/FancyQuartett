@@ -82,6 +82,10 @@ public class DeckDownloader extends AsyncTask<Void, Void, Exception> {
             JSONObject deckjson = new JSONObject(json);
             JSONArray cardsjson = deckjson.getJSONArray("cards");
             JSONArray propertyjson = deckjson.getJSONArray("properties");
+            File outDir = new File(localpath + deckname);
+            outDir.mkdirs();
+            File outFile = new File(outDir, deckname.toLowerCase() + ".json");
+            outFile.createNewFile();
             ArrayList<Property> properties = new ArrayList<>();
             ArrayList<Card> cards = new ArrayList<>();
             for (int i = 0; i < propertyjson.length(); i++) {
@@ -106,16 +110,14 @@ public class DeckDownloader extends AsyncTask<Void, Void, Exception> {
 
             deckjson.put("properties", propertyjson);
 
-            File outDir = new File(localpath + deckname);
-            outDir.mkdirs();
-            File outFile = new File(outDir, deckname.toLowerCase() + ".json");
-            outFile.createNewFile();
+
+
             FileOutputStream out = new FileOutputStream(outFile);
             out.write(deckjson.toString().getBytes(Charset.forName("UTF-8")));
             out.flush();
             out.close();
 
-            offlineDeck = new OfflineDeck(deckname,deckjson.getString("description"),cards,properties);
+            offlineDeck = new OfflineDeck(deckjson.get("name").toString(),deckjson.getString("description"),cards,properties);
         } catch (IOException e) {
             System.out.println(e);
             return e;

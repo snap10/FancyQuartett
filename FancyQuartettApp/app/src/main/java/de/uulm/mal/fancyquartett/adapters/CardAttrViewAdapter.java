@@ -87,7 +87,6 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
                 CardView view = (CardView)v;
                 view.setCardBackgroundColor(getContext().getResources().getColor(R.color.colorPrimary));
                 attrClickListener.onCardAttrClicked(property, value, attribute);
-                notifyItemChanged(position);
           }
       };
         return onClickListener;

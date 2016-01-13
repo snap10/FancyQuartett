@@ -68,7 +68,7 @@ public class NewGameGalleryViewAdapter extends GalleryViewAdapter {
      */
     @Override
     protected void showDownloadAlertDialog(final OnlineDeck onlinedeck, final DeckDownloader.OnDeckDownloadedListener listener, final View v) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
         builder.setMessage(R.string.downloadbeforeuseonlinedeck).setTitle(R.string.downloadalertdialogtitle);
 
         // Add the buttons
@@ -124,6 +124,9 @@ public class NewGameGalleryViewAdapter extends GalleryViewAdapter {
      */
     @Override
     public void onDeckDownloadFinished(Exception possibleException, OfflineDeck offlineDeck) {
+        if (swipeRefreshLayout!=null){
+            swipeRefreshLayout.setRefreshing(false);
+        }
         if (possibleException==null){
             if (mProgressDialog != null) {
                 mProgressDialog.dismiss();

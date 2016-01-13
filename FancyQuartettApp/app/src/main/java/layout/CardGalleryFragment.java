@@ -16,9 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import de.uulm.mal.fancyquartett.R;
-import de.uulm.mal.fancyquartett.adapters.DeckGalleryViewAdapter;
-import de.uulm.mal.fancyquartett.adapters.GalleryViewAdapter;
-import de.uulm.mal.fancyquartett.data.Card;
+import de.uulm.mal.fancyquartett.adapters.CardGalleryViewAdapter;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.utils.LocalDeckLoader;
 
@@ -44,7 +42,7 @@ public class CardGalleryFragment extends Fragment implements LocalDeckLoader.OnL
     private OnFragmentInteractionListener mListener;
     private OfflineDeck offlineDeck;
     private Menu menu;
-    private DeckGalleryViewAdapter deckGalleryViewAdapter;
+    private CardGalleryViewAdapter cardGalleryViewAdapter;
 
     public CardGalleryFragment() {
         // Required empty public constructor
@@ -93,9 +91,9 @@ public class CardGalleryFragment extends Fragment implements LocalDeckLoader.OnL
         recList.setHasFixedSize(true);
         recList.setLayoutManager(llm);
         if (offlineDeck!=null){
-            deckGalleryViewAdapter = new DeckGalleryViewAdapter(getContext().getApplicationContext(),DeckGalleryViewAdapter.LISTLAYOUT);
-            deckGalleryViewAdapter.setOfflineDeck(offlineDeck);
-            recList.setAdapter(deckGalleryViewAdapter);
+            cardGalleryViewAdapter = new CardGalleryViewAdapter(getContext().getApplicationContext(), CardGalleryViewAdapter.LISTLAYOUT);
+            cardGalleryViewAdapter.setOfflineDeck(offlineDeck);
+            recList.setAdapter(cardGalleryViewAdapter);
 
         }
 
@@ -138,9 +136,9 @@ public class CardGalleryFragment extends Fragment implements LocalDeckLoader.OnL
             Toast.makeText(this.getContext(),"Deck could not be loaded",Toast.LENGTH_LONG).show();
         }else{
             this.offlineDeck = offlineDeck;
-            deckGalleryViewAdapter = new DeckGalleryViewAdapter(getContext().getApplicationContext(),DeckGalleryViewAdapter.LISTLAYOUT);
-            deckGalleryViewAdapter.setOfflineDeck(offlineDeck);
-            recList.setAdapter(deckGalleryViewAdapter);
+            cardGalleryViewAdapter = new CardGalleryViewAdapter(getContext().getApplicationContext(), CardGalleryViewAdapter.LISTLAYOUT);
+            cardGalleryViewAdapter.setOfflineDeck(offlineDeck);
+            recList.setAdapter(cardGalleryViewAdapter);
 
         }
     }
@@ -182,15 +180,15 @@ public class CardGalleryFragment extends Fragment implements LocalDeckLoader.OnL
 
         if (item.getItemId()==R.id.listLayoutButton) {
             recList.setLayoutManager(llm);
-            deckGalleryViewAdapter = new DeckGalleryViewAdapter(getContext().getApplicationContext(),offlineDeck,DeckGalleryViewAdapter.LISTLAYOUT);
-            recList.setAdapter(deckGalleryViewAdapter);
+            cardGalleryViewAdapter = new CardGalleryViewAdapter(getContext().getApplicationContext(),offlineDeck, CardGalleryViewAdapter.LISTLAYOUT);
+            recList.setAdapter(cardGalleryViewAdapter);
             item.setVisible(false);
             MenuItem item2 = menu.findItem(R.id.gridLayoutButton);
             item2.setVisible(true);
         }else if(item.getItemId()==R.id.gridLayoutButton){
             recList.setLayoutManager(glm);
-            deckGalleryViewAdapter = new DeckGalleryViewAdapter(getContext().getApplicationContext(),offlineDeck,DeckGalleryViewAdapter.GRIDLAYOUT);
-            recList.setAdapter(deckGalleryViewAdapter);
+            cardGalleryViewAdapter = new CardGalleryViewAdapter(getContext().getApplicationContext(),offlineDeck, CardGalleryViewAdapter.GRIDLAYOUT);
+            recList.setAdapter(cardGalleryViewAdapter);
             item.setVisible(false);
             MenuItem item2=menu.findItem(R.id.listLayoutButton);
             item2.setVisible(true);

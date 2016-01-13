@@ -86,4 +86,13 @@ public class OfflineDeck extends Deck implements Serializable {
     public void setProperties(ArrayList<Property> properties) {
         this.properties = properties;
     }
+
+    /**
+     * Should delete all offlineFiles of deck including JSON and Picture data
+     * @return
+     */
+    public boolean removeFromFileSystem(){
+        //TODO @Marius, kriegste das hin... am besten ASYNC mit nem Konstrukt ähnlich der Loader
+        return false;
+    }
 }
