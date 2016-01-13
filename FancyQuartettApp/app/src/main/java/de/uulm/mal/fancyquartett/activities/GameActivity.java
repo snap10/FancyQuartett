@@ -30,7 +30,7 @@ import de.uulm.mal.fancyquartett.utils.LocalDeckLoader;
 import layout.CardFragment;
 
 
-public class GameActivity extends AppCompatActivity implements LocalDeckLoader.OnLocalDeckLoadedListener {
+public class GameActivity extends AppCompatActivity implements CardFragment.OnFragmentInteractionListener, LocalDeckLoader.OnLocalDeckLoadedListener {
 
     // view components
     public TextView cardQuantityP1, cardQuantityP2;
@@ -95,13 +95,27 @@ public class GameActivity extends AppCompatActivity implements LocalDeckLoader.O
      */
     @Override
     public void onDeckLoaded(OfflineDeck offlineDeck) {
-        // create cardFragment
-        cardFragment = CardFragment.newInstance(offlineDeck.getCards().get(0));
-        getSupportFragmentManager().beginTransaction().add(R.id.linLayout_Container, cardFragment).commit();
+
         // create gameEngine
         engine = new GameEngine(getApplicationContext(), offlineDeck);
         engine.initialiseSingleplayerGame();
         engine.startSingleplayerGame();
+    }
+
+
+
+    /**
+     * //TODO @Lukas: Hier kannst du die Engine mit methoden ansteuern...
+     * If a card attribute is clicked, the event is routed to this Method
+     *
+     * @param property
+     * @param value
+     * @param cardAttribute
+     */
+    @Override
+    public void onCardFragmentAttributeInteraction(Property property, float value, CardAttribute cardAttribute) {
+        //TODO sth stuff with your engine z.B
+        engine.compareCardsProperty(property);
     }
 
 
@@ -204,6 +218,9 @@ public class GameActivity extends AppCompatActivity implements LocalDeckLoader.O
         }
 
         public void initialiseGUI() {
+            // create cardFragment
+            cardFragment = CardFragment.newInstance(offlineDeck.getCards().get(0));
+            getSupportFragmentManager().beginTransaction().add(R.id.linLayout_Container, cardFragment).commit();
             progressBar.setProgress(50);
         }
 

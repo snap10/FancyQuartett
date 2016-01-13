@@ -1,5 +1,7 @@
 package layout;
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -16,13 +18,16 @@ import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.adapters.CardAttrViewAdapter;
 import de.uulm.mal.fancyquartett.adapters.CardImagesPagerAdapter;
 import de.uulm.mal.fancyquartett.data.Card;
+import de.uulm.mal.fancyquartett.data.CardAttribute;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
+import de.uulm.mal.fancyquartett.data.Property;
 import de.uulm.mal.fancyquartett.utils.LocalDeckLoader;
+
 
 /**
  * Created by Lukas on 09.01.2016.
  */
-public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDeckLoadedListener {
+public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDeckLoadedListener, CardAttrViewAdapter.OnCardAttrClickListener {
 
     private static final String ARG_CARDID = "card_id";
     private static final String ARG_CARD = "card";
@@ -39,6 +44,7 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
     private int cardID;
     private String deckname;
     private View cardFragmentView;
+    private OnFragmentInteractionListener mListener;
 
     public CardFragment() {
         // required empty public constructor
@@ -118,7 +124,7 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
 
         }
         // create cardAttrViewAdapter
-        CardAttrViewAdapter cardAttrViewAdapter = new CardAttrViewAdapter(getContext(), card.getAttributeList());
+        CardAttrViewAdapter cardAttrViewAdapter = new CardAttrViewAdapter(getContext(), card.getAttributeList(), this);
         recList.setAdapter(cardAttrViewAdapter);
         // create ViewPager
         ViewPager viewPager = (ViewPager) cardFragmentView.findViewById(R.id.viewPager_SlideShow);
@@ -145,7 +151,7 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
         this.offlineDeck = offlineDeck;
         this.card = offlineDeck.getCards().get(cardID);
         // create cardAttrViewAdapter
-        CardAttrViewAdapter cardAttrViewAdapter = new CardAttrViewAdapter(getContext(), card.getAttributeList());
+        CardAttrViewAdapter cardAttrViewAdapter = new CardAttrViewAdapter(getContext(), card.getAttributeList(), this);
         recList.setAdapter(cardAttrViewAdapter);
         // create ViewPager
         ViewPager viewPager = (ViewPager) cardFragmentView.findViewById(R.id.viewPager_SlideShow);
@@ -156,4 +162,54 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
         cardAttrViewAdapter.setCard(card);
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement layout.OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+
+    /**
+     * If a card attribute is clicked, the Listeners are informed with parameters
+     *
+     * @param property
+     * @param value
+     * @param attribute
+     */
+    @Override
+    public void onCardAttrClicked(Property property, float value, CardAttribute attribute) {
+        mListener.onCardFragmentAttributeInteraction(property, value, attribute);
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p/>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        /**
+         * If a card attribute is clicked, the event is routed to the Listeners of this Fragment
+         *
+         * @param property
+         * @param value
+         * @param cardAttribute
+         */
+        void onCardFragmentAttributeInteraction(Property property, float value, CardAttribute cardAttribute);
+    }
 }

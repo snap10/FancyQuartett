@@ -36,7 +36,7 @@
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#aaff9800">
+                    android:background="@color/primary_dark_AAopacity">
 
                     <TextView
                         android:id="@+id/deckname"

@@ -1,6 +1,9 @@
 package de.uulm.mal.fancyquartett.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.renderscript.Sampler;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +27,7 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
     private Context context;
     private List<CardAttribute> attrList;
     private Card card;
-
+    private OnCardAttrClickListener attrClickListener;
     /**
      *
      * @param context
@@ -38,9 +41,10 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
      * @param context
      * @param attrList
      */
-    public CardAttrViewAdapter(Context context, List<CardAttribute> attrList) {
+    public CardAttrViewAdapter(Context context, List<CardAttribute> attrList,OnCardAttrClickListener listener) {
         this.context = context;
         this.attrList = attrList;
+        this.attrClickListener=listener;
     }
 
     @Override
@@ -71,7 +75,22 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
             } else {
                 holder.cardAttrArrow.setImageResource(android.R.drawable.arrow_down_float);
             }
+            holder.view.setOnClickListener(getOnClickListener(property,value,cardAttr,position));
         }
+    }
+
+    private View.OnClickListener getOnClickListener(final Property property, final float value, final CardAttribute attribute, final int position) {
+      View.OnClickListener onClickListener = new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              //TODO highlight selected Item
+                CardView view = (CardView)v;
+                view.setCardBackgroundColor(getContext().getResources().getColor(R.color.colorPrimary));
+                attrClickListener.onCardAttrClicked(property, value, attribute);
+                notifyItemChanged(position);
+          }
+      };
+        return onClickListener;
     }
 
     @Override
@@ -101,10 +120,13 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
      */
     public interface OnCardAttrClickListener {
         /**
-         * TODO: bei klick auf ein attritub soll die game engine oder besser der thread die property gepusht
-         * bekommen die geklickt wurde, damit die dann verglichen werden kann.
+         *  If a card attribute is clicked, the Listeners are informed with parameters
+         *
+         * @param property
+         * @param value
+         * @param attribute
          */
-        public void onCardAttrClicked(Property property);
+        public void onCardAttrClicked(Property property,float value, CardAttribute attribute);
     }
 
     /**
