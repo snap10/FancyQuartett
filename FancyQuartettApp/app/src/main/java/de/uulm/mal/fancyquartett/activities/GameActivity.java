@@ -220,8 +220,13 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         public void initialiseGUI() {
             // create cardFragment
             cardFragment = CardFragment.newInstance(offlineDeck.getCards().get(0));
-            getSupportFragmentManager().beginTransaction().add(R.id.linLayout_Container, cardFragment,"currentcard").commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.linLayout_Container, cardFragment).commit();
             progressBar.setProgress(50);
+
+
+
+
+
         }
 
     /*
