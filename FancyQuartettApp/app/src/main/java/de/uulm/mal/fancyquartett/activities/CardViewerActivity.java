@@ -20,7 +20,7 @@ public class CardViewerActivity extends AppCompatActivity implements CardFragmen
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.card_viewer_fragment_container , CardViewerFragment.newInstance(getIntent().getExtras())).addToBackStack("cardviewerfragment").commit();
+                    .add(R.id.card_viewer_fragment_container , CardViewerFragment.newInstance(getIntent().getExtras())).commit();
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
