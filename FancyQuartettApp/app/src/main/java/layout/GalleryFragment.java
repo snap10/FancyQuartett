@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.adapters.GalleryViewAdapter;
+import de.uulm.mal.fancyquartett.data.GalleryModel;
 import de.uulm.mal.fancyquartett.data.OnlineDeck;
 import de.uulm.mal.fancyquartett.data.Settings;
 import de.uulm.mal.fancyquartett.utils.LocalDecksLoader;
@@ -93,10 +94,12 @@ public class GalleryFragment extends Fragment {
         }else if(onlineLoader!=null &&onlineLoader.getStatus()== AsyncTask.Status.RUNNING){
             swipeRefreshLayout.setRefreshing(true);
         }
+        galleryViewAdapter.setRefreshLayout(swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 galleryViewAdapter.setRefreshLayout(swipeRefreshLayout);
+                galleryViewAdapter.setGalleryModel(new GalleryModel());
                 new OnlineDecksLoader(Settings.serverAdress, Settings.serverRootPath,getContext().getCacheDir().getAbsolutePath(), galleryViewAdapter).execute();
                 new LocalDecksLoader(getContext().getFilesDir() + Settings.localFolder, galleryViewAdapter).execute();
             }

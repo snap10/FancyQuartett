@@ -130,11 +130,13 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
             galleryViewHolder.deckDescription.setText(onlineDeck.getDescription());
             galleryViewHolder.deckIcon.setImageBitmap(onlineDeck.getDeckimage().getBitmap());
             galleryViewHolder.view.setOnClickListener(getItemClickListener(onlineDeck, this));
+            galleryViewHolder.downloadButton.setVisibility(View.VISIBLE);
         } else {
             galleryViewHolder.deckName.setText(offlineDeck.getName());
             galleryViewHolder.deckDescription.setText(offlineDeck.getDescription());
             galleryViewHolder.deckIcon.setImageBitmap(offlineDeck.getCards().get(0).getImages().get(0).getBitmap());
             galleryViewHolder.view.setOnClickListener(getItemClickListener(offlineDeck));
+            galleryViewHolder.downloadButton.setVisibility(View.GONE);
         }
 
         //TODO implement the and ClickListeners
@@ -332,6 +334,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
         private TextView deckDescription;
         private ImageView deckIcon;
         private ImageButton deckContextMenuButton;
+        private ImageButton downloadButton;
         protected int index;
 
         protected Context context;
@@ -355,6 +358,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
             deckName = (TextView) v.findViewById(R.id.deckname);
             deckDescription = (TextView) v.findViewById(R.id.deckdescription);
             deckIcon = (ImageView) v.findViewById(R.id.deckicon);
+            downloadButton = (ImageButton) v.findViewById(R.id.downloadIcon);
             deckContextMenuButton = (ImageButton) v.findViewById(R.id.deck_options_button);
             deckContextMenuButton.setOnClickListener(new View.OnClickListener() {
                 @Override
