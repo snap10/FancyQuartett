@@ -123,7 +123,7 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
 
         }
         // create cardAttrViewAdapter
-        CardAttrViewAdapter cardAttrViewAdapter = new CardAttrViewAdapter(getContext(), card.getAttributeList(), this);
+        CardAttrViewAdapter cardAttrViewAdapter = new CardAttrViewAdapter(getContext(), card.getAttributes(), this);
         recList.setAdapter(cardAttrViewAdapter);
         // create ViewPager
         ViewPager viewPager = (ViewPager) cardFragmentView.findViewById(R.id.viewPager_SlideShow);
@@ -150,7 +150,7 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
         this.offlineDeck = offlineDeck;
         this.card = offlineDeck.getCards().get(cardID);
         // create cardAttrViewAdapter
-        CardAttrViewAdapter cardAttrViewAdapter = new CardAttrViewAdapter(getContext(), card.getAttributeList(), this);
+        CardAttrViewAdapter cardAttrViewAdapter = new CardAttrViewAdapter(getContext(), card.getAttributes(), this);
         recList.setAdapter(cardAttrViewAdapter);
         // create ViewPager
         ViewPager viewPager = (ViewPager) cardFragmentView.findViewById(R.id.viewPager_SlideShow);

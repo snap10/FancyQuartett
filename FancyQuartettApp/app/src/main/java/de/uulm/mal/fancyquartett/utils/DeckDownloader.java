@@ -107,11 +107,13 @@ public class DeckDownloader extends AsyncTask<Void, Void, Exception> {
                 for (int k = 0; k < attributes.length(); k++) {
                     attributesValues[k] = attributes.getJSONObject(k).getDouble("value");
                     //If localImagePath is not null rewrite JSON Path to localpath
+                    JSONObject attributeTmp = attributes.getJSONObject(k);
+                    attributeTmp.put("id",k);
                     if (localAttributeImagePath[k]!=null){
-                        JSONObject attributeTmp = attributes.getJSONObject(k);
+
                         attributeTmp.put("image",localAttributeImagePath[k]);
-                        attributes.put(k,attributeTmp);
                     }
+                    attributes.put(k,attributeTmp);
                 }
                 valuesList.add(attributesValues);
                 //Images

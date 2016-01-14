@@ -41,13 +41,13 @@ public class SoftKiTask extends AsyncTask<Void, Void, CardAttribute> {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        ArrayList<CardAttribute> attrList = card.getAttributeList();
+        ArrayList<CardAttribute> attrList = card.getAttributes();
         CardAttribute cardAttribute = null;
         double difference = 0.0f;
         for(int i=0; i<attrList.size(); i++) {
             CardAttribute ca = attrList.get(i);
             double median = ca.getProperty().getMedian();
-            float value = ca.getValue();
+            double value = ca.getValue();
             // check if value < median
             if(value < median) {
                 double diffTemp = 100 * ( (median - value) / median );

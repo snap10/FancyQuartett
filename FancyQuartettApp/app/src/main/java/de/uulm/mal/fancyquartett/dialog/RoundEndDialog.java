@@ -106,7 +106,7 @@ public class RoundEndDialog extends DialogFragment {
         TextView textViewP1Value = (TextView) view.findViewById(R.id.textView_P1Value);
         textViewP1Value.setText(p1Card.getValue(property) + " " + property.getUnit());
         TextView textViewProperty = (TextView) view.findViewById(R.id.textView_Property);
-        textViewProperty.setText(property.getText());
+        textViewProperty.setText(property.getAttributeName());
         TextView textViewP2Value = (TextView) view.findViewById(R.id.textView_P2Value);
         textViewP2Value.setText(p2Card.getValue(property) + " " + property.getUnit());
         // set top gui elements

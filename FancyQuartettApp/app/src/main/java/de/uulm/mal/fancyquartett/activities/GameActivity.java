@@ -101,9 +101,10 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         engine.startGame();
     }
 
+
+
     @Override
-<<<<<<< HEAD
-    public void onCardFragmentAttributeInteraction(Property property, float value, CardAttribute cardAttribute) {
+    public void onCardFragmentAttributeInteraction(Property property, double value, CardAttribute cardAttribute) {
         // identify playerWonRound
         int playerWonRound = engine.compareCardsProperty(property);
         // show RoundEndDialog
@@ -142,13 +143,8 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             } else {
                 engine.showPlayer1NextCard();
             }
-=======
-    public void onCardFragmentAttributeInteraction(Property property, double value, CardAttribute cardAttribute) {
-        if(engine.toTheEndTask != null) {
-            engine.toTheEndTask.onCardAttrClicked(property, value, cardAttribute);
->>>>>>> RestAPICALLS
-        }
-    }
+
+    }}
 
 
     /**
@@ -470,8 +466,8 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
          */
         public int compareCardsProperty(Property property) {
             // first read property-values of both cards
-            float p1Value = p1.getCurrentCard().getValues().get(property);
-            float p2Value = p2.getCurrentCard().getValues().get(property);
+            double p1Value = p1.getCurrentCard().getValue(property);
+            double p2Value = p2.getCurrentCard().getValue(property);
             // now compare
             if(property.biggerWins()) {
                 if(p1Value > p2Value) {

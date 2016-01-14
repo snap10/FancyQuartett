@@ -176,7 +176,7 @@ public class AssetsInstaller extends AsyncTask<Void, Void, Exception> {
         }
         for (int i = 0; i < properties.size(); i++) {
             Property prop = properties.get(i);
-            float[] medArray = new float[cards.size()];
+            double[] medArray = new double[cards.size()];
             for (int j = 0; j < cards.size(); j++) {
                 Card card = cards.get(j);
                 medArray[j] = card.getValue(prop);
@@ -191,8 +191,8 @@ public class AssetsInstaller extends AsyncTask<Void, Void, Exception> {
         return deckjson;
     }
 
-    private float calculateMedian(float[] medArray) {
-        float median;
+    private double calculateMedian(double[] medArray) {
+        double median;
         Arrays.sort(medArray);
         if (medArray.length % 2 == 0) {
             median = (medArray[medArray.length / 2] + medArray[medArray.length / 2 - 1]) / 2;

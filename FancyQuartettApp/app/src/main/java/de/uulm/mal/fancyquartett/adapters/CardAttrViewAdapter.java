@@ -109,7 +109,7 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
 
     public void setCard(Card card) {
         this.card = card;
-        attrList=card.getAttributeList();
+        attrList=card.getAttributes();
         notifyDataSetChanged();
     }
     /*

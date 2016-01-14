@@ -60,4 +60,28 @@ public class Property implements Serializable{
     public void setMedian(double median) {
         this.median = median;
     }
+
+    public int getPrecision() {
+        return precision;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getCardID() {
+        return cardID;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public Image getAttributeImage() {
+        return attributeImage;
+    }
+
+    public boolean isHigherWins() {
+        return higherWins;
+    }
 }
