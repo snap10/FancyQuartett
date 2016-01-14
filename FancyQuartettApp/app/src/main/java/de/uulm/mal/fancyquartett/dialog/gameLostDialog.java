@@ -7,7 +7,7 @@ import android.os.Bundle;
 /**
  * Created by Lukas on 11.01.2016.
  */
-public class gameLostDialog extends DialogFragment {
+public class GameLostDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

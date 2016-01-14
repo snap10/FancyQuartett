@@ -57,7 +57,7 @@ public class ToTheEndTask extends AsyncTask implements CardAttrViewAdapter.OnCar
                         // TODO: display won dialog
                     } else {
                         // show next card
-                        engine.showNextCard();
+                        engine.showPlayer1NextCard();
                     }
                 }
             } else {

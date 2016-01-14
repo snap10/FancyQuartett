@@ -142,8 +142,8 @@ public class Card implements Serializable{
      * @param values
      * @return
      */
-    private List<CardAttribute> makeAttrList(Map<Property, Float> values) {
-        List<CardAttribute> list = new ArrayList<CardAttribute>();
+    private ArrayList<CardAttribute> makeAttrList(Map<Property, Float> values) {
+        ArrayList<CardAttribute> list = new ArrayList<CardAttribute>();
         for (Property property : values.keySet()) {
             float value = values.get(property);
             list.add(new CardAttribute(property, value));
@@ -165,7 +165,7 @@ public class Card implements Serializable{
         return list;
     }
 
-    public List<CardAttribute> getAttributeList() {
+    public ArrayList<CardAttribute> getAttributeList() {
         return makeAttrList(values);
     }
 

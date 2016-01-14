@@ -1,11 +1,12 @@
 package de.uulm.mal.fancyquartett.activities;
 
+import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -15,16 +16,16 @@ import java.util.Date;
 import java.util.List;
 
 import de.uulm.mal.fancyquartett.R;
-import de.uulm.mal.fancyquartett.adapters.CardAttrViewAdapter;
 import de.uulm.mal.fancyquartett.data.Card;
 import de.uulm.mal.fancyquartett.data.CardAttribute;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.data.Player;
 import de.uulm.mal.fancyquartett.data.Property;
 import de.uulm.mal.fancyquartett.data.Settings;
+import de.uulm.mal.fancyquartett.dialog.RoundEndDialog;
 import de.uulm.mal.fancyquartett.enums.GameMode;
 import de.uulm.mal.fancyquartett.enums.KILevel;
-import de.uulm.mal.fancyquartett.tasks.ToTheEndTask;
+import de.uulm.mal.fancyquartett.tasks.SoftKiTask;
 import de.uulm.mal.fancyquartett.utils.LocalDeckLoader;
 import layout.CardFragment;
 
@@ -47,7 +48,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
     private int bundleMaxRounds;
     private int bundleGameTime;
     private int bundleGamePoints;
-    private boolean bundlemultiplayer;
+    private boolean bundleIsMultiplayer;
     private String bundleP1Name;
     private String bundleP2Name;
 
@@ -67,8 +68,8 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         if (offlineDeck != null) {
             bundleGameMode = (GameMode) intentbundle.get("gamemode");
             bundleKILevel = (KILevel) intentbundle.get("kilevel");
-            bundlemultiplayer = intentbundle.getBoolean("multiplayer");
-            if(bundlemultiplayer){
+            bundleIsMultiplayer = intentbundle.getBoolean("multiplayer");
+            if(bundleIsMultiplayer){
                 bundleP1Name = intentbundle.getString("playername1");
                 bundleP2Name = intentbundle.getString("playername2");
             }
@@ -96,14 +97,50 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
     public void onDeckLoaded(OfflineDeck offlineDeck) {
         // create gameEngine
         engine = new GameEngine(getApplicationContext(), offlineDeck);
-        engine.initialiseSingleplayerGame();
-        engine.startSingleplayerGame();
+        engine.initialiseGame();
+        engine.startGame();
     }
 
     @Override
     public void onCardFragmentAttributeInteraction(Property property, float value, CardAttribute cardAttribute) {
-        if(engine.toTheEndTask != null) {
-            engine.toTheEndTask.onCardAttrClicked(property, value, cardAttribute);
+        // identify playerWonRound
+        int playerWonRound = engine.compareCardsProperty(property);
+        // show RoundEndDialog
+        engine.showRoundEndDialog(cardAttribute, playerWonRound);
+        // handleCards
+        engine.handlePlayerCards(playerWonRound);
+        // check if player won game
+        int playerWonGame = engine.checkPlayerWon();
+        System.out.println("player " + playerWonRound + "won round");
+        if(playerWonGame == engine.PLAYER1 || playerWonGame == engine.PLAYER2) {
+            //engine.showGameEndDialog(playerWonRound, statistics);
+        } else {
+            // chance current player
+            if(engine.getCurPlayer() != playerWonRound) {
+                engine.changeCurrentPlayer();
+            }
+            // initialise next round
+            int curPlayer = engine.getCurPlayer();
+            if(curPlayer != engine.PLAYER1) {
+                // show p2 next card
+                engine.showPlayer2NextCard();
+                // start ki task
+                KILevel kiLevel = engine.getKiLevel();
+                if(kiLevel == KILevel.Soft) {
+                    SoftKiTask softKiTask = new SoftKiTask(engine.getCurPlayerCard(curPlayer), this);
+                    softKiTask.execute();
+                }
+                if(kiLevel == KILevel.Medium) {
+                    //MediumKiTask mediumKiTask = new MediumKiTast(enginge.getCurPlayerCard(curPlayer), this);
+                    //mediumKiTask.execute();
+                }
+                if(kiLevel == KILevel.Hard) {
+                    //HardmKiTask hardKiTask = new HardKiTast(enginge.getCurPlayerCard(curPlayer), this);
+                    //hardKiTask.execute();
+                }
+            } else {
+                engine.showPlayer1NextCard();
+            }
         }
     }
 
@@ -113,17 +150,19 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
      */
     public class GameEngine implements Serializable {
 
-        public final int STANDOFF = 0;
-        public final int PLAYER1 = 1;
-        public final int PLAYER2 = 2;
-        public final boolean PLAYER1_BEGINS = false;
-        public final boolean PLAYER2_BEGINS = true;
+        public static final int STANDOFF = 0;
+        public static final int PLAYER1 = 1;
+        public static final int PLAYER2 = 2;
 
-        // app attributes
-        private final Context context;
+        // player attributes
+        private int curPlayer = 0;
+        private Player p1;
+        private Player p2;
 
-        // tasks
-        ToTheEndTask toTheEndTask;
+        // ki attributes
+        SoftKiTask softAiTask;
+        //MediumAITask mediumAiTask;
+        //HardATTask hardAiTask;
 
         // game attributes
         private final OfflineDeck gameDeck;
@@ -136,21 +175,11 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         private int maxPoints = 0;
         private int timeout = 0;
         private KILevel kiLevel;
-        private int playerBegins = 0; // false (player1) , true (player2)
-        private int curPlayer = 0; // false (player1) , true (player2)
         private boolean isMultiplayer = false;
-        private List<Card> stingStack;
+        private ArrayList<Card> stingStack;
 
-        // player1 attributes
-        private Player p1;
-        private int p1Points;
-        private List<Card> p1Cards;
-
-        // player2 attributes
-        private Player p2;
-        private int p2Points;
-        private List<Card> p2Cards;
-
+        // app attributes
+        private final Context context;
 
         /**
          *
@@ -176,19 +205,19 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
 
 
         /**
-         * Reads all necessary data from GameActivity for Singleplayer-Mode.
+         * Reads all necessary data from GameActivity for Game.
          */
-        public void initialiseSingleplayerGame() {
+        public void initialiseGame() {
             this.gameMode = bundleGameMode;
             this.kiLevel = bundleKILevel;
             this.stingStack = new ArrayList<Card>();
+            this.isMultiplayer = bundleIsMultiplayer;
             if(Math.random() < 0.5) {
-                this.playerBegins = PLAYER1;
                 this.curPlayer = PLAYER1;
             } else {
-                this.playerBegins = PLAYER2;
                 this.curPlayer = PLAYER2;
             }
+            System.out.println("Player " + curPlayer + " beginns!");
             this.maxRounds = bundleMaxRounds;
             if(gameMode == GameMode.Time) {
                 this.timeout = bundleRoundTimeout;
@@ -198,25 +227,38 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             }
             if(gameMode == GameMode.Hotseat) {
             }
-            initialisePlayer();
-            initialiseGUI();
-        }
 
-        /**
-         * Reads all necessary data from GameActivity for Multiplayer-Mode.
-         */
-        public void initialiseMultiplayerGame() {
-            // TODO
+            // initialise players
+            initialisePlayers();
+            // initialise GUI
+            initialiseGUI();
         }
 
         /**
          * Initialise all necessary player data.
          */
-        public void initialisePlayer() {
-            this.p1Points = 0;
-            this.p2Points = 0;
+        public void initialisePlayers() {
+            // shuffle cards
             ArrayList<Card> cards = shuffleCards(gameDeck.getCards());
-            spreadCards(cards);
+            // spread cards
+            ArrayList<Card> p1Cards = new ArrayList<Card>();
+            ArrayList<Card> p2Cards = new ArrayList<Card>();
+            for(int i=0; i<cards.size(); i++) {
+                Card card = cards.get(i);
+                if((i%2) != 0) {
+                    p1Cards.add(card);
+                } else {
+                    p2Cards.add(card);
+                }
+            }
+            // create players
+            if(isMultiplayer) {
+                this.p1 = new Player(bundleP1Name, p1Cards);
+                this.p2 = new Player(bundleP2Name, p2Cards);
+            } else {
+                this.p1 = new Player("You", p1Cards);
+                this.p2 = new Player("Ki", p2Cards);
+            }
         }
 
         /**
@@ -227,28 +269,37 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             cardFragment = CardFragment.newInstance(offlineDeck.getCards().get(0));
             getSupportFragmentManager().beginTransaction().replace(R.id.linLayout_Container, cardFragment).commit();
             progressBar.setProgress(50);
-
-
-
-
-
         }
 
     /*
         GAME - CONTROLLING
     */
 
-        public void startSingleplayerGame() {
+        public void startGame() {
             // set lastPlayer Timestamp
             setLastPlayed();
             // start game
-            if(gameMode == GameMode.ToTheEnd) {
-                toTheEndTask = new ToTheEndTask(this.context, this);
-                toTheEndTask.execute();
+            if(curPlayer != PLAYER1) {
+                // TODO: diable cardButtons
+                if(kiLevel == KILevel.Soft) {
+                    SoftKiTask softKiTask = new SoftKiTask(p2.getCurrentCard(), GameActivity.this);
+                    softKiTask.execute();
+                }
+                if(kiLevel == KILevel.Medium) {
+                    // TODO: MediumKiTask
+                }
+                if(kiLevel == KILevel.Hard) {
+                    // TODO: HardKiTask
+                }
             }
+
         }
 
         public void exitSingleplayerGame() {
+
+        }
+
+        public void startSoftAiTask() {
 
         }
 
@@ -266,14 +317,14 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
          */
         public int checkPlayerWon() {
             if(gameMode == GameMode.Points) {
-                if(p1Points >= maxPoints) return PLAYER1;
-                if(p2Points >= maxPoints) return PLAYER2;
+                if(p1.getPoints() >= maxPoints) return PLAYER1;
+                if(p2.getPoints() >= maxPoints) return PLAYER2;
             } else if(gameMode == GameMode.Time) {
-                if(p1Cards.size() > p2Cards.size()) return PLAYER1;
-                if(p2Cards.size() > p1Cards.size()) return PLAYER2;
+                if(p1.getCards().size() > p2.getCards().size()) return PLAYER1;
+                if(p2.getCards().size() > p1.getCards().size()) return PLAYER2;
             } else {
-                if(p1Cards.size() == 0) return PLAYER2;
-                if(p2Cards.size() == 0) return PLAYER1;
+                if(p1.getCards().size() == 0) return PLAYER2;
+                if(p2.getCards().size() == 0) return PLAYER1;
             }
             return -1;
         }
@@ -284,10 +335,19 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
 
         /**
          * Shows the first card in player1s card-deck.
-         * (Be sure you've done handlePlayerCards(...) before!)
+         * Be sure you've done handlePlayerCards(...) before!
          */
-        public void showNextCard() {
-            cardFragment = cardFragment.newInstance(p1Cards.get(0));
+        public void showPlayer1NextCard() {
+            cardFragment = cardFragment.newInstance(p1.getCurrentCard());
+            getSupportFragmentManager().beginTransaction().replace(R.id.linLayout_Container, cardFragment).commit();
+        }
+
+        /**
+         * Shows the first card in player2s card-deck.
+         * Be sure you've done handlePlayerCards(...) before!
+         */
+        public void showPlayer2NextCard() {
+            cardFragment = cardFragment.newInstance(p2.getCurrentCard());
             getSupportFragmentManager().beginTransaction().replace(R.id.linLayout_Container, cardFragment).commit();
         }
 
@@ -308,35 +368,15 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         }
 
         /**
-         * Spreads game-card-deck into player1-deck and player2-deck.
-         * @param cards
-         */
-        public void spreadCards(ArrayList<Card> cards) {
-            // first create new ArrayLists (in case they're filled with some fancy stuff)
-            p1Cards = new ArrayList<Card>();
-            p2Cards = new ArrayList<Card>();
-            // now spread cards to player1 and player2
-            for(int i=0; i<cards.size(); i++) {
-                Card card = cards.get(i);
-                if((i%2) != 0) {
-                    addCardToPlayer(card, PLAYER1);
-                } else {
-                    addCardToPlayer(card, PLAYER2);
-                }
-            }
-        }
-
-        /**
          * Queues first (current) card of player1 or player2 at the end of his deck.
          * @param player
          */
         public void queueCard(int player) {
             if(player == PLAYER1) {
-                Card card = p1Cards.remove(0);
-                p1Cards.add(card);
+                p1.queueCard();
             } else {
-                Card card = p2Cards.remove(0);
-                p2Cards.add(card);
+                Card card = p2.removeCurrentCard();
+                p2.queueCard();
             }
         }
 
@@ -347,26 +387,10 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
          */
         public Card removeCardFromPlayer(int player) {
             if(player == PLAYER1) {
-                return p1Cards.remove(0);
+                return p1.removeCurrentCard();
             } else {
-                return p2Cards.remove(0);
+                return p2.removeCurrentCard();
             }
-        }
-
-        /**
-         * Removes a given card from given players card-deck.
-         * @param card
-         * @param player
-         */
-        public Card removeCardFromPlayer(Card card, int player) {
-            if(isCardOfPlayer(card, player)) {
-                if(player == PLAYER1) {
-                    return p1Cards.remove(p1Cards.indexOf(card));
-                } else {
-                    return p2Cards.remove(p2Cards.indexOf(card));
-                }
-            }
-            return null;
         }
 
         /**
@@ -375,32 +399,11 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
          * @param player
          */
         public void addCardToPlayer(Card card, int player) {
-            if(!isCardOfPlayer(card, player)) {
-                if(player == PLAYER1) {
-                    p1Cards.add(card);
-                } else {
-                    p2Cards.add(card);
-                }
-            }
-        }
-
-        /**
-         * Checks if a player owns a given card.
-         * @param card
-         * @param player
-         * @return
-         */
-        public boolean isCardOfPlayer(Card card, int player) {
             if(player == PLAYER1) {
-               if(p1Cards.contains(card)) {
-                   return true;
-               }
+                p1.addNewCard(card);
             } else {
-                if(p2Cards.contains(card)) {
-                    return true;
-                }
+                p2.addNewCard(card);
             }
-            return false;
         }
 
         /**
@@ -419,9 +422,9 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
          */
         public void removeCardsFromStingStag(int player) {
             if(player == PLAYER1) {
-                p1Cards.addAll(stingStack);
+                p1.addNewCards(stingStack);
             } else {
-                p2Cards.addAll(stingStack);
+                p2.addNewCards(stingStack);
             }
             stingStack = new ArrayList<Card>();
         }
@@ -444,9 +447,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
                     engine.addCardToPlayer(card, playerWon);
                 }
                 if(stingStack.size() > 0) {
-                    System.out.println("Player " + playerWon + "gets " + stingStack.size() + " crads from stingstack");
                     removeCardsFromStingStag(playerWon);
-
                 }
             } else {
                 Card p1Card = engine.removeCardFromPlayer(engine.PLAYER1);
@@ -463,8 +464,8 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
          */
         public int compareCardsProperty(Property property) {
             // first read property-values of both cards
-            float p1Value = p1Cards.get(0).getValues().get(property);
-            float p2Value = p2Cards.get(0).getValues().get(property);
+            float p1Value = p1.getCurrentCard().getValues().get(property);
+            float p2Value = p2.getCurrentCard().getValues().get(property);
             // now compare
             if(property.biggerWins()) {
                 if(p1Value > p2Value) {
@@ -488,8 +489,14 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         DIALOG - CONTROLLING
      */
 
-        public void showRoundWonDialog(Player p, CardAttribute attrP1, CardAttribute attrP2, Card newCard) {
+        public void showRoundEndDialog(CardAttribute cardAttribute, int playerWonRound) {
             // TODO: show dialog if player won any round
+            Card p1Card = p1.getCurrentCard();
+            Card p2Card = p2.getCurrentCard();
+            String p1Name = p1.getName();
+            String p2Name = p2.getName();
+            DialogFragment dialog = new RoundEndDialog().newInstance(p1Card, p2Card, cardAttribute, playerWonRound, p1Name, p2Name);
+            dialog.show(getFragmentManager(), "bla");
         }
 
         public void showRoundLostDialog(Player p, CardAttribute attrP1, CardAttribute attrP2) {
@@ -515,6 +522,18 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         public void setLastPlayed() {
             Date date = new Date();
             this.lastPlayed = new Timestamp(date.getTime());
+        }
+
+        public KILevel getKiLevel() {
+            return kiLevel;
+        }
+
+        public Card getCurPlayerCard(int player) {
+            if(player == PLAYER1) {
+                return p1.getCurrentCard();
+            } else {
+                return p2.getCurrentCard();
+            }
         }
     }
 
