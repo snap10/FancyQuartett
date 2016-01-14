@@ -53,15 +53,6 @@ public class StartFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_main_start, container, false);
-        Button testButton = (Button) v.findViewById(R.id.testGameActivity);
-        testButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), GameActivity.class);
-                intent.getExtras().putInt("deckid",11);
-                startActivity(intent);
-            }
-        });
         Button newSinglePlayerButton = (Button) v.findViewById(R.id.newSingleplayerButton);
         newSinglePlayerButton.setOnClickListener(new View.OnClickListener() {
             @Override
