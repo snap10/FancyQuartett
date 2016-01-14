@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -123,11 +124,20 @@ public class RoundEndDialog extends DialogFragment {
         // display first image from current player card
         ivImage.setImageBitmap(player.getCurrentCard().getImages().get(0).getBitmap());
         // display winner / loser
-        if(playerWon == player.getId()) {
-            tvInfo.setText("WINNER");
+        if(playerWon != engine.STANDOFF) {
+            if(playerWon == player.getId()) {
+                tvInfo.setText("WINNER");
+                tvInfo.setBackgroundColor(Color.GREEN);
+            } else {
+                tvInfo.setText("LOSER");
+                tvInfo.setBackgroundColor(Color.RED);
+            }
         } else {
-            tvInfo.setText("LOSER");
+            tvInfo.setText("STANDOFF");
+            tvInfo.setBackgroundColor(Color.BLACK);
+            tvInfo.setTextColor(Color.WHITE);
         }
+
     }
 
     public void setCompareGUI(Property property, TextView tvProperty, TextView tvP1Value, TextView tvP2Value) {

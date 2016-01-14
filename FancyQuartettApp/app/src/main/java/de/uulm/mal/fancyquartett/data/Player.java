@@ -14,10 +14,10 @@ public class Player implements Serializable {
     private int points = 0;
     private int roundsWon = 0;
 
-    public Player(int id, String name, ArrayList<Card> cards) {
+    public Player(int id, String name) {
         this.id = id;
         this.name = name;
-        this.cards = cards;
+        this.cards = new ArrayList<Card>();
     }
 
     /*
@@ -36,20 +36,16 @@ public class Player implements Serializable {
     STATISTICS
      */
 
-    public void addPoints(int points) {
-        this.points += points;
-    }
+    public void setPoints(int points) {this.points = points;}
 
-    public void removePoints(int points) {
-        this.points -= points;
-    }
+
 
     public int getPoints() {
         return points;
     }
 
-    public void increaseRoundsWon() {
-        roundsWon++;
+    public void setRoundsWon(int roundsWon) {
+        this.roundsWon = roundsWon;
     }
 
     public int getRoundsWon() {
