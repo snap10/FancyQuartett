@@ -58,7 +58,7 @@ public class StartFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), GameActivity.class);
-                intent.putExtra("deckname","bikes");
+                intent.getExtras().putInt("deckid",11);
                 startActivity(intent);
             }
         });

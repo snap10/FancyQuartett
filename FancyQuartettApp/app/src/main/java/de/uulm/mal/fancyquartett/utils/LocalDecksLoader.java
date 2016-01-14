@@ -79,11 +79,11 @@ public class LocalDecksLoader extends AsyncTask<Void, Void, ArrayList<OfflineDec
         ArrayList<OfflineDeck> offlineDecks = new ArrayList<>();
         File decksDirectory = new File(path);
         String[] decks= decksDirectory.list();
-
+        if (decks!=null){
         for (int i = 0; i < decks.length; i++) {
             String deckPath = decksDirectory+"/"+decks[i];
             try {
-                OfflineDeck offlineDeck = new OfflineDeck(deckPath,decks[i]);
+                OfflineDeck offlineDeck = new OfflineDeck(deckPath,decks[i],true);
                 offlineDecks.add(offlineDeck);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -91,7 +91,7 @@ public class LocalDecksLoader extends AsyncTask<Void, Void, ArrayList<OfflineDec
             }
 
 
-        }
+        }}
         return offlineDecks;
     }
 

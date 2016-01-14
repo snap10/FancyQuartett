@@ -1,13 +1,10 @@
 package de.uulm.mal.fancyquartett.adapters;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
@@ -20,13 +17,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONException;
-
 import java.util.ArrayList;
 
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.activities.CardGalleryActivity;
-import de.uulm.mal.fancyquartett.data.Deck;
 import de.uulm.mal.fancyquartett.data.GalleryModel;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.data.OnlineDeck;
@@ -34,7 +28,6 @@ import de.uulm.mal.fancyquartett.data.Settings;
 import de.uulm.mal.fancyquartett.utils.DeckDownloader;
 import de.uulm.mal.fancyquartett.utils.LocalDecksLoader;
 import de.uulm.mal.fancyquartett.utils.OnlineDecksLoader;
-import layout.CardGalleryFragment;
 
 
 /**
@@ -135,6 +128,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
             final OnlineDeck onlineDeck = galleryModel.getOnlineDeck(i);
             galleryViewHolder.deckName.setText(onlineDeck.getName());
             galleryViewHolder.deckDescription.setText(onlineDeck.getDescription());
+            galleryViewHolder.deckIcon.setImageBitmap(onlineDeck.getDeckimage().getBitmap());
             galleryViewHolder.view.setOnClickListener(getItemClickListener(onlineDeck, this));
         } else {
             galleryViewHolder.deckName.setText(offlineDeck.getName());
@@ -261,7 +255,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
         builder.setPositiveButton(R.string.download, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 try {
-                    final DeckDownloader downloader = new DeckDownloader(Settings.serverAdress, getContext().getFilesDir() + Settings.localFolder, onlinedeck.getName().toLowerCase(), listener);
+                    final DeckDownloader downloader = new DeckDownloader(Settings.serverAdress, getContext().getFilesDir() + Settings.localFolder, Settings.serverRootPath,onlinedeck.getId(), listener);
                     downloader.execute();
                     // instantiate it within the onCreate method
                     mProgressDialog = new ProgressDialog(v.getContext());

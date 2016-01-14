@@ -1,63 +1,14 @@
 package de.uulm.mal.fancyquartett.data;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.File;
+import java.io.Serializable;
 
 /**
- * Created by mk on 02.01.2016.
+ * WrapperClass for OnlineDecks, compatibilityIssues
  */
-public class OnlineDeck extends Deck {
+public class OnlineDeck extends Deck implements Serializable {
 
-    private JSONObject deckJson;
-    private String host;
-    private GalleryModel gallery;
-
-    public OnlineDeck(JSONObject json, String host, GalleryModel gallery) throws JSONException {
-
-        super(json.getString("name"),json.getString("description"));
-        deckJson = json;
-
-        this.host = host;
-        this.gallery = gallery;
-    }
-
-    /**
-     * DummyConstructor for Testing with Custom Decks
-     * //TODO Delete when appropriate Deck Ressource is availabe
-     * @param name
-     * @param description
-     */
-    public OnlineDeck(String name,String description){
-        super(name,description);
-    }
-
-    //TODO probably do Async
-    // creates a full offline deck. includes download of images.
-    public OfflineDeck download() throws Exception {
-        JSONArray cardsJson = deckJson.getJSONArray("cards");
-        JSONArray propsJson = deckJson.getJSONArray("properties");
-        Property[] props = new Property[propsJson.length()];
-        for(int i = 0; i < props.length; i++) {
-            props[i] = new Property(propsJson.getJSONObject(i));
-        }
-        Card[] cards = new Card[cardsJson.length()];
-        for(int i = 0; i < cards.length; i++) {
-            // creating card objects initiates image downloads
-            //TODO cards[i] = new Card(cardsJson.getJSONObject(i), props, host,gallery.getContext().getFilesDir()+Settings.localFolder, getName(), false);
-        }
-        OfflineDeck offlineDeck= null;
-        try {
-            offlineDeck = new OfflineDeck(gallery.getContext().getFilesDir()+ Settings.localFolder,getName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        gallery.move(this, offlineDeck);
-
-
-        //TODO save json locally
-        return offlineDeck;
+    public OnlineDeck(int deckid, String name, String description, Image image, String misc, String misc_version) {
+        super(deckid,name,description,image,misc,misc_version);
     }
 }

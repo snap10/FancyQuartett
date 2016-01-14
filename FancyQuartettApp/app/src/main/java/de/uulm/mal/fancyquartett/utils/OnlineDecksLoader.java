@@ -7,13 +7,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+import de.uulm.mal.fancyquartett.data.Deck;
+import de.uulm.mal.fancyquartett.data.Image;
 import de.uulm.mal.fancyquartett.data.OnlineDeck;
+import de.uulm.mal.fancyquartett.data.Settings;
 
 /**
  * Created by Snap10 on 12.01.16.
@@ -21,16 +25,21 @@ import de.uulm.mal.fancyquartett.data.OnlineDeck;
 public class OnlineDecksLoader extends AsyncTask<Void, Void, Exception> {
 
     private String host;
-    private String json;
-    private String deckjson;
     private OnOnlineDecksLoaded listener;
-    private String decklistFilename;
+    private String rootpath;
     private ArrayList<OnlineDeck> onlineDecks;
-    public OnlineDecksLoader(String host,String decklistFilename, OnOnlineDecksLoaded listener) {
+    private String cachePath;
+
+    public OnlineDecksLoader(String host,String rootpath,String cachePath, OnOnlineDecksLoaded listener) {
         super();
         this.host =host;
         this.listener=listener;
-        this.decklistFilename=decklistFilename;
+        if (rootpath==null){
+            this.rootpath="/decks";
+        }else{
+            this.rootpath=rootpath;
+        }
+        this.cachePath=cachePath;
     }
 
     public interface OnOnlineDecksLoaded{
@@ -46,35 +55,23 @@ public class OnlineDecksLoader extends AsyncTask<Void, Void, Exception> {
     @Override
     protected Exception doInBackground(Void... v) {
         try {
-            URL u = new URL("http://"+host +"/"+decklistFilename);
-            HttpURLConnection c = (HttpURLConnection) u.openConnection();
-            c.setConnectTimeout(2000);
-            BufferedReader in = new BufferedReader(new InputStreamReader(c.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-                response.append("\n");
-            }
-            in.close();
-            json = response.toString();
-            JSONArray decklist = new JSONObject(json).getJSONArray("decks");
-            onlineDecks = new ArrayList<OnlineDeck>();
+            String json = retrieveDataFromServer(host,rootpath,"application/json");
+
+            JSONArray decklist = new JSONArray(json);
+            onlineDecks = new ArrayList<>();
             for (int i = 0; i < decklist.length() ; i++) {
-                String deckname= decklist.get(i).toString().toLowerCase();
-                URL deckurl = new URL("http://"+host+"/"+deckname+"/"+deckname+".json");
-                HttpURLConnection deckconnection = (HttpURLConnection) deckurl.openConnection();
-                deckconnection.setConnectTimeout(2000);
-                BufferedReader deckin = new BufferedReader(new InputStreamReader(deckconnection.getInputStream()));
-                String deckInputLine;
-                StringBuffer deckResponse = new StringBuffer();
-                while ((deckInputLine = deckin.readLine()) != null) {
-                    deckResponse.append(deckInputLine);
-                    deckResponse.append("\n");
+                JSONObject deckjsonTmp = decklist.getJSONObject(i);
+                int deckid = deckjsonTmp.getInt("id");
+                JSONObject deckjson = new JSONObject(retrieveDataFromServer(host, rootpath + "/" + deckid,"application/json"));
+                //Download DeckImage
+                //TODO add caching functionallity
+                File outDir = new File(cachePath +"/"+ deckid+"/images");
+                outDir.mkdirs();
+                String localPath = Image.downloadFromTo(deckjson.getString("image"), outDir);
+                if(localPath!=null){
+                    deckjson.put("image",localPath);
                 }
-                in.close();
-                deckjson = deckResponse.toString();
-                OnlineDeck onlineDeck = new OnlineDeck(new JSONObject(deckjson), host,null);
+                OnlineDeck onlineDeck = new OnlineDeck(deckid,deckjson.getString("name"),deckjson.getString("description"),new Image(deckjson.getString("image"),true),deckjson.getString("misc"),deckjson.getString("misc_version"));
                 onlineDecks.add(onlineDeck);
             }
         } catch (IOException e) {
@@ -102,5 +99,31 @@ public class OnlineDecksLoader extends AsyncTask<Void, Void, Exception> {
     protected void onPostExecute(Exception e) {
         super.onPostExecute(e);
         listener.onDownloadFinished(e, onlineDecks);
+    }
+
+    /**
+     *
+     * @param host
+     * @param path
+     * @param contentType
+     * @return
+     * @throws IOException
+     */
+    private String retrieveDataFromServer(String host, String path,String contentType) throws IOException{
+        URL u = new URL("http://"+host +"/"+path);
+        HttpURLConnection c = (HttpURLConnection) u.openConnection();
+        c.setRequestProperty("Authorization", Settings.serverAuthorization);
+        c.setRequestProperty("Content-Type", contentType);
+        c.setConnectTimeout(1000);
+        BufferedReader in = new BufferedReader(new InputStreamReader(c.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+            response.append("\n");
+        }
+        in.close();
+        String json = response.toString();
+        return json;
     }
 }

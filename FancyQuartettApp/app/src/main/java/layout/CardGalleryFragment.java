@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,8 +19,10 @@ import android.widget.Toast;
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.adapters.CardGalleryViewAdapter;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
+import de.uulm.mal.fancyquartett.data.Settings;
 import de.uulm.mal.fancyquartett.utils.LocalDeckLoader;
-
+import de.uulm.mal.fancyquartett.utils.LocalDecksLoader;
+import de.uulm.mal.fancyquartett.utils.OnlineDecksLoader;
 
 
 /**
@@ -87,6 +90,8 @@ public class CardGalleryFragment extends Fragment implements LocalDeckLoader.OnL
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_main_gallery, container, false);
+        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefreshlayout);
+        swipeRefreshLayout.setEnabled(false);
         recList = (RecyclerView) rootView.findViewById(R.id.recycler_gallery_list);
         recList.setHasFixedSize(true);
         recList.setLayoutManager(llm);

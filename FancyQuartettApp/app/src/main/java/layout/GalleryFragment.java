@@ -2,11 +2,10 @@ package layout;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,9 +16,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-
-import java.io.IOException;
 
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.adapters.GalleryViewAdapter;
@@ -45,6 +41,8 @@ public class GalleryFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private Menu menu;
+    private LocalDecksLoader loader;
+    private OnlineDecksLoader onlineLoader;
 
     public GalleryFragment() {
         // Required empty public constructor
@@ -71,11 +69,11 @@ public class GalleryFragment extends Fragment {
         setHasOptionsMenu(true);
         //Initialize Data
         galleryViewAdapter = new GalleryViewAdapter(getContext());
-        LocalDecksLoader loader = new LocalDecksLoader(getContext().getFilesDir() + Settings.localFolder, galleryViewAdapter);
+        loader = new LocalDecksLoader(getContext().getFilesDir() + Settings.localFolder, galleryViewAdapter);
         loader.execute();
 
-        new OnlineDecksLoader(Settings.serverAdress, Settings.serverDecklistJsonFilename, galleryViewAdapter).execute();
-
+       onlineLoader =new OnlineDecksLoader(Settings.serverAdress, Settings.serverRootPath,getContext().getCacheDir().getAbsolutePath(), galleryViewAdapter);
+        onlineLoader.execute();
         glm = new GridLayoutManager(getContext(), 2);
         llm = new LinearLayoutManager(this.getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -89,11 +87,17 @@ public class GalleryFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_main_gallery, container, false);
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefreshlayout);
+        swipeRefreshLayout.setEnabled(true);
+        if (loader!=null&&loader.getStatus()== AsyncTask.Status.RUNNING){
+            swipeRefreshLayout.setRefreshing(true);
+        }else if(onlineLoader!=null &&onlineLoader.getStatus()== AsyncTask.Status.RUNNING){
+            swipeRefreshLayout.setRefreshing(true);
+        }
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 galleryViewAdapter.setRefreshLayout(swipeRefreshLayout);
-                new OnlineDecksLoader(Settings.serverAdress, Settings.serverDecklistJsonFilename, galleryViewAdapter).execute();
+                new OnlineDecksLoader(Settings.serverAdress, Settings.serverRootPath,getContext().getCacheDir().getAbsolutePath(), galleryViewAdapter).execute();
                 new LocalDecksLoader(getContext().getFilesDir() + Settings.localFolder, galleryViewAdapter).execute();
             }
         });

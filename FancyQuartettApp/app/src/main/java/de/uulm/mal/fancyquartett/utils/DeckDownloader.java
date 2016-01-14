@@ -17,9 +17,10 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import de.uulm.mal.fancyquartett.data.Card;
+import de.uulm.mal.fancyquartett.data.Image;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
-import de.uulm.mal.fancyquartett.data.Property;
+import de.uulm.mal.fancyquartett.data.Settings;
+
 
 /**
  * Created by Snap10 on 12.01.16.
@@ -27,23 +28,29 @@ import de.uulm.mal.fancyquartett.data.Property;
 public class DeckDownloader extends AsyncTask<Void, Void, Exception> {
 
 
-    private final String localpath;
+    private String localpath;
+    private String rootpath;
     private String host;
     private String json;
     private OnDeckDownloadedListener listener;
-    private String deckname;
+    private int deckID;
     private OfflineDeck offlineDeck;
 
     /**
      * @param host
-     * @param deckname
+     * @param deckID
      * @param listener
      */
-    public DeckDownloader(String host, String localpath, String deckname, OnDeckDownloadedListener listener) {
+    public DeckDownloader(String host, String localpath, String rootpath, int deckID, OnDeckDownloadedListener listener) {
         super();
         this.host = host;
         this.listener = listener;
-        this.deckname = deckname.toLowerCase();
+        this.deckID = deckID;
+        if (rootpath == null) {
+            this.rootpath = "/decks";
+        } else {
+            this.rootpath = rootpath;
+        }
         this.localpath = localpath;
     }
 
@@ -66,58 +73,67 @@ public class DeckDownloader extends AsyncTask<Void, Void, Exception> {
     @Override
     protected Exception doInBackground(Void... v) {
         try {
+            String json = retrieveDataFromServer(host, rootpath + "/" + deckID,"application/json");
 
-            URL u = new URL("http://" + host + "/" + deckname + "/" + deckname + ".json");
-            HttpURLConnection c = (HttpURLConnection) u.openConnection();
-            c.setConnectTimeout(2000);
-            BufferedReader in = new BufferedReader(new InputStreamReader(c.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-                response.append("\n");
-            }
-            in.close();
-            json = response.toString();
-            JSONObject deckjson = new JSONObject(json);
-            JSONArray cardsjson = deckjson.getJSONArray("cards");
-            JSONArray propertyjson = deckjson.getJSONArray("properties");
-            File outDir = new File(localpath + deckname);
+            JSONObject deckjsonTmp = new JSONObject(json);
+            int deckid = deckjsonTmp.getInt("id");
+
+            JSONObject deckjson = new JSONObject(retrieveDataFromServer(host, rootpath + "/" + deckid,"application/json"));
+            File outDir = new File(localpath + deckid+"/images");
             outDir.mkdirs();
-            File outFile = new File(outDir, deckname.toLowerCase() + ".json");
-            outFile.createNewFile();
-            ArrayList<Property> properties = new ArrayList<>();
-            ArrayList<Card> cards = new ArrayList<>();
-            for (int i = 0; i < propertyjson.length(); i++) {
-                properties.add(new Property(propertyjson.getJSONObject(i)));
+            String localPath = Image.downloadFromTo(deckjson.getString("image"), outDir);
+            if(localPath!=null){
+                deckjson.put("image",localPath);
             }
-            for (int i = 0; i < cardsjson.length(); i++) {
-                Card card = new Card(cardsjson.getJSONObject(i), properties,host, localpath+"/"+deckname, deckname, false);
-                cards.add(card);
+            JSONArray cardsTmp = new JSONArray(retrieveDataFromServer(host, rootpath + "/" + deckid + "/cards","application/json"));
+            //Download Attribute Images
+            JSONArray tmpAttributes = new JSONArray(retrieveDataFromServer(host, rootpath + "/" + deckid + "/cards/" + cardsTmp.getJSONObject(0).getInt("id") + "/attributes","application/json"));
+            String[] localAttributeImagePath = new String[tmpAttributes.length()];
+            for (int i = 0; i <tmpAttributes.length() ; i++) {
+                JSONObject attribute =tmpAttributes.getJSONObject(i);
+                outDir = new File(localpath + deckid+"/images/attributes");
+                outDir.mkdirs();
+                localAttributeImagePath[i] = Image.downloadFromTo(attribute.getString("image"),outDir);
             }
-            for (int i = 0; i < properties.size(); i++) {
-                Property prop = properties.get(i);
-                float[] medArray = new float[cards.size()];
-                for (int j = 0; j < cards.size(); j++) {
-                    Card card = cards.get(j);
-                    medArray[j] = card.getValue(prop);
+            JSONArray cardsJsonArray = new JSONArray();
+
+            ArrayList<double[]> valuesList = new ArrayList<>();
+            for (int j = 0; j < cardsTmp.length(); j++) {
+                int cardID = cardsTmp.getJSONObject(j).getInt("id");
+                JSONObject cardTmp = new JSONObject(retrieveDataFromServer(host, rootpath + "/" + deckid + "/cards/" + cardID,"application/json"));
+                //Attributes
+                JSONArray attributes = new JSONArray(retrieveDataFromServer(host, rootpath + "/" + deckid + "/cards/" + cardID + "/attributes","application/json"));
+                double[] attributesValues = new double[attributes.length()];
+                for (int k = 0; k < attributes.length(); k++) {
+                    attributesValues[k] = attributes.getJSONObject(k).getDouble("value");
+                    //If localImagePath is not null rewrite JSON Path to localpath
+                    if (localAttributeImagePath[k]!=null){
+                        JSONObject attributeTmp = attributes.getJSONObject(k);
+                        attributeTmp.put("image",localAttributeImagePath[k]);
+                        attributes.put(k,attributeTmp);
+                    }
                 }
-                prop.setMedian(calculateMedian(medArray));
-                JSONObject propjson = propertyjson.getJSONObject(i);
-                propjson.put("median", prop.getMedian());
-                propertyjson.put(i, propjson);
+                valuesList.add(attributesValues);
+                //Images
+                JSONArray images = new JSONArray(retrieveDataFromServer(host, rootpath + "/" + deckid + "/cards/" + cardID + "/images","application/json"));
+                images = downloadCardImages(deckjsonTmp, images,deckid);
+                cardTmp.put("attributes", attributes);
+                cardTmp.put("images", images);
+                cardsJsonArray.put(cardTmp);
             }
+            cardsJsonArray=writeMedianToAttributeJson(cardsTmp, cardsJsonArray, valuesList);
 
-            deckjson.put("properties", propertyjson);
-
-
-
+            deckjson.put("cards", cardsJsonArray);
+            String deckname = deckjson.getString("name").toLowerCase();
+            outDir = new File(localpath + deckid);
+            outDir.mkdirs();
+            File outFile = new File(outDir, deckid + ".json");
+            outFile.createNewFile();
             FileOutputStream out = new FileOutputStream(outFile);
             out.write(deckjson.toString().getBytes(Charset.forName("UTF-8")));
             out.flush();
             out.close();
-
-            offlineDeck = new OfflineDeck(deckjson.get("name").toString(),deckjson.getString("description"),cards,properties);
+            offlineDeck = new OfflineDeck(deckjson,true);
         } catch (IOException e) {
             System.out.println(e);
             return e;
@@ -127,6 +143,54 @@ public class DeckDownloader extends AsyncTask<Void, Void, Exception> {
         }
 
         return null;
+    }
+
+    /**
+     *
+     * @param deckjsonTmp
+     * @param images
+     * @return
+     * @throws JSONException
+     */
+    private JSONArray downloadCardImages(JSONObject deckjsonTmp, JSONArray images, int deckid) throws JSONException {
+        for (int i = 0; i <images.length() ; i++) {
+            JSONObject imageTmp =images.getJSONObject(i);
+            File outDir = new File(localpath + deckid+"/images/cards");
+            outDir.mkdirs();
+            String localPath = Image.downloadFromTo(imageTmp.getString("image"), outDir);
+            if(localPath!=null){
+                imageTmp.put("image",localPath);
+                images.put(i,imageTmp);
+            }
+        }
+        return images;
+    }
+
+    /**
+     *
+     * @param cardsTmp
+     * @param cardsJsonArray
+     * @param valuesList
+     * @return
+     * @throws JSONException
+     */
+    private JSONArray writeMedianToAttributeJson(JSONArray cardsTmp, JSONArray cardsJsonArray, ArrayList<double[]> valuesList) throws JSONException {
+        //Write median to JSON
+        double[] medianArray = calculateMedian(valuesList);
+        //For every Card get the Attributes and write the median to the attribute Object. Put That Object back in the Array and Put the Array to the Card
+        //Then put the Card back in the CardsArray
+        for (int j = 0; j < cardsTmp.length(); j++) {
+            JSONObject cardTmp = cardsJsonArray.getJSONObject(j);
+            JSONArray attributes = cardTmp.getJSONArray("attributes");
+            for (int k = 0; k < attributes.length(); k++) {
+                JSONObject tmpAttribute = attributes.getJSONObject(k);
+                tmpAttribute.put("median", medianArray[k]);
+                attributes.put(k, tmpAttribute);
+            }
+            cardTmp.put("attributes", attributes);
+            cardsJsonArray.put(j, cardTmp);
+        }
+        return cardsJsonArray;
     }
 
     /**
@@ -146,15 +210,46 @@ public class DeckDownloader extends AsyncTask<Void, Void, Exception> {
         listener.onDeckDownloadFinished(e, offlineDeck);
     }
 
+
+    private String retrieveDataFromServer(String host, String path,String contentType) throws IOException {
+        URL u = new URL("http://" + host + "/" + path);
+        HttpURLConnection c = (HttpURLConnection) u.openConnection();
+        c.setRequestProperty("Authorization", Settings.serverAuthorization);
+        c.setRequestProperty("Content-Type", contentType);
+        c.setConnectTimeout(1000);
+        BufferedReader in = new BufferedReader(new InputStreamReader(c.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+            response.append("\n");
+        }
+        in.close();
+        String json = response.toString();
+        return json;
+    }
+
     /**
      * Calculates the Median of the Given float Array and returns the median
      *
-     * @param medArray
+     * @param valuesList
      * @return
      */
-    private float calculateMedian(float[] medArray) {
-        float median;
+    private double[] calculateMedian(ArrayList<double[]> valuesList) {
+        double[] median = new double[valuesList.get(0).length];
+        double[] tmp = new double[valuesList.size()];
+        for (int i = 0; i < median.length; i++) {
+            for (int k = 0; k < valuesList.size(); k++) {
+                tmp[k] = valuesList.get(k)[i];
+                median[i] = returnMedian(tmp);
+            }
+        }
+        return median;
+    }
+
+    private double returnMedian(double[] medArray) {
         Arrays.sort(medArray);
+        double median;
         if (medArray.length % 2 == 0) {
             median = (medArray[medArray.length / 2] + medArray[medArray.length / 2 - 1]) / 2;
         } else {

@@ -60,7 +60,8 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
         super.onCreate(savedInstanceState);
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean secondRun = pref.getBoolean("filesInstalled", false);
-        if (!secondRun) {
+       //TODO implement AssetsInstaller for new Json Modell and set !secondRun
+        if (false) {
 
             AssetsInstaller installer = null;
             try {

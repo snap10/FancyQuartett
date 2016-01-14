@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import de.uulm.mal.fancyquartett.R;
-import de.uulm.mal.fancyquartett.adapters.CardAttrViewAdapter;
 import de.uulm.mal.fancyquartett.data.CardAttribute;
 import de.uulm.mal.fancyquartett.data.Property;
 import layout.CardFragment;
@@ -41,7 +40,7 @@ public class CardViewerActivity extends AppCompatActivity implements CardFragmen
      * @param cardAttribute
      */
     @Override
-    public void onCardFragmentAttributeInteraction(Property property, float value, CardAttribute cardAttribute) {
+    public void onCardFragmentAttributeInteraction(Property property, double value, CardAttribute cardAttribute) {
 
     }
 }

@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -15,7 +14,6 @@ import java.util.Date;
 import java.util.List;
 
 import de.uulm.mal.fancyquartett.R;
-import de.uulm.mal.fancyquartett.adapters.CardAttrViewAdapter;
 import de.uulm.mal.fancyquartett.data.Card;
 import de.uulm.mal.fancyquartett.data.CardAttribute;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
@@ -82,8 +80,8 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             onDeckLoaded(offlineDeck);
         } else {
             //sth went wrong with the Intent or an old Method is used ...
-            String deckname = getIntent().getExtras().getString("deckname");
-            new LocalDeckLoader(getFilesDir() + Settings.localFolder, deckname.toLowerCase(), this).execute();
+            int deckID = getIntent().getExtras().getInt("deckid");
+            new LocalDeckLoader(getFilesDir() + Settings.localFolder, deckID, this).execute();
         }
     }
 
@@ -101,7 +99,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
     }
 
     @Override
-    public void onCardFragmentAttributeInteraction(Property property, float value, CardAttribute cardAttribute) {
+    public void onCardFragmentAttributeInteraction(Property property, double value, CardAttribute cardAttribute) {
         if(engine.toTheEndTask != null) {
             engine.toTheEndTask.onCardAttrClicked(property, value, cardAttribute);
         }
