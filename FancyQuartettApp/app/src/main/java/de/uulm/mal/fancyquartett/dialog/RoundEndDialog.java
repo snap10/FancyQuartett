@@ -20,17 +20,19 @@ import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.activities.GameActivity;
 import de.uulm.mal.fancyquartett.data.Card;
 import de.uulm.mal.fancyquartett.data.CardAttribute;
+import de.uulm.mal.fancyquartett.data.Player;
 import de.uulm.mal.fancyquartett.data.Property;
+import de.uulm.mal.fancyquartett.interfaces.OnDialogButtonClickListener;
 
 /**
  * Created by Lukas on 11.01.2016.
  */
 public class RoundEndDialog extends DialogFragment {
 
-    private Card p1Card, p2Card;
+    private GameActivity.GameEngine engine;
     private CardAttribute cardAttribute;
     private int playerWon;
-    private String p1Name, p2Name;
+    private Player p1, p2;
 
     /**
      *
@@ -41,23 +43,21 @@ public class RoundEndDialog extends DialogFragment {
 
     /**
      *
-     * @param p1Card
-     * @param p2Card
+     * @param engine
+     * @param p1
+     * @param p2
      * @param cardAttribute
      * @param playerWon
-     * @param p1Name
-     * @param p2Name
      * @return
      */
-    public static RoundEndDialog newInstance(Card p1Card, Card p2Card, CardAttribute cardAttribute, int playerWon, String p1Name, String p2Name) {
+    public static RoundEndDialog newInstance(GameActivity.GameEngine engine, Player p1, Player p2, CardAttribute cardAttribute, int playerWon) {
         RoundEndDialog dialog = new RoundEndDialog();
         Bundle args = new Bundle();
-        args.putSerializable("p1Card", p1Card);
-        args.putSerializable("p2Card", p2Card);
+        args.putSerializable("gameEngine", engine);
+        args.putSerializable("p1", p1);
+        args.putSerializable("p2", p2);
         args.putSerializable("cardAttribute", cardAttribute);
         args.putInt("playerWon", playerWon);
-        args.putString("p1Name", p1Name);
-        args.putString("p2Name", p2Name);
         dialog.setArguments(args);
         return dialog;
     }
@@ -66,16 +66,15 @@ public class RoundEndDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // read bundle data
         super.onCreateDialog(savedInstanceState);
-        Bundle bundle = getArguments();
-        if(bundle != null) {
-            System.out.println("in");
-            this.p1Card = (Card) bundle.getSerializable("p1Card");
-            this.p2Card = (Card) bundle.getSerializable("p2Card");
-            this.cardAttribute = (CardAttribute) bundle.getSerializable("cardAttribute");
-            this.playerWon = bundle.getInt("playerWon");
-            this.p1Name = bundle.getString("p1Name");
-            this.p2Name = bundle.getString("p2Name");
+        Bundle args = getArguments();
+        if(args != null) {
+            this.engine = (GameActivity.GameEngine) args.getSerializable("gameEngine");
+            this.p1 = (Player) args.get("p1");
+            this.p2 = (Player) args.get("p2");
+            this.cardAttribute = (CardAttribute) args.getSerializable("cardAttribute");
+            this.playerWon = args.getInt("playerWon");
         }
+
         // get the dialogbuilder
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // get the layout inflater
@@ -87,42 +86,57 @@ public class RoundEndDialog extends DialogFragment {
                 .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        System.out.println("positive clicked");
+                        engine.OnDialogPositiveClick(RoundEndDialog.this);
                     }
                 });
-        // set top gui elements
-        TextView textViewP1Name = (TextView) view.findViewById(R.id.textView_P1Name);
-        textViewP1Name.setText(p1Name + ":");
-        ImageView imageViewImageP1Card = (ImageView) view.findViewById(R.id.imageView_ImageP1Card);
-        imageViewImageP1Card.setImageBitmap(p1Card.getImages().get(0).getBitmap());
-        TextView textViewInfoP1Card = (TextView) view.findViewById(R.id.textView_InfoP1Card);
-        if(playerWon == GameActivity.GameEngine.PLAYER1) {
-            textViewInfoP1Card.setText("WINNER");
-        } else {
-            textViewInfoP1Card.setText("LOSER");
-        }
+        // build dialog
+        Dialog dialog = builder.create();
+
+        // read player1 gui elements
+        TextView tvP1Name = (TextView) view.findViewById(R.id.textView_P1Name);
+        ImageView ivP1Image = (ImageView) view.findViewById(R.id.imageView_ImageP1Card);
+        TextView tvP1Info = (TextView) view.findViewById(R.id.textView_InfoP1Card);
+        // set player1 gui
+        setPlayerGUI(tvP1Name, ivP1Image, tvP1Info, p1);
+
         // set center gui elements
         Property property = cardAttribute.getProperty();
-        TextView textViewP1Value = (TextView) view.findViewById(R.id.textView_P1Value);
-        textViewP1Value.setText(p1Card.getValue(property) + " " + property.getUnit());
-        TextView textViewProperty = (TextView) view.findViewById(R.id.textView_Property);
-        textViewProperty.setText(property.getAttributeName());
-        TextView textViewP2Value = (TextView) view.findViewById(R.id.textView_P2Value);
-        textViewP2Value.setText(p2Card.getValue(property) + " " + property.getUnit());
-        // set top gui elements
-        TextView textViewP2Name = (TextView) view.findViewById(R.id.textView_P2Name);
-        textViewP2Name.setText(p2Name + ":");
-        ImageView imageViewImageP2Card = (ImageView) view.findViewById(R.id.imageView_ImageP2Card);
-        imageViewImageP2Card.setImageBitmap(p2Card.getImages().get(0).getBitmap());
-        TextView textViewInfoP2Card = (TextView) view.findViewById(R.id.textView_InfoP2Card);
-        if(playerWon == GameActivity.GameEngine.PLAYER2) {
-            textViewInfoP2Card.setText("WINNER");
-        } else {
-            textViewInfoP2Card.setText("LOSER");
-        }
+        TextView tvP1Value = (TextView) view.findViewById(R.id.textView_P1Value);
+        TextView tvProperty = (TextView) view.findViewById(R.id.textView_Property);
+        TextView tvP2Value = (TextView) view.findViewById(R.id.textView_P2Value);
+        // set center gui
+        setCompareGUI(property, tvProperty, tvP1Value, tvP2Value);
 
-        System.out.println("OnCreateDialog finished");
-        return  builder.create();
+        // set top gui elements
+        TextView tvP2Name = (TextView) view.findViewById(R.id.textView_P2Name);
+        ImageView ivP2Image = (ImageView) view.findViewById(R.id.imageView_ImageP2Card);
+        TextView tvP2Info = (TextView) view.findViewById(R.id.textView_InfoP2Card);
+        // set player2 gui
+        setPlayerGUI(tvP2Name, ivP2Image, tvP2Info, p2);
+
+        return  dialog;
+    }
+
+    public void setPlayerGUI(TextView tvName, ImageView ivImage, TextView tvInfo, Player player) {
+        // display player name
+        tvName.setText(player.getName() + ":");
+        // display first image from current player card
+        ivImage.setImageBitmap(player.getCurrentCard().getImages().get(0).getBitmap());
+        // display winner / loser
+        if(playerWon == player.getId()) {
+            tvInfo.setText("WINNER");
+        } else {
+            tvInfo.setText("LOSER");
+        }
+    }
+
+    public void setCompareGUI(Property property, TextView tvProperty, TextView tvP1Value, TextView tvP2Value) {
+        // display player1 value
+        tvP1Value.setText(p1.getCurrentCard().getValue(property) + " " + property.getUnit());
+        // display property
+        tvProperty.setText(property.getAttributeName());
+        // display player2 value
+        tvP2Value.setText(p2.getCurrentCard().getValue(property) + " " + property.getUnit());
     }
 
 }

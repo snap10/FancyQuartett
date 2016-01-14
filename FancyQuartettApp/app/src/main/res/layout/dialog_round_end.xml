@@ -26,7 +26,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/imageView_ImageP1Card"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/ic_launcher"
+            android:adjustViewBounds="false" />
 
         <TextView
             android:layout_width="fill_parent"

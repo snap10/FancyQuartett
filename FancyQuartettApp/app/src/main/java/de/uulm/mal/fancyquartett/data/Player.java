@@ -1,28 +1,35 @@
 package de.uulm.mal.fancyquartett.data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Lukas on 08.01.2016.
  */
-public class Player {
+public class Player implements Serializable {
 
+    private int id = -1;
     private String name;
     private ArrayList<Card> cards;
     private int points = 0;
     private int roundsWon = 0;
 
-    public Player(String name, ArrayList<Card> cards) {
+    public Player(int id, String name, ArrayList<Card> cards) {
+        this.id = id;
         this.name = name;
         this.cards = cards;
     }
 
     /*
-    NAME
+    PLAYER
      */
 
     public String getName() {
         return name;
+    }
+
+    public int getId() {
+        return id;
     }
 
     /*

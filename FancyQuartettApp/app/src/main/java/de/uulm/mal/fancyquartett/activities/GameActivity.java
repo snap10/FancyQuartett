@@ -1,7 +1,6 @@
 package de.uulm.mal.fancyquartett.activities;
 
 import android.app.DialogFragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.data.Card;
@@ -25,6 +23,7 @@ import de.uulm.mal.fancyquartett.data.Settings;
 import de.uulm.mal.fancyquartett.dialog.RoundEndDialog;
 import de.uulm.mal.fancyquartett.enums.GameMode;
 import de.uulm.mal.fancyquartett.enums.KILevel;
+import de.uulm.mal.fancyquartett.interfaces.OnDialogButtonClickListener;
 import de.uulm.mal.fancyquartett.tasks.SoftKiTask;
 import de.uulm.mal.fancyquartett.utils.LocalDeckLoader;
 import layout.CardFragment;
@@ -107,50 +106,16 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
     public void onCardFragmentAttributeInteraction(Property property, double value, CardAttribute cardAttribute) {
         // identify playerWonRound
         int playerWonRound = engine.compareCardsProperty(property);
+        engine.setPlayerWonRound(playerWonRound);
         // show RoundEndDialog
         engine.showRoundEndDialog(cardAttribute, playerWonRound);
-        // handleCards
-        engine.handlePlayerCards(playerWonRound);
-        // check if player won game
-        int playerWonGame = engine.checkPlayerWon();
-        System.out.println("player " + playerWonRound + "won round");
-        if(playerWonGame == engine.PLAYER1 || playerWonGame == engine.PLAYER2) {
-            //engine.showGameEndDialog(playerWonRound, statistics);
-        } else {
-            // chance current player
-            if(engine.getCurPlayer() != playerWonRound) {
-                engine.changeCurrentPlayer();
-            }
-            // initialise next round
-            int curPlayer = engine.getCurPlayer();
-            if(curPlayer != engine.PLAYER1) {
-                // show p2 next card
-                engine.showPlayer2NextCard();
-                // start ki task
-                KILevel kiLevel = engine.getKiLevel();
-                if(kiLevel == KILevel.Soft) {
-                    SoftKiTask softKiTask = new SoftKiTask(engine.getCurPlayerCard(curPlayer), this);
-                    softKiTask.execute();
-                }
-                if(kiLevel == KILevel.Medium) {
-                    //MediumKiTask mediumKiTask = new MediumKiTast(enginge.getCurPlayerCard(curPlayer), this);
-                    //mediumKiTask.execute();
-                }
-                if(kiLevel == KILevel.Hard) {
-                    //HardmKiTask hardKiTask = new HardKiTast(enginge.getCurPlayerCard(curPlayer), this);
-                    //hardKiTask.execute();
-                }
-            } else {
-                engine.showPlayer1NextCard();
-            }
-
-    }}
+    }
 
 
     /**
      * Inner Class of GameActivity - GameEngine
      */
-    public class GameEngine implements Serializable {
+    public class GameEngine implements Serializable, OnDialogButtonClickListener {
 
         public static final int STANDOFF = 0;
         public static final int PLAYER1 = 1;
@@ -158,6 +123,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
 
         // player attributes
         private int curPlayer = 0;
+        private int playerWonRound = 0;
         private Player p1;
         private Player p2;
 
@@ -175,6 +141,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         private int curRound = 0;
         private int maxRounds = 0;
         private int maxPoints = 0;
+        private int gameTime = 0;
         private int timeout = 0;
         private KILevel kiLevel;
         private boolean isMultiplayer = false;
@@ -255,11 +222,11 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             }
             // create players
             if(isMultiplayer) {
-                this.p1 = new Player(bundleP1Name, p1Cards);
-                this.p2 = new Player(bundleP2Name, p2Cards);
+                this.p1 = new Player(PLAYER1, bundleP1Name, p1Cards);
+                this.p2 = new Player(PLAYER2, bundleP2Name, p2Cards);
             } else {
-                this.p1 = new Player("You", p1Cards);
-                this.p2 = new Player("Ki", p2Cards);
+                this.p1 = new Player(PLAYER1, "You", p1Cards);
+                this.p2 = new Player(PLAYER2, "KI", p2Cards);
             }
         }
 
@@ -329,6 +296,10 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
                 if(p2.getCards().size() == 0) return PLAYER1;
             }
             return -1;
+        }
+
+        public void setPlayerWonRound(int playerWonRound) {
+            this.playerWonRound = playerWonRound;
         }
 
     /*
@@ -497,7 +468,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             Card p2Card = p2.getCurrentCard();
             String p1Name = p1.getName();
             String p2Name = p2.getName();
-            DialogFragment dialog = new RoundEndDialog().newInstance(p1Card, p2Card, cardAttribute, playerWonRound, p1Name, p2Name);
+            DialogFragment dialog = new RoundEndDialog().newInstance(this, p1, p2, cardAttribute, playerWonRound);
             dialog.show(getFragmentManager(), "bla");
         }
 
@@ -536,6 +507,52 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             } else {
                 return p2.getCurrentCard();
             }
+        }
+
+        @Override
+        public void OnDialogPositiveClick(DialogFragment dialog) {
+            // handleCards
+            engine.handlePlayerCards(playerWonRound);
+            // check if player won game
+            int playerWonGame = checkPlayerWon();
+            if(playerWonGame == PLAYER1 || playerWonGame == PLAYER2) {
+                //engine.showGameEndDialog(playerWonRound, statistics);
+            } else {
+                // change current player
+                if(getCurPlayer() != playerWonRound) {
+                    changeCurrentPlayer();
+                }
+                // initialise next round
+                if(curPlayer != PLAYER1) {
+                    // show p2 next card
+                    showPlayer2NextCard();
+                    // start ki task
+                    if(kiLevel == KILevel.Soft) {
+                        SoftKiTask softKiTask = new SoftKiTask(getCurPlayerCard(curPlayer), GameActivity.this);
+                        softKiTask.execute();
+                    }
+                    if(kiLevel == KILevel.Medium) {
+                        //MediumKiTask mediumKiTask = new MediumKiTast(enginge.getCurPlayerCard(curPlayer), GameActivity.this);
+                        //mediumKiTask.execute();
+                    }
+                    if(kiLevel == KILevel.Hard) {
+                        //HardmKiTask hardKiTask = new HardKiTast(enginge.getCurPlayerCard(curPlayer), GameActivity.this);
+                        //hardKiTask.execute();
+                    }
+                } else {
+                    showPlayer1NextCard();
+                }
+            }
+        }
+
+        @Override
+        public void OnDialogNevativeClick(DialogFragment dialog) {
+            // Do nothing
+        }
+
+        @Override
+        public void OnDialogNeutralClick(DialogFragment dialog) {
+            // Do nothing
         }
     }
 
