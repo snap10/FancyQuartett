@@ -1,17 +1,14 @@
 package de.uulm.mal.fancyquartett.data;
 
-import android.util.Log;
-
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by mk on 01.01.2016.
@@ -19,7 +16,6 @@ import java.util.Arrays;
 public class OfflineDeck extends Deck implements Serializable {
 
     private ArrayList<Card> cards;
-
     private ArrayList<Property> properties;
 
     /**
@@ -35,17 +31,17 @@ public class OfflineDeck extends Deck implements Serializable {
     }
 
     /**
-     * Used by LocalDecksLoader and LocalDeckLoader
+     * Used by LocalDecksLoader and LocalDeckLoader //TODO Rewrite for new Json specification
      *
      * @param folder
-     * @param name
+     * @param filename
      * @throws Exception
      */
-    public OfflineDeck(String folder, String name) throws Exception {
+    public OfflineDeck(String folder, String filename,boolean isLocal) throws Exception {
         super();
         this.cards = new ArrayList<Card>();
         this.properties = new ArrayList<Property>();
-        File jsonFile = new File(folder, name + ".json");
+        File jsonFile = new File(folder, filename + ".json");
         BufferedReader br = null;
         StringBuffer buffer = new StringBuffer();
         br = new BufferedReader(new FileReader(jsonFile));
@@ -55,18 +51,39 @@ public class OfflineDeck extends Deck implements Serializable {
             buffer.append('\n');
         }
         br.close();
-        JSONObject json = new JSONObject(buffer.toString());
-        super.name = json.getString("name");
-        super.description = json.getString("description");
-        JSONArray cardsJson = json.getJSONArray("cards");
-        JSONArray propsJson = json.getJSONArray("properties");
+        JSONObject deckjson = new JSONObject(buffer.toString());
 
-        for (int i = 0; i < propsJson.length(); i++) {
-            properties.add(new Property(propsJson.getJSONObject(i)));
+        this.id = deckjson.getInt("id");
+        this.name = deckjson.getString("name");
+        this.description = deckjson.getString("description");
+        this.deckimage = new Image(deckjson.getString("image"), true);
+        this.misc = deckjson.getString("misc");
+        this.misc_version = deckjson.getString("misc_version");
+        this.cards = new ArrayList<Card>();
+        this.properties = new ArrayList<Property>();
+        JSONArray cardsJson = deckjson.getJSONArray("cards");
+        for (int i = 0; i < cardsJson.length(); i++) {
+            JSONObject card = cardsJson.getJSONObject(i);
+            cards.add(new Card(card, isLocal));
         }
 
+    }
+
+    /**
+     * Used by Deckdownloader to Download Decks and return OfflineDeck
+     *
+     * @param deckjson
+     * @param isLocal  important to have the Images of the Cards downloaded if isLocal==false;
+     * @throws JSONException
+     */
+    public OfflineDeck(JSONObject deckjson, boolean isLocal) throws JSONException {
+        super(deckjson.getInt("id"), deckjson.getString("name"), deckjson.getString("description"), new Image(deckjson.getString("image"), true), deckjson.getString("misc"), deckjson.getString("misc_version"));
+        this.cards = new ArrayList<Card>();
+        this.properties = new ArrayList<Property>();
+        JSONArray cardsJson = deckjson.getJSONArray("cards");
         for (int i = 0; i < cardsJson.length(); i++) {
-            cards.add(new Card(cardsJson.getJSONObject(i), properties, folder, name, true));
+            JSONObject card = cardsJson.getJSONObject(i);
+            cards.add(new Card(card, isLocal));
         }
 
     }
@@ -89,9 +106,10 @@ public class OfflineDeck extends Deck implements Serializable {
 
     /**
      * Should delete all offlineFiles of deck including JSON and Picture data
+     *
      * @return
      */
-    public boolean removeFromFileSystem(){
+    public boolean removeFromFileSystem() {
         //TODO @Marius, kriegste das hin... am besten ASYNC mit nem Konstrukt ähnlich der Loader
         return false;
     }

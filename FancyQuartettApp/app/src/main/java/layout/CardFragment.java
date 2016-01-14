@@ -1,14 +1,12 @@
 package layout;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -31,7 +29,7 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
 
     private static final String ARG_CARDID = "card_id";
     private static final String ARG_CARD = "card";
-    private static final String ARG_DECKNAME = "deck_name";
+    private static final String ARG_DECKID = "deck_name";
 
     // view attributes
     private RecyclerView recList;
@@ -42,7 +40,7 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
     private OfflineDeck offlineDeck;
     private Card card;
     private int cardID;
-    private String deckname;
+    private int deckID;
     private View cardFragmentView;
     private OnFragmentInteractionListener mListener;
 
@@ -80,14 +78,15 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
      * Creates a new instance of this fragment using the provided prameters.
      *
      * @param cardId
-     * @param deckname
+     * @param deckid
+     *
      * @return
      */
-    public static CardFragment newInstance(int cardId, String deckname) {
+    public static CardFragment newInstance(int cardId, int deckid) {
         CardFragment fragment = new CardFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_CARDID, cardId);
-        args.putString(ARG_DECKNAME, deckname);
+        args.putInt(ARG_DECKID, deckid);
         fragment.setArguments(args);
         return fragment;
     }
@@ -98,11 +97,11 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
         if (getArguments() != null) {
             cardID = getArguments().getInt(ARG_CARDID);
             card = (Card) getArguments().getSerializable(ARG_CARD);
-            deckname = getArguments().getString(ARG_DECKNAME);
+            deckID = getArguments().getInt(ARG_DECKID);
         }
         if (card != null) {
             cardID = card.getID();
-            deckname = card.getDeckname();
+            deckID = card.getDeckID();
         }
 
     }
@@ -188,7 +187,7 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
      * @param attribute
      */
     @Override
-    public void onCardAttrClicked(Property property, float value, CardAttribute attribute) {
+    public void onCardAttrClicked(Property property, double value, CardAttribute attribute) {
         mListener.onCardFragmentAttributeInteraction(property, value, attribute);
     }
 
@@ -210,6 +209,6 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
          * @param value
          * @param cardAttribute
          */
-        void onCardFragmentAttributeInteraction(Property property, float value, CardAttribute cardAttribute);
+        void onCardFragmentAttributeInteraction(Property property, double value, CardAttribute cardAttribute);
     }
 }

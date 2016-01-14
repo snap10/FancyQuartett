@@ -8,16 +8,26 @@ import java.io.Serializable;
 public class Deck implements Serializable {
 
 
+    protected int id;
     protected String name = null;
-
     protected String description = null;
-
+    protected Image deckimage;
+    protected String misc;
+    protected String misc_version;
     public Deck(){};
     public Deck(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
+    public Deck(int id, String name, String description, Image deckimage, String misc, String misc_version) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.deckimage = deckimage;
+        this.misc = misc;
+        this.misc_version = misc_version;
+    }
 
     public String getName() {
         return name;
@@ -34,6 +44,22 @@ public class Deck implements Serializable {
     public void setDescription(String description) {
         this.description = description;
 
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public Image getDeckimage() {
+        return deckimage;
+    }
+
+    public String getMisc() {
+        return misc;
+    }
+
+    public String getMisc_version() {
+        return misc_version;
     }
 
     /**
@@ -68,4 +94,6 @@ public class Deck implements Serializable {
         return (this.name.equals(otherDeck.name)&&this.description.equals(otherDeck.description));
 
     }
+
+
 }

@@ -18,29 +18,30 @@ import de.uulm.mal.fancyquartett.data.OfflineDeck;
  *         When collected Jsons, a new OfflineDeck is created for every JSON.
  */
 public class LocalDeckLoader extends AsyncTask<Void, Void, OfflineDeck> {
+    private int deckid;
     String path;
-    String deckname;
+
     OnLocalDeckLoadedListener listener;
 
     /**
      *
      * @param path
-     * @param deckname
+     * @param deckid
      */
-    public LocalDeckLoader(String path, String deckname) {
+    public LocalDeckLoader(String path, int deckid) {
         this.path = path;
-        this.deckname = deckname;
+        this.deckid=deckid;
     }
 
     /**
      *
      * @param path
-     * @param deckname
+     * @param deckid
      * @param listener
      */
-    public LocalDeckLoader(String path, String deckname, OnLocalDeckLoadedListener listener) {
+    public LocalDeckLoader(String path, int deckid, OnLocalDeckLoadedListener listener) {
         this.path = path;
-        this.deckname = deckname;
+        this.deckid =deckid;
         this.listener = listener;
     }
 
@@ -86,9 +87,9 @@ public class LocalDeckLoader extends AsyncTask<Void, Void, OfflineDeck> {
     protected OfflineDeck doInBackground(Void... params) {
 
         OfflineDeck offlineDeck = null;
-        String deckPath = path + "/" + deckname;
+        String deckPath = path + "/" + deckid;
         try {
-            offlineDeck = new OfflineDeck(deckPath, deckname);
+            offlineDeck = new OfflineDeck(deckPath, deckid+"",true);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

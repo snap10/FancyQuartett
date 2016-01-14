@@ -8,19 +8,21 @@ import android.graphics.Bitmap;
  */
 public class Settings {
 
+    public static String serverAuthorization = "Basic c3R1ZGVudDphZm1iYQ==";
+
     public Settings() {
     }
 
     //Testadress for Localhost on FerdiBirksMacbook, please adapt for your localhost
-    public static String defaultServerAdress = "192.168.0.40/fancyquartetttest";
+    public static String defaultServerAdress = "quartett.af-mba.dbis.info";
     public static String defaultLocalAssets = "decks";
     public static String defaultLocalFolder = "/decks/";
-    public static String defaultServerDecklistJsonFilename = "decks.json";
+    public static String defaultServerRootPath = "/decks";
 
-    public static String serverAdress = "192.168.0.40/fancyquartetttest";
+    public static String serverAdress = "quartett.af-mba.dbis.info";
     public static String localAssets = "decks";
     public static String localFolder = "/decks/";
-    public static String serverDecklistJsonFilename = "decks.json";
+    public static String serverRootPath = "/decks";
 
     public String getServerAdress() {
         return serverAdress;
@@ -47,11 +49,11 @@ public class Settings {
     }
 
     public String getServerDecklistJsonFilename() {
-        return serverDecklistJsonFilename;
+        return serverRootPath;
     }
 
     public void setServerDecklistJsonFilename(String serverDecklistJsonFilename) {
-        this.serverDecklistJsonFilename = serverDecklistJsonFilename;
+        this.serverRootPath = serverDecklistJsonFilename;
     }
 
     /**

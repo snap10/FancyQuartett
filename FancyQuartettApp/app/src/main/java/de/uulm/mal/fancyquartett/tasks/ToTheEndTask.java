@@ -2,11 +2,9 @@ package de.uulm.mal.fancyquartett.tasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import de.uulm.mal.fancyquartett.activities.GameActivity;
 import de.uulm.mal.fancyquartett.adapters.CardAttrViewAdapter;
-import de.uulm.mal.fancyquartett.data.Card;
 import de.uulm.mal.fancyquartett.data.CardAttribute;
 import de.uulm.mal.fancyquartett.data.Property;
 
@@ -70,7 +68,7 @@ public class ToTheEndTask extends AsyncTask implements CardAttrViewAdapter.OnCar
     }
 
     @Override
-    public void onCardAttrClicked(Property property, float value, CardAttribute attribute) {
+    public void onCardAttrClicked(Property property, double value, CardAttribute attribute) {
         currentProperty = property;
         playerSelectedCartAttribute = true;
     }

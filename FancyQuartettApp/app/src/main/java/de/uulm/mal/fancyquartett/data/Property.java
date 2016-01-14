@@ -10,49 +10,44 @@ import java.io.Serializable;
  */
 public class Property implements Serializable{
 
-    // id maps properties to card values
-    private int id = 0;
 
-    // name to be displayed to the user
-    private String text = null;
-
-    // true = bigger values win, false = smaller values win
-    private boolean biggerWins = true;
-
-    // unit string displayed after numeric value
-    private String unit = null;
+    private int precision;
     private double median;
-
-    // (?)
-    private int precision = 0;
-
-    // TODO:
-    //private Bitmap icon;
+    private int id;
+    private int cardID;
+    private String attributeName;
+    private String unit;
+    private int order;
+    private Image attributeImage;
+    private boolean higherWins;
 
     public Property(JSONObject json) throws JSONException {
         this.id = json.getInt("id");
-        this.text = json.getString("text");
+        this.attributeName = json.getString("text");
         this.unit = json.getString("unit");
-        this.biggerWins = (json.getInt("compare")==1);
+        this.higherWins = (json.getInt("compare")==1);
         this.precision = json.getInt("precision");
         if (json.has("median")){
             this.median = json.getDouble("median");
         }
     }
 
-    public Property(String text, boolean biggerWins, int id, String unit, int precision) {
-        this.text = text;
-        this.biggerWins = biggerWins;
-        this.id = id;
+    public Property(boolean higherWins, Image attributeImage, int order, String unit, String attributeName, int cardID, int id, double median) {
+        this.higherWins = higherWins;
+        this.attributeImage = attributeImage;
+        this.order = order;
         this.unit = unit;
-        this.precision = precision;
+        this.attributeName = attributeName;
+        this.cardID = cardID;
+        this.id = id;
+        this.median = median;
     }
 
     public int id() { return id; }
 
-    public boolean biggerWins() { return biggerWins; }
+    public boolean biggerWins() { return higherWins; }
 
-    public String getText() { return text; }
+    public String getAttributeName() { return attributeName; }
 
     public String getUnit() {
         return unit;

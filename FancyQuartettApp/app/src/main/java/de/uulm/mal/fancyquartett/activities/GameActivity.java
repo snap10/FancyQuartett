@@ -83,8 +83,8 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             onDeckLoaded(offlineDeck);
         } else {
             //sth went wrong with the Intent or an old Method is used ...
-            String deckname = getIntent().getExtras().getString("deckname");
-            new LocalDeckLoader(getFilesDir() + Settings.localFolder, deckname.toLowerCase(), this).execute();
+            int deckID = getIntent().getExtras().getInt("deckid");
+            new LocalDeckLoader(getFilesDir() + Settings.localFolder, deckID, this).execute();
         }
     }
 
@@ -102,6 +102,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
     }
 
     @Override
+<<<<<<< HEAD
     public void onCardFragmentAttributeInteraction(Property property, float value, CardAttribute cardAttribute) {
         // identify playerWonRound
         int playerWonRound = engine.compareCardsProperty(property);
@@ -141,6 +142,11 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             } else {
                 engine.showPlayer1NextCard();
             }
+=======
+    public void onCardFragmentAttributeInteraction(Property property, double value, CardAttribute cardAttribute) {
+        if(engine.toTheEndTask != null) {
+            engine.toTheEndTask.onCardAttrClicked(property, value, cardAttribute);
+>>>>>>> RestAPICALLS
         }
     }
 

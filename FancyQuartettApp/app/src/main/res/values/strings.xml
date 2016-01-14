@@ -106,6 +106,7 @@
     <string name="pref_default_display_serveraddress">Enter Serveraddress here</string>
     <string name="downloadProgressText">Deck is downloading, please wait!</string>
     <string name="canceledDownload">Canceled Download</string>
+    <string name="noDescriptionAvailabe">No Description available for this Card</string>
 
 
 </resources>

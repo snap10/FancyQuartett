@@ -2,6 +2,7 @@ package layout;
 
 import android.app.Activity;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -32,6 +33,9 @@ public class NewGameGalleryFragment extends Fragment {
     LinearLayoutManager llm;
     GridLayoutManager glm;
     private Menu menu;
+    private OnlineDecksLoader onlineLoader;
+    private LocalDecksLoader loader;
+
 
     public NewGameGalleryFragment() {
     }
@@ -56,11 +60,11 @@ public class NewGameGalleryFragment extends Fragment {
         setHasOptionsMenu(true);
         //Initialize Data
         newGameGalleryViewAdapter = new NewGameGalleryViewAdapter(getActivity());
-        LocalDecksLoader loader = new LocalDecksLoader(getContext().getFilesDir() + Settings.localFolder, newGameGalleryViewAdapter);
+        loader = new LocalDecksLoader(getContext().getFilesDir() + Settings.localFolder, newGameGalleryViewAdapter);
         loader.execute();
 
-        new OnlineDecksLoader(Settings.serverAdress, Settings.serverDecklistJsonFilename, newGameGalleryViewAdapter).execute();
-
+        onlineLoader = new OnlineDecksLoader(Settings.serverAdress, Settings.serverRootPath,getContext().getCacheDir().getAbsolutePath(), newGameGalleryViewAdapter);
+        onlineLoader.execute();
         glm = new GridLayoutManager(getContext(), 2);
         llm = new LinearLayoutManager(this.getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -72,11 +76,17 @@ public class NewGameGalleryFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_main_gallery, container, false);
         final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefreshlayout);
+        swipeRefreshLayout.setEnabled(true);
+        if (loader!=null&&loader.getStatus()== AsyncTask.Status.RUNNING){
+            swipeRefreshLayout.setRefreshing(true);
+        }else if(onlineLoader!=null &&onlineLoader.getStatus()== AsyncTask.Status.RUNNING){
+            swipeRefreshLayout.setRefreshing(true);
+        }
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 newGameGalleryViewAdapter.setRefreshLayout(swipeRefreshLayout);
-                new OnlineDecksLoader(Settings.serverAdress, Settings.serverDecklistJsonFilename, newGameGalleryViewAdapter).execute();
+                new OnlineDecksLoader(Settings.serverAdress, Settings.serverRootPath,getContext().getCacheDir().getAbsolutePath(), newGameGalleryViewAdapter).execute();
                 new LocalDecksLoader(getContext().getFilesDir() + Settings.localFolder, newGameGalleryViewAdapter).execute();
             }
         });

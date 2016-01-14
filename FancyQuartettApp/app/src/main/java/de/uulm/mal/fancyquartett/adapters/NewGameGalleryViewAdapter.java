@@ -5,14 +5,9 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Message;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import org.json.JSONException;
 
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.data.GalleryModel;
@@ -75,7 +70,7 @@ public class NewGameGalleryViewAdapter extends GalleryViewAdapter {
         builder.setPositiveButton(R.string.download, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 try {
-                    final DeckDownloader downloader = new DeckDownloader(Settings.serverAdress, getContext().getFilesDir()+Settings.localFolder, onlinedeck.getName().toLowerCase(), listener);
+                    final DeckDownloader downloader = new DeckDownloader(Settings.serverAdress, getContext().getFilesDir() + Settings.localFolder, Settings.serverRootPath, onlinedeck.getId(), listener);
                     downloader.execute();
 
 // instantiate it within the onCreate method
@@ -124,14 +119,14 @@ public class NewGameGalleryViewAdapter extends GalleryViewAdapter {
      */
     @Override
     public void onDeckDownloadFinished(Exception possibleException, OfflineDeck offlineDeck) {
-        if (swipeRefreshLayout!=null){
+        if (swipeRefreshLayout != null) {
             swipeRefreshLayout.setRefreshing(false);
         }
-        if (possibleException==null){
+        if (possibleException == null) {
             if (mProgressDialog != null) {
                 mProgressDialog.dismiss();
             }
-            if (offlineDeck!=null){
+            if (offlineDeck != null) {
                 Bundle conData = new Bundle();
                 conData.putSerializable("offlinedeck", offlineDeck);
                 Intent intent = new Intent();
@@ -139,8 +134,8 @@ public class NewGameGalleryViewAdapter extends GalleryViewAdapter {
                 activity.setResult(Activity.RESULT_OK, intent);
                 activity.finish();
             }
-        }else{
-            if (mProgressDialog!=null){
+        } else {
+            if (mProgressDialog != null) {
                 mProgressDialog.setMessage("Error while Downloading");
                 possibleException.printStackTrace();
             }

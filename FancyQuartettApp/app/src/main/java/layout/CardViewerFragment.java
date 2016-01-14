@@ -1,7 +1,6 @@
 package layout;
 
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -24,9 +23,10 @@ public class CardViewerFragment extends Fragment{
 
     private int cardnumber = 0;
     private int decksize;
-    private String deckname;
+    private int deckID;
     private OfflineDeck offlineDeck;
     private ProgressBar pagerProgress;
+    private int clickedPosition;
 
     public CardViewerFragment() {
     }
@@ -50,13 +50,14 @@ public class CardViewerFragment extends Fragment{
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             cardnumber = getArguments().getInt("cardnumber");
+            clickedPosition = getArguments().getInt("clickedPosition");
             offlineDeck = (OfflineDeck)getArguments().getSerializable("offlinedeck");
             if (offlineDeck!=null) {
                 decksize = offlineDeck.getCards().size();
-                deckname = offlineDeck.getName();
+                deckID = offlineDeck.getId();
             }else{
                 decksize = getArguments().getInt("decksize");
-                deckname = getArguments().getString("deckname");
+                deckID = getArguments().getInt("deckid");
             }
         }
     }
@@ -70,8 +71,8 @@ public class CardViewerFragment extends Fragment{
         viewPager.setAdapter(pagerAdapter);
         pagerProgress = (ProgressBar) v.findViewById(R.id.pagerprogress);
         pagerProgress.setMax(offlineDeck.getCards().size()-1);
-        pagerProgress.setProgress(cardnumber);
-        viewPager.setCurrentItem(cardnumber);
+        pagerProgress.setProgress(clickedPosition);
+        viewPager.setCurrentItem(clickedPosition);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -124,8 +125,8 @@ public class CardViewerFragment extends Fragment{
         public CardFragment getItem(int position) {
             CardFragment fragment;
             if (offlineDeck==null){
-                fragment= CardFragment.newInstance(cardnumber,deckname);
-                loader = new LocalDeckLoader(getContext().getFilesDir() + Settings.localFolder, deckname.toLowerCase(), fragment);
+                fragment= CardFragment.newInstance(cardnumber, deckID);
+                loader = new LocalDeckLoader(getContext().getFilesDir() + Settings.localFolder, deckID, fragment);
                 loader.execute();
                 //get CardFragment showing the position-th Card of the Deck
             }else{

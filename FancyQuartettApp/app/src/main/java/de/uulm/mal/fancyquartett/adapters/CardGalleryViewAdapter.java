@@ -93,7 +93,7 @@ public class CardGalleryViewAdapter extends RecyclerView.Adapter<CardGalleryView
      * @param i
      */
     @Override
-    public void onBindViewHolder(final DeckGalleryViewHolder deckGalleryViewHolder, int i) {
+    public void onBindViewHolder(final DeckGalleryViewHolder deckGalleryViewHolder, final int i) {
         final Card card = offlineDeck.getCards().get(i);
         if (card == null) {
             Toast.makeText(this.getContext(), "Error:Some Cards failed to load", Toast.LENGTH_SHORT).show();
@@ -108,6 +108,7 @@ public class CardGalleryViewAdapter extends RecyclerView.Adapter<CardGalleryView
                     Intent intent = new Intent(context, CardViewerActivity.class);
                     intent.putExtra("deckname",offlineDeck.getName());
                     intent.putExtra("cardnumber",card.getID());
+                    intent.putExtra("clickedPosition",i);
                     intent.putExtra("decksize",offlineDeck.getCards().size());
                     intent.putExtra("offlinedeck",offlineDeck);
 

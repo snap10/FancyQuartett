@@ -1,8 +1,6 @@
 package de.uulm.mal.fancyquartett.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.renderscript.Sampler;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -63,9 +61,9 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
             Toast.makeText(this.getContext(), "Error:Some CardAttributes failed to load", Toast.LENGTH_SHORT).show();
         } else {
             Property property = cardAttr.getProperty();
-            float value = cardAttr.getValue();
+            double value = cardAttr.getValue();
             // set holder attributes
-            holder.cardAttrName.setText(property.getText());
+            holder.cardAttrName.setText(property.getAttributeName());
             holder.cardAttrValue.setText("" + value);
             holder.cardAttrUnit.setText(property.getUnit());
             // TODO: set right icons
@@ -79,7 +77,7 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
         }
     }
 
-    private View.OnClickListener getOnClickListener(final Property property, final float value, final CardAttribute attribute, final int position) {
+    private View.OnClickListener getOnClickListener(final Property property, final double value, final CardAttribute attribute, final int position) {
       View.OnClickListener onClickListener = new View.OnClickListener() {
           @Override
           public void onClick(View v) {
@@ -125,7 +123,7 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
          * @param value
          * @param attribute
          */
-        public void onCardAttrClicked(Property property,float value, CardAttribute attribute);
+        public void onCardAttrClicked(Property property, double value, CardAttribute attribute);
     }
 
     /**

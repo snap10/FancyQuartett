@@ -3,9 +3,6 @@ package de.uulm.mal.fancyquartett.data;
 import android.content.Context;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.File;
 import java.util.ArrayList;
 
@@ -71,53 +68,11 @@ public class GalleryModel implements OnlineDeckLoader.OnOnlineDeckLoaded {
     }
 
 
-    // searches for already downloaded decks in local storage and creates OfflineDecks
 
-    /**
-     * //TODO check if needed when LocalDecksLoader is used
-     *
-     * @throws Exception
-     */
-    public void scanOfflineDecks() throws Exception {
-        File decksDirectory = new File(adapter.getContext().getFilesDir() + Settings.localFolder);
-        String[] decks = decksDirectory.list();
-        if (decks.length > 0) {
-            for (int i = 0; i < decks.length; i++) {
-                String deckPath = decksDirectory + "/" + decks[i];
-                try {
-                    OfflineDeck offlineDeck = new OfflineDeck(deckPath, decks[i]);
-                    offlineDecks.add(offlineDeck);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            throw new Exception("No Local Decks found");
-        }
-    }
 
     //Method to provide application Context From Adapter
     public Context getContext() {
         return adapter.getContext();
-    }
-
-
-    /**
-     * Overload of fetch Online Deck for Testing
-     * //TODO possibly remove after Testing if not needed
-     *
-     * @param host
-     * @param deckname
-     */
-    public void fetchOnlineDeck(String host, String deckname) {
-        this.onlineDeckHost = host;
-        new OnlineDeckLoader(onlineDeckHost, deckname, this).execute();
-    }
-
-    public void move(OnlineDeck onlineDeck, OfflineDeck offlineDeck) {
-        onlineDecks.remove(onlineDeck);
-        offlineDecks.add(offlineDeck);
-        adapter.notifyDataSetChanged();
     }
 
     /**
@@ -175,7 +130,7 @@ public class GalleryModel implements OnlineDeckLoader.OnOnlineDeckLoaded {
 
     }
 
-
+    //TODO Check the efficiency of those Methods regarding the new DataModell
     public void addOfflineDecks(ArrayList<OfflineDeck> offlineDecks) {
         if (this.offlineDecks.size() == 0) {
             this.offlineDecks = offlineDecks;

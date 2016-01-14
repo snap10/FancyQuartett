@@ -13,13 +13,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.uulm.mal.fancyquartett.R;
+
 /**
  * Created by mk on 01.01.2016.
  */
-public class Card implements Serializable{
+public class Card implements Serializable {
 
-    private int id = 0;
-
+    private int id;
+    private int deckID;
+    private int order;
+    private String name = "";
+    private ArrayList<CardAttribute> attributes;
     private ArrayList<Image> images;
 
     private String description = null;
@@ -28,13 +33,10 @@ public class Card implements Serializable{
     // map properties onto card values. Use float for all value types.
     private HashMap<Property, Float> values;
 
-    private String name = null;
-
 
     // constructor used by OnlineDecks when downloading
 
     /**
-     *
      * @param json
      * @param props
      * @param hostadress
@@ -62,7 +64,7 @@ public class Card implements Serializable{
             int propId = pair.getInt("propertyId");
             float val = (float) pair.getDouble("value");
             for (int j = 0; j < props.size(); j++) {
-            // search property with given id for each value
+                // search property with given id for each value
                 if (props.get(j).id() == propId) {
                     values.put(props.get(j), val);
                     break;
@@ -74,7 +76,6 @@ public class Card implements Serializable{
     // constructor used by OfflineDecks
 
     /**
-     *
      * @param json
      * @param props
      * @param localDeckFolder
@@ -110,6 +111,25 @@ public class Card implements Serializable{
         }
     }
 
+    public Card(JSONObject cardJson, boolean isLocal) throws JSONException {
+        images = new ArrayList<Image>();
+        attributes = new ArrayList<CardAttribute>();
+        this.id = cardJson.getInt("id");
+        this.deckID = cardJson.getInt("deck");
+        this.order = cardJson.getInt("order");
+        this.name = cardJson.getString("name");
+        JSONArray imgJsonArr = cardJson.getJSONArray("images");
+        JSONArray attrJsonArr = cardJson.getJSONArray("attributes");
+        for (int i = 0; i < imgJsonArr.length(); i++) {
+            JSONObject imgJson = imgJsonArr.getJSONObject(i);
+            images.add(new Image(imgJson, isLocal));
+        }
+        for (int i = 0; i < attrJsonArr.length(); i++) {
+            JSONObject attrJson = attrJsonArr.getJSONObject(i);
+            attributes.add(new CardAttribute(attrJson));
+        }
+    }
+
     public ArrayList<Image> getImages() {
         return images;
     }
@@ -131,11 +151,15 @@ public class Card implements Serializable{
         this.description = description;
     }
 
-    // compare with other card's respective property and return true if this card wins
-    public boolean compare(Property prop, float enemyValue) {
-        return prop.biggerWins() ? values.get(prop) > enemyValue : values.get(prop) < enemyValue;
+    public List<CardAttribute> getAttributeList() {
+        return attributes;
     }
 
+    public ArrayList<CardAttribute> getAttributes() {
+        return attributes;
+    }
+
+<<<<<<< HEAD
     /**
      * This function converts Map<Property,Float> into List<CardAttribute>
      *
@@ -167,6 +191,14 @@ public class Card implements Serializable{
 
     public ArrayList<CardAttribute> getAttributeList() {
         return makeAttrList(values);
+=======
+    public int getOrder() {
+        return order;
+    }
+
+    public int getDeckID() {
+        return deckID;
+>>>>>>> RestAPICALLS
     }
 
     /**
@@ -210,10 +242,6 @@ public class Card implements Serializable{
 
     public HashMap<Property, Float> getValues() {
         return values;
-    }
-
-    public void setValues(HashMap<Property, Float> values) {
-        this.values = values;
     }
 
     public void setName(String name) {
