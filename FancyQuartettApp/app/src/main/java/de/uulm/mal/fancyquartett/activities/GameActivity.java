@@ -2,6 +2,7 @@ package de.uulm.mal.fancyquartett.activities;
 
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ProgressBar;
@@ -23,6 +24,7 @@ import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.data.Player;
 import de.uulm.mal.fancyquartett.data.Property;
 import de.uulm.mal.fancyquartett.data.Settings;
+import de.uulm.mal.fancyquartett.dialog.GameEndDialog;
 import de.uulm.mal.fancyquartett.dialog.RoundEndDialog;
 import de.uulm.mal.fancyquartett.enums.GameMode;
 import de.uulm.mal.fancyquartett.enums.KILevel;
@@ -270,6 +272,43 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             engine.showRoundEndDialog(cardAttribute, playerWonRound);
         }
 
+        public void initialiseNextRound(){
+            // handleCards
+            cardCtrl.handlePlayerCards(playerWonRound);
+            // check if player won game
+            int playerWonGame = playerCtrl.checkPlayerWon();
+            if(playerWonGame == PLAYER1 || playerWonGame == PLAYER2) {
+                engine.showGameEndDialog(this, playerWonGame);
+            } else {
+                // change current player
+                if(getCurPlayer() != playerWonRound) {
+                    playerCtrl.changeCurrentPlayer();
+                }
+                // initialise next round
+                if(curPlayer != PLAYER1) {
+                    // show p2 next card
+                    showPlayer2NextCard();
+                    // TODO: disable item clicks from p1
+                    // start ki task
+                    if(kiLevel == KILevel.Soft) {
+                        SoftKiTask softKiTask = new SoftKiTask(cardCtrl.getCurPlayerCard(curPlayer), GameActivity.this);
+                        softKiTask.execute();
+                    }
+                    if(kiLevel == KILevel.Medium) {
+                        //MediumKiTask mediumKiTask = new MediumKiTast(enginge.getCurPlayerCard(curPlayer), GameActivity.this);
+                        //mediumKiTask.execute();
+                    }
+                    if(kiLevel == KILevel.Hard) {
+                        //HardmKiTask hardKiTask = new HardKiTast(enginge.getCurPlayerCard(curPlayer), GameActivity.this);
+                        //hardKiTask.execute();
+                    }
+                } else {
+                    showPlayer1NextCard();
+                }
+            }
+            // TODO: display KI Playtime (Progressbar)
+        }
+
     /*
         GUI - CONTROLLING
     */
@@ -313,8 +352,11 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             dialog.show(getFragmentManager(), "RoundEndDialog");
         }
 
-        public void showGameEndDialog(/*TODO: fancy parameters (statistic, players, ...)*/) {
-            // TODO: show dialog if player won the game
+        public void showGameEndDialog(GameEngine engine, int playerWon) {
+            Player playerWonGame = getPlayer(playerWon);
+            DialogFragment dialog = new GameEndDialog().newInstance(this, playerWonGame);
+            dialog.show(getFragmentManager(), "GameEndDialog");
+            // TODO: show statistics
         }
 
         /*
@@ -323,41 +365,17 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
 
         @Override
         public void OnDialogPositiveClick(DialogFragment dialog) {
-            // handleCards
-            cardCtrl.handlePlayerCards(playerWonRound);
-            // check if player won game
-            int playerWonGame = playerCtrl.checkPlayerWon();
-            if(playerWonGame == PLAYER1 || playerWonGame == PLAYER2) {
-                //engine.showGameEndDialog(playerWonRound, statistics);
-                System.out.println("GAME END!");
+            // check if Callback is from GameEndDialog
+            if(dialog instanceof GameEndDialog) {
+                // TODO: write statistics
+                // close game and go back to main_activity
+                Intent intent = new Intent(GameActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             } else {
-                // change current player
-                if(getCurPlayer() != playerWonRound) {
-                    playerCtrl.changeCurrentPlayer();
-                }
-                // initialise next round
-                if(curPlayer != PLAYER1) {
-                    // show p2 next card
-                    showPlayer2NextCard();
-                    // TODO: disable item clicks from p1
-                    // start ki task
-                    if(kiLevel == KILevel.Soft) {
-                        SoftKiTask softKiTask = new SoftKiTask(cardCtrl.getCurPlayerCard(curPlayer), GameActivity.this);
-                        softKiTask.execute();
-                    }
-                    if(kiLevel == KILevel.Medium) {
-                        //MediumKiTask mediumKiTask = new MediumKiTast(enginge.getCurPlayerCard(curPlayer), GameActivity.this);
-                        //mediumKiTask.execute();
-                    }
-                    if(kiLevel == KILevel.Hard) {
-                        //HardmKiTask hardKiTask = new HardKiTast(enginge.getCurPlayerCard(curPlayer), GameActivity.this);
-                        //hardKiTask.execute();
-                    }
-                } else {
-                    showPlayer1NextCard();
-                }
+                // initialise next Round
+                initialiseNextRound();
             }
-            // TODO: display KI Playtime (Progressbar)
         }
 
         @Override

@@ -27,7 +27,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/imageView_ImageP1Card"
             android:src="@mipmap/ic_launcher"
-            android:adjustViewBounds="false" />
+            android:adjustViewBounds="false"
+            android:longClickable="false" />
 
         <TextView
             android:layout_width="fill_parent"
