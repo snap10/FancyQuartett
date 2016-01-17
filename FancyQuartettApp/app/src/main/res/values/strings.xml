@@ -12,7 +12,6 @@
     <string name="statistic">Statistic</string>
     <string name="action_rules">Rules</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="gamemode_chooser_title">Game Mode</string>
     <string name="generalsettings_title">General Settings</string>
@@ -107,6 +106,8 @@
     <string name="downloadProgressText">Deck is downloading, please wait!</string>
     <string name="canceledDownload">Canceled Download</string>
     <string name="noDescriptionAvailabe">No Description available for this Card</string>
+    <string name="delete">Delete Deck</string>
+    <string name="delete_deck">Delete Deck</string>
 
     <string name="statisticSharedPreferencesKey">stats</string>
     <string name="statisticNumSingleplayerGamesPlayedKey">numSingleplayerGamesPlayed</string>

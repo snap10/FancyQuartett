@@ -185,6 +185,10 @@ public class GalleryModel implements OnlineDeckLoader.OnOnlineDeckLoaded {
             Toast.makeText(getContext(), "No Connection to ServerRessource" + possibleException.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
+
+    public void remove(OfflineDeck offlineDeck) {
+        offlineDecks.remove(offlineDeck);
+    }
 }
 
 

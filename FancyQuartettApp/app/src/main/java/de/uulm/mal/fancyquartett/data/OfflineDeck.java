@@ -1,5 +1,7 @@
 package de.uulm.mal.fancyquartett.data;
 
+import android.content.Context;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -109,8 +111,22 @@ public class OfflineDeck extends Deck implements Serializable {
      *
      * @return
      */
-    public boolean removeFromFileSystem() {
-        //TODO @Marius, kriegste das hin... am besten ASYNC mit nem Konstrukt ähnlich der Loader
-        return false;
+    public void removeFromFileSystem(Context context) {
+        File f = new File(context.getFilesDir()+Settings.localFolder+"/"+id);
+        deleteRecursive(f);
+    }
+
+    /**
+     *
+     * @param dirOrFile
+     */
+    private void deleteRecursive(File dirOrFile) {
+
+        if (dirOrFile.isDirectory())
+            for (File child : dirOrFile.listFiles())
+                deleteRecursive(child);
+
+        dirOrFile.delete();
+
     }
 }

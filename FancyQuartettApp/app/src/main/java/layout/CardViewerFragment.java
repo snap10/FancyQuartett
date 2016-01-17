@@ -111,7 +111,6 @@ public class CardViewerFragment extends Fragment{
 
     private class CardPagerAdapter extends FragmentPagerAdapter {
         LocalDeckLoader loader;
-    //TODO solve Problem when scrolling backwards
         public CardPagerAdapter(FragmentManager fm) {
             super(fm);
         }

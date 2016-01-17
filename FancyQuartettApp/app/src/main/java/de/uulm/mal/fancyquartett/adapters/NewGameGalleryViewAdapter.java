@@ -62,7 +62,7 @@ public class NewGameGalleryViewAdapter extends GalleryViewAdapter {
      * @param listener
      */
     @Override
-    protected void showDownloadAlertDialog(final OnlineDeck onlinedeck, final DeckDownloader.OnDeckDownloadedListener listener, final View v) {
+    public void showDownloadAlertDialog(final OnlineDeck onlinedeck, final DeckDownloader.OnDeckDownloadedListener listener, final View v) {
         AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
         builder.setMessage(R.string.downloadbeforeuseonlinedeck).setTitle(R.string.downloadalertdialogtitle);
 

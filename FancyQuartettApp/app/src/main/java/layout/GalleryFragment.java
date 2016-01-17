@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.adapters.GalleryViewAdapter;
 import de.uulm.mal.fancyquartett.data.GalleryModel;
+import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.data.OnlineDeck;
 import de.uulm.mal.fancyquartett.data.Settings;
 import de.uulm.mal.fancyquartett.utils.LocalDecksLoader;
@@ -82,6 +83,39 @@ public class GalleryFragment extends Fragment {
 
     }
 
+    /**
+     * This hook is called whenever an item in a context menu is selected. The
+     * default implementation simply returns false to have the normal processing
+     * happen (calling the item's Runnable or sending a message to its Handler
+     * as appropriate). You can use this method for any items for which you
+     * would like to do processing without those other facilities.
+     * <p>
+     * Use {@link MenuItem#getMenuInfo()} to get extra information set by the
+     * View that added this menu item.
+     * <p>
+     * Derived classes should call through to the base class for it to perform
+     * the default menu handling.
+     *
+     * @param item The context menu item that was selected.
+     * @return boolean Return false to allow normal context menu processing to
+     * proceed, true to consume it here.
+     */
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (R.id.deleteDeckMenuItem==item.getItemId()){
+            OfflineDeck offlineDeck = (OfflineDeck)item.getIntent().getExtras().get("offlinedeck");
+            offlineDeck.removeFromFileSystem(this.getContext());
+            galleryViewAdapter.getGalleryModel().remove(offlineDeck);
+            new OnlineDecksLoader(Settings.serverAdress, Settings.serverRootPath,getContext().getCacheDir().getAbsolutePath(), galleryViewAdapter).execute();
+
+        }else if(R.id.downloadDeckMenuItem==item.getItemId()){
+                OnlineDeck onlineDeck = (OnlineDeck)item.getIntent().getExtras().get("onlinedeck");
+                galleryViewAdapter.showDownloadAlertDialog(onlineDeck,galleryViewAdapter,this.getView());
+        }
+
+        return super.onContextItemSelected(item);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -109,6 +143,7 @@ public class GalleryFragment extends Fragment {
 
         recList.setLayoutManager(llm);
         recList.setAdapter(galleryViewAdapter);
+        registerForContextMenu(recList);
 
 
         return rootView;

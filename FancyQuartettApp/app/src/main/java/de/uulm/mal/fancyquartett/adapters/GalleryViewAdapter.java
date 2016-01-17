@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -33,7 +34,7 @@ import de.uulm.mal.fancyquartett.utils.OnlineDecksLoader;
 /**
  * Created by Snap10 on 04/01/16.
  */
-public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.GalleryViewHolder> implements OnlineDecksLoader.OnOnlineDecksLoaded, LocalDecksLoader.OnLocalDecksLoadedListener, DeckDownloader.OnDeckDownloadedListener {
+public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.GalleryViewHolder> implements MenuItem.OnMenuItemClickListener, OnlineDecksLoader.OnOnlineDecksLoaded, LocalDecksLoader.OnLocalDecksLoadedListener, DeckDownloader.OnDeckDownloadedListener {
 
     public static final int LISTLAYOUT = 0;
     public static final int GRIDLAYOUT = 1;
@@ -53,6 +54,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
         galleryModel = new GalleryModel();
         layout = 0;
     }
+
 
     /**
      * @param context
@@ -131,16 +133,35 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
             galleryViewHolder.deckIcon.setImageBitmap(onlineDeck.getDeckimage().getBitmap());
             galleryViewHolder.view.setOnClickListener(getItemClickListener(onlineDeck, this));
             galleryViewHolder.downloadButton.setVisibility(View.VISIBLE);
+            galleryViewHolder.view.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+                @Override
+                public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+                    new MenuInflater(context).inflate(R.menu.gallerylist_menu, menu);
+                    menu.findItem(R.id.downloadDeckMenuItem).setVisible(true);
+                    menu.findItem(R.id.downloadDeckMenuItem).setIntent(new Intent().putExtra("onlinedeck", onlineDeck));
+                }
+            });
+
+
         } else {
             galleryViewHolder.deckName.setText(offlineDeck.getName());
             galleryViewHolder.deckDescription.setText(offlineDeck.getDescription());
             galleryViewHolder.deckIcon.setImageBitmap(offlineDeck.getCards().get(0).getImages().get(0).getBitmap());
             galleryViewHolder.view.setOnClickListener(getItemClickListener(offlineDeck));
             galleryViewHolder.downloadButton.setVisibility(View.GONE);
+            galleryViewHolder.view.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+                @Override
+                public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+                    new MenuInflater(context).inflate(R.menu.gallerylist_menu, menu);
+                    menu.findItem(R.id.deleteDeckMenuItem).setVisible(true);
+                    menu.findItem(R.id.deleteDeckMenuItem).setIntent(new Intent().putExtra("offlinedeck", offlineDeck));
+                }
+            });
+
         }
 
-        //TODO implement the and ClickListeners
     }
+
 
 
     public Context getContext() {
@@ -249,7 +270,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
     /**
      * @param onlinedeck
      */
-    protected void showDownloadAlertDialog(final OnlineDeck onlinedeck, final DeckDownloader.OnDeckDownloadedListener listener, final View v) {
+    public void showDownloadAlertDialog(final OnlineDeck onlinedeck, final DeckDownloader.OnDeckDownloadedListener listener, final View v) {
         AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
         builder.setMessage(R.string.downloadandsavedialogtext).setTitle(R.string.downloaddialogtitle);
 
@@ -325,6 +346,24 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
     }
 
     /**
+     * Called when a menu item has been invoked.  This is the first code
+     * that is executed; if it returns true, no other callbacks will be
+     * executed.
+     *
+     * @param item The menu item that was invoked.
+     * @return Return true to consume this click and prevent others from
+     * executing.
+     */
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        if (R.id.deleteDeckMenuItem==item.getItemId()){
+           CharSequence tmp= item.getTitle();
+            System.out.println(tmp);
+        }
+        return false;
+    }
+
+    /**
      * InnerClass TimerViewHolder extends RecyclerView.ViewHolder
      */
     public static class GalleryViewHolder extends RecyclerView.ViewHolder {
@@ -366,13 +405,14 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
                     v.showContextMenu();
                 }
             });
-            v.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-                @Override
-                public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                    new MenuInflater(context).inflate(R.menu.gallerylist_menu, menu);
-                }
-            });
+
+
+
+
+
+
         }
+
 
     }
 
