@@ -12,59 +12,72 @@
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="?android:attr/listPreferredItemHeight"
-
+        android:layout_height="?android:attr/listPreferredItemHeightSmall"
         android:padding="5dp">
 
         <ImageView
             android:id="@+id/imageView_attrIcon"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_alignLeft="@+id/textView_attrName"
-            android:layout_alignStart="@+id/textView_attrName"
-            android:layout_below="@+id/textView_attrName"
-            android:src="@android:drawable/ic_menu_report_image" />
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@android:drawable/ic_menu_report_image"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true" />
 
         <TextView
             android:id="@+id/textView_attrName"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
             android:layout_alignWithParentIfMissing="false"
             android:gravity="center_vertical"
             android:text="AttrName"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/imageView_attrIcon"
+            android:layout_toEndOf="@+id/imageView_attrIcon" />
+
+        <ImageView
+            android:id="@+id/imageView_attrArrow"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@android:drawable/ic_menu_report_image"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true" />
+
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true">
+            android:id="@+id/linearLayout3"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true">
+
             <TextView
                 android:id="@+id/textView_attrValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="AttrValue"
-                 />
+                android:layout_alignBottom="@+id/imageView_attrIcon"
+                android:layout_toRightOf="@+id/imageView_attrIcon"
+                android:layout_toEndOf="@+id/imageView_attrIcon"
+                android:layout_alignParentBottom="false"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="5dp" />
+
             <TextView
-                android:layout_marginLeft="5dp"
                 android:id="@+id/textView_attrUnit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="AttrUnit"
- />
-
+                android:layout_alignBottom="@+id/imageView_attrIcon"
+                android:layout_toRightOf="@+id/textView_attrValue"
+                android:layout_toEndOf="@+id/textView_attrValue"
+                android:layout_alignParentBottom="false"
+                android:layout_centerInParent="true" />
         </LinearLayout>
-
-        <ImageView
-            android:id="@+id/imageView_attrArrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/imageView_attrIcon"
-            android:layout_alignRight="@+id/textView_attrName"
-            android:src="@android:drawable/ic_menu_report_image" />
 
     </RelativeLayout>
 
