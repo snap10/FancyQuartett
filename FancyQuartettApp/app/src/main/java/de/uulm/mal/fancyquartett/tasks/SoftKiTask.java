@@ -31,15 +31,18 @@ public class SoftKiTask extends AsyncTask<Void, Void, CardAttribute> {
 
     @Override
     protected void onPostExecute(CardAttribute cardAttribute) {
+        if(cardAttribute == null) return;
         listener.onCardFragmentAttributeInteraction(cardAttribute.getProperty(), cardAttribute.getValue(), cardAttribute);
     }
 
     @Override
     protected CardAttribute doInBackground(Void... params) {
+        if(isCancelled()) return null;
+        listener.lockInteraction(true);
         try {
             Thread.sleep(DELAY);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // flies when user left game during delay
         }
         ArrayList<CardAttribute> attrList = card.getAttributes();
         CardAttribute cardAttribute = null;
@@ -52,7 +55,7 @@ public class SoftKiTask extends AsyncTask<Void, Void, CardAttribute> {
             if(value < median) {
                 double diffTemp = 100 * ( (median - value) / median );
                 // check if diffTemp > difference
-                if(diffTemp > diffTemp) {
+                if(diffTemp > diffTemp) { //TODO ???
                     cardAttribute = ca;
                 }
             }
@@ -63,6 +66,7 @@ public class SoftKiTask extends AsyncTask<Void, Void, CardAttribute> {
                 cardAttribute = attrList.get(indexRandom);
             }
         }
+        listener.lockInteraction(false);
         return cardAttribute;
     }
 }

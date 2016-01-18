@@ -32,6 +32,7 @@ import de.uulm.mal.fancyquartett.interfaces.OnDialogButtonClickListener;
 import de.uulm.mal.fancyquartett.tasks.SoftKiTask;
 import de.uulm.mal.fancyquartett.utils.LocalDeckLoader;
 import layout.CardFragment;
+import layout.StatisticFragment;
 
 
 public class GameActivity extends AppCompatActivity implements CardFragment.OnFragmentInteractionListener, LocalDeckLoader.OnLocalDeckLoadedListener {
@@ -92,6 +93,12 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         }
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        engine.stop();
+    }
+
     /**
      * Callback Method for LocalDeckLoader
      *
@@ -106,12 +113,24 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
     }
 
 
-
+    /**
+     * Callback for computer player thread
+     * @param property
+     * @param value
+     * @param cardAttribute
+     */
     @Override
     public void onCardFragmentAttributeInteraction(Property property, double value, CardAttribute cardAttribute) {
         engine.handleCardAttrSelect(cardAttribute);
     }
 
+    /**
+     * Callback for computer player thread to prevent user interaction during delay
+     */
+    @Override
+    public void lockInteraction(boolean lock) {
+        engine.lock = lock;
+    }
 
     /**
      * Inner Class of GameActivity - GameEngine
@@ -132,6 +151,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         SoftKiTask softAiTask;
         //MediumAITask mediumAiTask;
         //HardATTask hardAiTask;
+        private boolean lock = false;
 
         // game attributes
         private final OfflineDeck gameDeck;
@@ -147,6 +167,9 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         private KILevel kiLevel;
         private boolean isMultiplayer = false;
         private ArrayList<Card> stingStack;
+
+        // flag used to prevent multiple dialoge showing and statistics counting
+        private boolean gameover = false;
 
         // app attributes
         private final Context context;
@@ -248,8 +271,8 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             if(curPlayer != PLAYER1) {
                 // TODO: diable cardButtons
                 if(kiLevel == KILevel.Soft) {
-                    SoftKiTask softKiTask = new SoftKiTask(p2.getCurrentCard(), GameActivity.this);
-                    softKiTask.execute();
+                    softAiTask = new SoftKiTask(p2.getCurrentCard(), GameActivity.this);
+                    softAiTask.execute();
                 }
                 if(kiLevel == KILevel.Medium) {
                     // TODO: MediumKiTask
@@ -262,23 +285,47 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
 
         public void exitGame() {
             // TODO: show confirm-dialog
+            stop();
+        }
+
+        private void stopTasks() {
+            if(softAiTask != null) softAiTask.cancel(true);
+            //TODO cancel others too...
+        }
+
+        public void stop() {
+            stopTasks();
+            //... are there more things to clean up?
         }
 
         public void handleCardAttrSelect(CardAttribute cardAttribute) {
+            // prevent player from selecting during computer's turn
+            if(lock) return;
             // identify winner of round
             int playerWonRound = cardCtrl.compareCardsProperty(cardAttribute.getProperty());
+            if(playerWonRound == -1) {
+                // one player's deck is empty
+            }
             engine.setPlayerWonRound(playerWonRound);
             // show RoundEndDialog
             engine.showRoundEndDialog(cardAttribute, playerWonRound);
+            statisticCtrl.duelsMadePlusOne(playerWonRound==PLAYER1);
         }
 
         public void initialiseNextRound(){
+            if(lock) return;
             // handleCards
-            cardCtrl.handlePlayerCards(playerWonRound);
+            if(!cardCtrl.handlePlayerCards(playerWonRound)) {
+                // one player's deck is empty
+            }
             // check if player won game
             int playerWonGame = playerCtrl.checkPlayerWon();
             if(playerWonGame == PLAYER1 || playerWonGame == PLAYER2) {
-                engine.showGameEndDialog(this, playerWonGame);
+                if(!gameover) {
+                    engine.showGameEndDialog(this, playerWonGame);
+                    statisticCtrl.gamesPlayedPlusOne(playerWonGame==PLAYER1);
+                    gameover = true;
+                }
             } else {
                 // change current player
                 if(getCurPlayer() != playerWonRound) {
@@ -288,11 +335,10 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
                 if(curPlayer != PLAYER1) {
                     // show p2 next card
                     showPlayer2NextCard();
-                    // TODO: disable item clicks from p1
                     // start ki task
                     if(kiLevel == KILevel.Soft) {
-                        SoftKiTask softKiTask = new SoftKiTask(cardCtrl.getCurPlayerCard(curPlayer), GameActivity.this);
-                        softKiTask.execute();
+                        softAiTask = new SoftKiTask(cardCtrl.getCurPlayerCard(curPlayer), GameActivity.this);
+                        softAiTask.execute();
                     }
                     if(kiLevel == KILevel.Medium) {
                         //MediumKiTask mediumKiTask = new MediumKiTast(enginge.getCurPlayerCard(curPlayer), GameActivity.this);
@@ -356,7 +402,6 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             Player playerWonGame = getPlayer(playerWon);
             DialogFragment dialog = new GameEndDialog().newInstance(this, playerWonGame);
             dialog.show(getFragmentManager(), "GameEndDialog");
-            // TODO: show statistics
         }
 
         /*
@@ -427,6 +472,8 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         public int getMaxPoints() {
             return maxPoints;
         }
+
+        public Context getContext() { return context; }
 
         /*
         SETTERS

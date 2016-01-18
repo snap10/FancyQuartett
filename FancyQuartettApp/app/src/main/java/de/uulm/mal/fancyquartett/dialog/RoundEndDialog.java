@@ -141,6 +141,7 @@ public class RoundEndDialog extends DialogFragment {
     }
 
     public void setCompareGUI(Property property, TextView tvProperty, TextView tvP1Value, TextView tvP2Value) {
+        if(tvProperty == null || tvP1Value == null || tvP2Value == null) return; // can happen when user clicks very fast
         // display player1 value
         tvP1Value.setText(p1.getCurrentCard().getValue(property) + " " + property.getUnit());
         // display property

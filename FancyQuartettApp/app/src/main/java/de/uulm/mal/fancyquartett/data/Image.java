@@ -197,8 +197,7 @@ public class Image implements Serializable {
 
     private class ImgDownloader extends AsyncTask<Void, Void, String> {
 
-        private final String newFullLocalPath
-                ;
+        private final String newFullLocalPath;
         private String url;
         private Bitmap img;
 

@@ -7,8 +7,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.text.DecimalFormat;
 
 import de.uulm.mal.fancyquartett.R;
+import de.uulm.mal.fancyquartett.controller.StatisticController;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,7 +66,30 @@ public class StatisticFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main_statistic, container, false);
+        View v = inflater.inflate(R.layout.fragment_main_statistic, container, false);
+
+        // fill the statistic view with values
+        StatisticController ctrl = new StatisticController(this);
+        TextView v1 = (TextView) v.findViewById(R.id.num_singleplayer_games);
+        v1.setText(String.valueOf(ctrl.gamesPlayed()));
+        TextView v2 = (TextView) v.findViewById(R.id.num_singleplayer_games_won);
+        v2.setText(String.valueOf(ctrl.gamesWon()));
+        TextView v3 = (TextView) v.findViewById(R.id.num_singleplayer_games_lost);
+        v3.setText(String.valueOf(ctrl.gamesLost()));
+        TextView v4 = (TextView) v.findViewById(R.id.percentage_singleplayer_games_won);
+        String gamesWinningPercentage = new DecimalFormat("#.#").format((float) (ctrl.gamesPlayed() - ctrl.gamesLost()) / (float) ctrl.gamesPlayed());
+        v4.setText(gamesWinningPercentage);
+        TextView v5 = (TextView) v.findViewById(R.id.num_singleplayer_duels);
+        v5.setText(String.valueOf(ctrl.duelsMade()));
+        TextView v6 = (TextView) v.findViewById(R.id.num_singleplayer_duels_won);
+        v6.setText(String.valueOf(ctrl.duelsWon()));
+        TextView v7 = (TextView) v.findViewById(R.id.num_singleplayer_duels_lost);
+        v7.setText(String.valueOf(ctrl.duelsLost()));
+        TextView v8 = (TextView) v.findViewById(R.id.percentage_singleplayer_duels_won);
+        String duelsWinningPercentage = new DecimalFormat("#.#").format((float) (ctrl.duelsMade() - ctrl.duelsLost()) / (float) ctrl.duelsMade());
+        v8.setText(duelsWinningPercentage);
+
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -108,6 +108,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      * @see #sBindPreferenceSummaryToValueListener
      */
     private static void bindPreferenceSummaryToValue(Preference preference) {
+        if(preference == null) {
+            // prefernce key was not found in xml
+            System.err.println("Preference not found in XML");
+            return; // avoid null pointer
+        }
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 

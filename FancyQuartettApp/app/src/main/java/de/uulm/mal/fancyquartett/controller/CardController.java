@@ -106,17 +106,20 @@ public class CardController {
      * Removes card from loser and adds it to winners card-deck. If stingStack contains some
      * cards, then they will be added to to winners card-deck.
      * @param winnerId
+     * @return if successful or not. problems can be e.g. that a player's deck is empty.
      */
-    public void handlePlayerCards(int winnerId) {
+    public boolean handlePlayerCards(int winnerId) {
         if(winnerId != engine.STANDOFF) {
             if(winnerId == engine.PLAYER1) {
                 Card card = removeCardFromPlayer(engine.PLAYER2);
                 queueCard(winnerId);
+                if(card == null) return false;
                 addCardToPlayer(card, winnerId);
             }
             if(winnerId == engine.PLAYER2) {
                 Card card = removeCardFromPlayer(engine.PLAYER1);
                 queueCard(winnerId);
+                if(card == null) return false;
                 addCardToPlayer(card, winnerId);
             }
             if(engine.getStingStack().size() > 0) {
@@ -125,20 +128,27 @@ public class CardController {
         } else {
             Card p1Card = removeCardFromPlayer(engine.PLAYER1);
             Card p2Card = removeCardFromPlayer(engine.PLAYER2);
+            if(p1Card == null || p2Card == null) return false;
             addCardsToStingStag(p1Card, p2Card);
         }
+        return true;
     }
 
     /**
      * Compares a property of two given cards and returns the player who won. If both cards
      * have the same value, then return standoff (cards are not yet added to stingstack!).
      * @param property
-     * @return
+     * @return -1 if there are no cards (maybe game has ended), else return the player who won the duel
      */
     public int compareCardsProperty(Property property) {
         // first read property-values of both cards
-        double p1Value = engine.getP1().getCurrentCard().getValue(property);
-        double p2Value = engine.getP2().getCurrentCard().getValue(property);
+        Card p1Card = engine.getP1().getCurrentCard();
+        Card p2Card = engine.getP2().getCurrentCard();
+        if(p1Card == null || p2Card == null) {
+            return -1;
+        }
+        double p1Value = p1Card.getValue(property);
+        double p2Value = p2Card.getValue(property);
         // now compare
         if(property.biggerWins()) {
             if(p1Value > p2Value) {

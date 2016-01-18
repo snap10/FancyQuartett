@@ -108,5 +108,15 @@
     <string name="canceledDownload">Canceled Download</string>
     <string name="noDescriptionAvailabe">No Description available for this Card</string>
 
+    <string name="statisticSharedPreferencesKey">stats</string>
+    <string name="statisticNumSingleplayerGamesPlayedKey">numSingleplayerGamesPlayed</string>
+    <string name="statisticNumSingleplayerGamesWonKey">numSingleplayerGamesWon</string>
+    <string name="statisticNumSingleplayerGamesLostKey">numSingleplayerGamesLost</string>
+    <string name="statisticSingleplayerGamesWinningPercentageKey">singleplayerWinningPercentage</string>
+    <string name="statisticNumSingleplayerDuelsMadeKey">numSingleplayerDuelsMade</string>
+    <string name="statisticNumSingleplayerDuelsWonKey">numSingleplayerDuelsWon</string>
+    <string name="statisticNumSingleplayerDuelsLostKey">numSingleplayerDuelsLost</string>
+    <string name="statisticSingleplayerDuelsWinningPercentageKey">singleplayerDuelsWinningPercentage</string>
+
 
 </resources>

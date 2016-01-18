@@ -93,6 +93,7 @@ public class DeckDownloader extends AsyncTask<Void, Void, Exception> {
                 JSONObject attribute =tmpAttributes.getJSONObject(i);
                 outDir = new File(localpath + deckid+"/images/attributes");
                 outDir.mkdirs();
+                System.out.println(attribute.getString("image"));
                 localAttributeImagePath[i] = Image.downloadFromTo(attribute.getString("image"),outDir);
             }
             JSONArray cardsJsonArray = new JSONArray();

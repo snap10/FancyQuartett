@@ -70,10 +70,12 @@ public class Player implements Serializable {
     }
 
     public Card removeCurrentCard() {
+        if(cards.size() == 0) return null;
         return cards.remove(0);
     }
 
     public Card getCurrentCard() {
+        if(cards.size() == 0) return null;
         return cards.get(0);
     }
 
