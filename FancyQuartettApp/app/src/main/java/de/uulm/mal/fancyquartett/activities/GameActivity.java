@@ -1,14 +1,18 @@
 package de.uulm.mal.fancyquartett.activities;
 
+import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -17,8 +21,11 @@ import org.w3c.dom.Text;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.controller.CardController;
@@ -36,6 +43,8 @@ import de.uulm.mal.fancyquartett.dialog.RoundEndDialog;
 import de.uulm.mal.fancyquartett.enums.GameMode;
 import de.uulm.mal.fancyquartett.enums.KILevel;
 import de.uulm.mal.fancyquartett.interfaces.OnDialogButtonClickListener;
+import de.uulm.mal.fancyquartett.interfaces.OnGameTimeUpdateListener;
+import de.uulm.mal.fancyquartett.tasks.GameTimeTask;
 import de.uulm.mal.fancyquartett.tasks.SoftKiTask;
 import de.uulm.mal.fancyquartett.tasks.PlayerTimeOutTask;
 import de.uulm.mal.fancyquartett.utils.LocalDeckLoader;
@@ -71,6 +80,9 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        // disable device display-timeout in this activity
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         // build toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.gameActivity_Toolbar);
@@ -125,8 +137,8 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
 
     @Override
     protected void onStop() {
-        super.onStop();
         engine.stop();
+        super.onStop();
     }
 
     @Override
@@ -137,6 +149,22 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setIcon(R.drawable.ic_error_black_24dp)
+                .setTitle("Closing Game")
+                .setMessage("Are you sure you want to close the game? This game will be saved after closing.")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish(); // calls onStop too
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
     /**
@@ -168,7 +196,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
     /**
      * Inner Class of GameActivity - GameEngine
      */
-    public class GameEngine implements Serializable, OnDialogButtonClickListener {
+    public class GameEngine implements Serializable, OnDialogButtonClickListener, OnGameTimeUpdateListener {
 
         public static final int STANDOFF = 0;
         public static final int PLAYER1 = 1;
@@ -185,6 +213,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         //private transient MediumAITask mediumAiTask;
         //private transient HardATTask hardAiTask;
         private transient PlayerTimeOutTask playerTimeOutTask;
+        private transient GameTimeTask gameTimeTask;
 
         // dialogues
         private transient KiPlaysDialog kiPlaysDialog;
@@ -194,7 +223,6 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         private GameMode gameMode;
         private Timestamp startTime = null;
         private Timestamp lastPlayed = null;
-        private Timestamp endTime = null;
         private int curRound = 0;
         private long curTime = 0;
         private int maxRounds = 0;
@@ -246,13 +274,16 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
          * Reads all necessary data from GameActivity for Game.
          */
         public void initialiseGame() {
-            // create Controller
+            // set start-time
+            Date date = new Date();
+            this.startTime = new Timestamp(date.getTime());
+            // create controller(s)
             this.cardCtrl = new CardController(this);
             this.playerCtrl = new PlayerController(this);
             this.statisticCtrl = new StatisticController(this);
-            // create Tasks
+            // create task(s)
             this.playerTimeOutTask = new PlayerTimeOutTask(GameActivity.this, this, pbBalance);
-            // create StingStack
+            // create sting-stack
             this.stingStack = new ArrayList<Card>();
             // get game-specific parameters
             this.gameMode = bundleGameMode;
@@ -270,6 +301,10 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             this.maxPoints = bundleGamePoints;
             if(this.maxPoints != 0) {
                 this.hasMaxPoints = true;
+            }
+            if(gameMode == GameMode.Time) {
+                this.gameTime = bundleGameTime*1000*60;
+                System.out.println(this.gameTime);
             }
             // identify player for first move
             if(Math.random() < 0.5) {
@@ -315,11 +350,13 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
     */
 
         public void startGame() {
+            // create Tasks
+            gameTimeTask = new GameTimeTask(this);
             // create KiPlaysDialog
             kiPlaysDialog = new KiPlaysDialog().newInstance(this);
             kiPlaysDialog.setCancelable(false);
             // set lastPlayer Timestamp
-            setLastPlayed();
+            updateLastPlayed();
             // start game
             if(curPlayer != PLAYER1) {
                 // start KI
@@ -329,6 +366,11 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
                 kiPlaysDialog.show(getFragmentManager(), "KiPlaysDialog");
                 kiPlaysDialog.dismiss();
             }
+            // start GameTimeTask if GameMode is Time
+            if(gameMode == GameMode.Time) {
+                System.out.println("TASK EXECUTED");
+                gameTimeTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
+            }
             // display balance
             handleBalance();
             // display toolbar info
@@ -337,13 +379,23 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             handlePlayerTimeout();
         }
 
+        public void finishGame(int playerWonGame) {
+            if(!gameover) {
+                // show dialog
+                engine.showGameEndDialog(this, playerWonGame);
+                // write statistic
+                statisticCtrl.gamesPlayedPlusOne(playerWonGame==PLAYER1);
+                gameover = true;
+            }
+        }
+
         /**
          * Starts a new Ki-Task.
          */
         private void startKiTask(){
             if(kiLevel == KILevel.Soft) {
                 softAiTask = new SoftKiTask(p2.getCurrentCard(), GameActivity.this);
-                softAiTask.execute();
+                softAiTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);;
             }
             if(kiLevel == KILevel.Medium) {
                 // TODO: MediumKiTask
@@ -358,20 +410,35 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             stop();
         }
 
-        private void stopTasks() {
-            if(!playerTimeOutTask.isCancelled()) playerTimeOutTask.cancel(true);
-            if(softAiTask != null) softAiTask.cancel(true);
+        private void stopAllTasks() {
+            stopAiTasks();
+            stopPlayerTimeoutTask();
+            stopGameTimeTask();
             //TODO cancel others too...
         }
 
+        private void stopAiTasks() {
+            if(softAiTask != null) softAiTask.cancel(true);
+            //if(mediumAiTask != null) mediumAiTask.cancel(true);
+            //if(hardAiTask != null) mediumAiTask.cancel(true);
+        }
+
+        private void stopPlayerTimeoutTask(){
+            if(!playerTimeOutTask.isCancelled()) playerTimeOutTask.cancel(true);
+        }
+
+        private void stopGameTimeTask(){
+            if(!gameTimeTask.isCancelled()) gameTimeTask.cancel(true);
+        }
+
         public void stop() {
-            stopTasks();
+            stopAllTasks();
             //... are there more things to clean up?
         }
 
         public void handleCardAttrSelect(CardAttribute cardAttribute) {
-            // stop all running tasks
-            stopTasks();
+            // stop PlayerTimeoutTask
+            stopPlayerTimeoutTask();
             // identify winner of round
             int playerWonRound = cardCtrl.compareCardsProperty(cardAttribute.getProperty());
             if(playerWonRound == -1) {
@@ -398,13 +465,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             // check if player won game
             int playerWonGame = playerCtrl.checkPlayerWon();
             if(playerWonGame == PLAYER1 || playerWonGame == PLAYER2) {
-                if(!gameover) {
-                    // show dialog
-                    engine.showGameEndDialog(this, playerWonGame);
-                    // write statistic
-                    statisticCtrl.gamesPlayedPlusOne(playerWonGame==PLAYER1);
-                    gameover = true;
-                }
+                finishGame(playerWonGame);
             } else {
                 // change current player if necessary
                 if(curPlayer != playerWonRound && playerWonRound != STANDOFF) {
@@ -447,7 +508,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
          * then it will show a waiting-dialog.
          */
         public void handlePlayerTimeout() {
-            tvCurPlayer.setText("It's " + getPlayer(curPlayer).getName() + " turn!");
+            tvCurPlayer.setText("Current Player: " + getPlayer(curPlayer).getName());
             if(curPlayer == PLAYER1) {
                 if(hasPlayerTimeout) {
                     pbTimeout.setMax(timeout);
@@ -455,7 +516,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
                     // start task
                     playerTimeOutTask.cancel(false);
                     playerTimeOutTask = new PlayerTimeOutTask(GameActivity.this, this, pbTimeout);
-                    playerTimeOutTask.execute();
+                    playerTimeOutTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
                 } else {
                     pbTimeout.setMax(0);
                     pbTimeout.setProgress(0);
@@ -481,8 +542,22 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             if(gameMode != GameMode.Time) {
                 linLayoutTime.setVisibility(View.GONE);
             } else {
-                tvTimeLeft.setText("" + (gameTime - curTime));
-                // TODO: format time
+                long timeLeft = gameTime - curTime;
+                // calculate hours / minutes / seconds
+                int hours = (int) TimeUnit.MILLISECONDS.toHours(timeLeft);
+                timeLeft = timeLeft - (hours * 3600000);
+                int minutes = (int) TimeUnit.MILLISECONDS.toMinutes(timeLeft);
+                timeLeft = timeLeft - (minutes * 60000);
+                int secons = (int) TimeUnit.MILLISECONDS.toSeconds(timeLeft);
+                String time = "";
+                if(hours > 0) {
+                    time = hours + "h " + minutes + "m";
+                }else if(hours == 0 && minutes > 0) {
+                    time = minutes +"m";
+                } else {
+                    time = secons + "s";
+                }
+                tvTimeLeft.setText(time);
             }
             if(!hasMaxRounds){
                 linLayoutRound.setVisibility(View.GONE);
@@ -555,7 +630,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         public void OnDialogPositiveClick(DialogFragment dialog) {
             // check if Callback is from GameEndDialog
             if(dialog instanceof GameEndDialog) {
-                stopTasks();
+                stopAllTasks();
                 // TODO: write statistics
                 // close game and go back to main_activity
                 Intent intent = new Intent(GameActivity.this, MainActivity.class);
@@ -577,9 +652,31 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             // Do nothing
         }
 
+
+        @Override
+        public void onGameTimeUpdate(long time) {
+            if(time == 0) {
+                int playerWonGame = playerCtrl.checkPlayerWon();
+                if(playerWonGame == PLAYER1 || playerWonGame == PLAYER2) {
+                    finishGame(playerWonGame);
+                } // TODO: else play +1 round
+            } else {
+                curTime = time;
+                handleToolbarInfo();
+            }
+        }
+
         /*
         GETTERS
          */
+
+        public int getGameTime() {
+            return gameTime;
+        }
+
+        public long getCurTime() {
+            return curTime;
+        }
 
         public boolean getHasMaxRounds() {
             return hasMaxRounds;
@@ -647,7 +744,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         SETTERS
          */
 
-        public void setLastPlayed() {
+        public void updateLastPlayed() {
             Date date = new Date();
             this.lastPlayed = new Timestamp(date.getTime());
         }

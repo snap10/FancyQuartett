@@ -50,13 +50,11 @@ public class SoftKiTask extends AsyncTask<Void, Void, CardAttribute> {
             CardAttribute ca = attrList.get(i);
             double median = ca.getProperty().getMedian();
             double value = ca.getValue();
-            // check if value < median
-            if(value < median) {
-                double diffTemp = 100 * ( (median - value) / median );
-                // check if diffTemp > difference
-                if(diffTemp > diffTemp) { //TODO ???
-                    cardAttribute = ca;
-                }
+            // calculate difference
+            double diffTemp = 100 * ( (median - value) / median );
+            // check if diffTemp > difference
+            if(diffTemp > difference && diffTemp > 0) {
+                cardAttribute = ca;
             }
             // check if cardAttribute was found
             if(cardAttribute == null) {

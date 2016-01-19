@@ -53,17 +53,15 @@ public class PlayerController {
                 }
             }
         }
-        // win after gameTime
-        if(engine.getGameMode() == GameMode.Time) {
-            // TODO
-        }
-        // regular win
+        // regular win by GameMode-End
         if(gameMode == GameMode.Points) {
             if(p1.getPoints() >= maxPoints) return engine.PLAYER1;
             if(p2.getPoints() >= maxPoints) return engine.PLAYER2;
         } else if(gameMode == GameMode.Time) {
-            if(p1.getCards().size() > p2.getCards().size()) return engine.PLAYER1;
-            if(p2.getCards().size() > p1.getCards().size()) return engine.PLAYER2;
+            if(engine.getCurTime() >= engine.getGameTime()) {
+                if(p1.getCards().size() > p2.getCards().size()) return engine.PLAYER1;
+                if(p2.getCards().size() > p1.getCards().size()) return engine.PLAYER2;
+            }
         } else {
             if(p1.getCards().size() == 0) return engine.PLAYER2;
             if(p2.getCards().size() == 0) return engine.PLAYER1;
