@@ -38,7 +38,6 @@ public class SoftKiTask extends AsyncTask<Void, Void, CardAttribute> {
     @Override
     protected CardAttribute doInBackground(Void... params) {
         if(isCancelled()) return null;
-        listener.lockInteraction(true);
         try {
             Thread.sleep(DELAY);
         } catch (InterruptedException e) {
@@ -66,7 +65,6 @@ public class SoftKiTask extends AsyncTask<Void, Void, CardAttribute> {
                 cardAttribute = attrList.get(indexRandom);
             }
         }
-        listener.lockInteraction(false);
         return cardAttribute;
     }
 }

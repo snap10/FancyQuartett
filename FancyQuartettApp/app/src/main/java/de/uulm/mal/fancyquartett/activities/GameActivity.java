@@ -8,15 +8,17 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.TimerTask;
 
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.controller.CardController;
@@ -29,21 +31,22 @@ import de.uulm.mal.fancyquartett.data.Player;
 import de.uulm.mal.fancyquartett.data.Property;
 import de.uulm.mal.fancyquartett.data.Settings;
 import de.uulm.mal.fancyquartett.dialog.GameEndDialog;
+import de.uulm.mal.fancyquartett.dialog.KiPlaysDialog;
 import de.uulm.mal.fancyquartett.dialog.RoundEndDialog;
 import de.uulm.mal.fancyquartett.enums.GameMode;
 import de.uulm.mal.fancyquartett.enums.KILevel;
 import de.uulm.mal.fancyquartett.interfaces.OnDialogButtonClickListener;
 import de.uulm.mal.fancyquartett.tasks.SoftKiTask;
-import de.uulm.mal.fancyquartett.tasks.TimeOutTask;
+import de.uulm.mal.fancyquartett.tasks.PlayerTimeOutTask;
 import de.uulm.mal.fancyquartett.utils.LocalDeckLoader;
 import layout.CardFragment;
-import layout.StatisticFragment;
 
 
 public class GameActivity extends AppCompatActivity implements CardFragment.OnFragmentInteractionListener, LocalDeckLoader.OnLocalDeckLoadedListener {
 
     // view components
-    private TextView tvCardQuantityP1, tvCardQuantityP2, tvCurPlayer;
+    private TextView tvCardQuantityP1, tvCardQuantityP2, tvCurPlayer, tvRoundsLeft, tvTimeLeft;
+    private LinearLayout linLayoutRound, linLayoutTime;
     private ProgressBar pbBalance;
     private ProgressBar pbTimeout;
     private CardFragment cardFragment;
@@ -69,13 +72,20 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+        // build toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.gameActivity_Toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         // find view components
+        linLayoutRound = (LinearLayout) findViewById(R.id.linLayout_Rounds);
+        linLayoutTime = (LinearLayout) findViewById(R.id.linLayout_Time);
         tvCardQuantityP1 = (TextView) findViewById(R.id.textView_YourCards);
         tvCardQuantityP2 = (TextView) findViewById(R.id.textView_OpponendsCards);
         tvCurPlayer = (TextView) findViewById(R.id.textView_CurPlayer);
+        tvRoundsLeft = (TextView) findViewById(R.id.textView_Rounds_Left);
+        tvTimeLeft = (TextView) findViewById(R.id.textView_Time_Left);
         pbBalance = (ProgressBar) findViewById(R.id.progressBar_Balance);
         pbTimeout = (ProgressBar) findViewById(R.id.progressBar_Timeout);
 
@@ -154,13 +164,6 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         engine.handleCardAttrSelect(cardAttribute);
     }
 
-    /**
-     * Callback for computer player thread to prevent user interaction during delay
-     */
-    @Override
-    public void lockInteraction(boolean lock) {
-        engine.lock = lock;
-    }
 
     /**
      * Inner Class of GameActivity - GameEngine
@@ -181,8 +184,10 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         private transient SoftKiTask softAiTask;
         //private transient MediumAITask mediumAiTask;
         //private transient HardATTask hardAiTask;
-        private transient TimeOutTask timeOutTask;
-        private boolean lock = false;
+        private transient PlayerTimeOutTask playerTimeOutTask;
+
+        // dialogues
+        private transient KiPlaysDialog kiPlaysDialog;
 
         // game attributes
         private final OfflineDeck gameDeck;
@@ -191,6 +196,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         private Timestamp lastPlayed = null;
         private Timestamp endTime = null;
         private int curRound = 0;
+        private long curTime = 0;
         private int maxRounds = 0;
         private int maxPoints = 0;
         private int gameTime = 0;
@@ -245,7 +251,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             this.playerCtrl = new PlayerController(this);
             this.statisticCtrl = new StatisticController(this);
             // create Tasks
-            this.timeOutTask = new TimeOutTask(this, pbBalance);
+            this.playerTimeOutTask = new PlayerTimeOutTask(GameActivity.this, this, pbBalance);
             // create StingStack
             this.stingStack = new ArrayList<Card>();
             // get game-specific parameters
@@ -309,26 +315,42 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
     */
 
         public void startGame() {
+            // create KiPlaysDialog
+            kiPlaysDialog = new KiPlaysDialog().newInstance(this);
+            kiPlaysDialog.setCancelable(false);
             // set lastPlayer Timestamp
             setLastPlayed();
             // start game
             if(curPlayer != PLAYER1) {
-                // TODO: diable cardButtons
-                if(kiLevel == KILevel.Soft) {
-                    softAiTask = new SoftKiTask(p2.getCurrentCard(), GameActivity.this);
-                    softAiTask.execute();
-                }
-                if(kiLevel == KILevel.Medium) {
-                    // TODO: MediumKiTask
-                }
-                if(kiLevel == KILevel.Hard) {
-                    // TODO: HardKiTask
-                }
+                // start KI
+               startKiTask();
+            } else {
+                // workaround for later dismiss()
+                kiPlaysDialog.show(getFragmentManager(), "KiPlaysDialog");
+                kiPlaysDialog.dismiss();
             }
             // display balance
             handleBalance();
+            // display toolbar info
+            handleToolbarInfo();
             // start timeout timer if necessary
-            handleTimeout();
+            handlePlayerTimeout();
+        }
+
+        /**
+         * Starts a new Ki-Task.
+         */
+        private void startKiTask(){
+            if(kiLevel == KILevel.Soft) {
+                softAiTask = new SoftKiTask(p2.getCurrentCard(), GameActivity.this);
+                softAiTask.execute();
+            }
+            if(kiLevel == KILevel.Medium) {
+                // TODO: MediumKiTask
+            }
+            if(kiLevel == KILevel.Hard) {
+                // TODO: HardKiTask
+            }
         }
 
         public void exitGame() {
@@ -337,7 +359,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         }
 
         private void stopTasks() {
-            if(!timeOutTask.isCancelled()) timeOutTask.cancel(true);
+            if(!playerTimeOutTask.isCancelled()) playerTimeOutTask.cancel(true);
             if(softAiTask != null) softAiTask.cancel(true);
             //TODO cancel others too...
         }
@@ -348,22 +370,27 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         }
 
         public void handleCardAttrSelect(CardAttribute cardAttribute) {
-            // prevent player from selecting during computer's turn
-            if(!timeOutTask.isCancelled()) timeOutTask.cancel(true);
-            if(lock) return;
+            // stop all running tasks
+            stopTasks();
             // identify winner of round
             int playerWonRound = cardCtrl.compareCardsProperty(cardAttribute.getProperty());
             if(playerWonRound == -1) {
                 // standoff (TODO: bug if player only has 1 card left)
             }
             engine.setPlayerWonRound(playerWonRound);
+            // increase rounds played
+            curRound++;
+            // dismiss KiPlaysDialog
+            if(!kiPlaysDialog.isHidden()) kiPlaysDialog.dismiss();
             // show RoundEndDialog
             engine.showRoundEndDialog(cardAttribute, playerWonRound);
             statisticCtrl.duelsMadePlusOne(playerWonRound == PLAYER1);
         }
 
+        /**
+         * Next round will be initialised if there isn't any winner.
+         */
         public void initialiseNextRound(){
-            //if(lock) return; if handleCardAttrSelect is locked, then this is locked too
             // handleCards
             if(!cardCtrl.handlePlayerCards(playerWonRound)) {
                 // one player's deck is empty
@@ -372,7 +399,9 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             int playerWonGame = playerCtrl.checkPlayerWon();
             if(playerWonGame == PLAYER1 || playerWonGame == PLAYER2) {
                 if(!gameover) {
+                    // show dialog
                     engine.showGameEndDialog(this, playerWonGame);
+                    // write statistic
                     statisticCtrl.gamesPlayedPlusOne(playerWonGame==PLAYER1);
                     gameover = true;
                 }
@@ -385,31 +414,84 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
                 if(curPlayer != PLAYER1) {
                     // show p2 next card
                     showPlayer2NextCard();
-                    // start ki task
-                    if(kiLevel == KILevel.Soft) {
-                        softAiTask = new SoftKiTask(cardCtrl.getCurPlayerCard(curPlayer), GameActivity.this);
-                        softAiTask.execute();
-                    }
-                    if(kiLevel == KILevel.Medium) {
-                        //MediumKiTask mediumKiTask = new MediumKiTast(enginge.getCurPlayerCard(curPlayer), GameActivity.this);
-                        //mediumKiTask.execute();
-                    }
-                    if(kiLevel == KILevel.Hard) {
-                        //HardmKiTask hardKiTask = new HardKiTast(enginge.getCurPlayerCard(curPlayer), GameActivity.this);
-                        //hardKiTask.execute();
-                    }
+                    // start KI
+                    startKiTask();
                 } else {
                     showPlayer1NextCard();
                 }
                 // show new Card-Balance
                 handleBalance();
-                handleTimeout();
+                // show new toolbar info
+                handleToolbarInfo();
+                // update timeout progressbar
+                handlePlayerTimeout();
             }
         }
 
-    /*
-        GUI - CONTROLLING
-    */
+        /**
+         * Sets Balance UI-Elements and displays it.
+         */
+        public void handleBalance() {
+            // calculation requires double values, don't ask why -.-
+            double gameDeckSize = gameDeck.getCards().size();
+            double p1Size = p1.getCards().size();
+            double p2Size = p2.getCards().size();
+            double progress = 100 * ( (gameDeckSize - p2Size) / gameDeckSize );
+            tvCardQuantityP1.setText(p1.getName() + ": " + (int) p1Size);
+            tvCardQuantityP2.setText(p2.getName() + ": " + (int) p2Size);
+            pbBalance.setProgress((int) progress);
+        }
+
+        /**
+         * Sets up timeout-progressbar and starts TimeOutTask. If current player is KI,
+         * then it will show a waiting-dialog.
+         */
+        public void handlePlayerTimeout() {
+            tvCurPlayer.setText("It's " + getPlayer(curPlayer).getName() + " turn!");
+            if(curPlayer == PLAYER1) {
+                if(hasPlayerTimeout) {
+                    pbTimeout.setMax(timeout);
+                    pbTimeout.setProgress(timeout);
+                    // start task
+                    playerTimeOutTask.cancel(false);
+                    playerTimeOutTask = new PlayerTimeOutTask(GameActivity.this, this, pbTimeout);
+                    playerTimeOutTask.execute();
+                } else {
+                    pbTimeout.setMax(0);
+                    pbTimeout.setProgress(0);
+                }
+            } else {
+                if(isMultiplayer) {
+                    // TODO: set player2 timeout (copy from above?!)
+                } else {
+                    pbTimeout.setMax(0);
+                    pbTimeout.setProgress(0);
+                    // show dialog
+                    kiPlaysDialog.show(getFragmentManager(), "KiPlaysDialog");
+                }
+
+            }
+        }
+
+        /**
+         * Displays Time-Left and Rounds-Left in Toolbar if necessary.
+         */
+        public void handleToolbarInfo() {
+            // check if info is necessary
+            if(gameMode != GameMode.Time) {
+                linLayoutTime.setVisibility(View.GONE);
+            } else {
+                tvTimeLeft.setText("" + (gameTime - curTime));
+                // TODO: format time
+            }
+            if(!hasMaxRounds){
+                linLayoutRound.setVisibility(View.GONE);
+            } else {
+                tvRoundsLeft.setText((curRound+1) + " / " + maxRounds);
+            }
+        }
+
+
 
         /**
          * Shows the first card in player1s card-deck.
@@ -429,41 +511,6 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             getSupportFragmentManager().beginTransaction().replace(R.id.linLayout_Container, cardFragment).commit();
         }
 
-        public void handleBalance() {
-            // calculation requires double values, don't ask why -.-
-            double gameDeckSize = gameDeck.getCards().size();
-            double p1Size = p1.getCards().size();
-            double p2Size = p2.getCards().size();
-            double progress = 100 * ( (gameDeckSize - p2Size) / gameDeckSize );
-            tvCardQuantityP1.setText(p1.getName() + ": " + (int) p1Size);
-            tvCardQuantityP2.setText(p2.getName() + ": " + (int) p2Size);
-            pbBalance.setProgress((int) progress);
-        }
-
-        public void handleTimeout() {
-            tvCurPlayer.setText("It's " + getPlayer(curPlayer).getName() + " turn!");
-            if(curPlayer == PLAYER1) {
-                if(hasPlayerTimeout) {
-                    pbTimeout.setMax(timeout);
-                    pbTimeout.setProgress(timeout);
-                    // start task
-                    timeOutTask.cancel(false);
-                    timeOutTask = new TimeOutTask(this, pbTimeout);
-                    timeOutTask.execute();
-                } else {
-                    pbTimeout.setMax(0);
-                    pbTimeout.setProgress(0);
-                }
-            } else{
-                pbTimeout.setMax(5000);
-                pbTimeout.setProgress(5000);
-                // start task
-                timeOutTask.cancel(false);
-                timeOutTask = new TimeOutTask(this, pbTimeout);
-                timeOutTask.execute();
-            }
-
-        }
 
         public void disableCard(){
             // TODO
@@ -533,6 +580,18 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         /*
         GETTERS
          */
+
+        public boolean getHasMaxRounds() {
+            return hasMaxRounds;
+        }
+
+        public int getCurRound() {
+            return curRound;
+        }
+
+        public void increaseMaxRounds() {
+            maxRounds++;
+        }
 
         public boolean getHasPlayerTimeout() {
             return hasPlayerTimeout;

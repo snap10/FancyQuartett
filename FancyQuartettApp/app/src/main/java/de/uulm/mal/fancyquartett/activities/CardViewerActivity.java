@@ -43,9 +43,4 @@ public class CardViewerActivity extends AppCompatActivity implements CardFragmen
     public void onCardFragmentAttributeInteraction(Property property, double value, CardAttribute cardAttribute) {
 
     }
-
-    @Override
-    public void lockInteraction(boolean lock) {
-
-    }
 }

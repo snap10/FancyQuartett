@@ -210,11 +210,5 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
          * @param cardAttribute
          */
         void onCardFragmentAttributeInteraction(Property property, double value, CardAttribute cardAttribute);
-
-        /**
-         * When computer player thread is delayed, we have to prevent user interaction
-         * @param lock
-         */
-        void lockInteraction(boolean lock);
     }
 }

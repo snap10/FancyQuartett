@@ -40,6 +40,24 @@ public class PlayerController {
         int maxPoints = engine.getMaxPoints();
         Player p1 = engine.getP1();
         Player p2 = engine.getP2();
+        // win after maxRounds
+        if(engine.getHasMaxRounds()) {
+            if(engine.getMaxRounds() == engine.getCurRound()) {
+                if(gameMode == GameMode.Points) {
+                    if(p1.getPoints() > p2.getPoints()) return engine.PLAYER1;
+                    if(p2.getPoints() > p1.getPoints()) return engine.PLAYER2;
+                } else {
+                    if(p1.getCards().size() > p2.getCards().size()) return engine.PLAYER1;
+                    if(p2.getCards().size() > p1.getCards().size()) return engine.PLAYER2;
+                    if(p1.getCards().size() == p2.getCards().size()) engine.increaseMaxRounds();
+                }
+            }
+        }
+        // win after gameTime
+        if(engine.getGameMode() == GameMode.Time) {
+            // TODO
+        }
+        // regular win
         if(gameMode == GameMode.Points) {
             if(p1.getPoints() >= maxPoints) return engine.PLAYER1;
             if(p2.getPoints() >= maxPoints) return engine.PLAYER2;
@@ -50,6 +68,7 @@ public class PlayerController {
             if(p1.getCards().size() == 0) return engine.PLAYER2;
             if(p2.getCards().size() == 0) return engine.PLAYER1;
         }
+
         return -1;
     }
 
