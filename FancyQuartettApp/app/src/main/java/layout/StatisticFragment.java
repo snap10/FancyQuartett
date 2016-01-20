@@ -77,7 +77,7 @@ public class StatisticFragment extends Fragment {
         TextView v3 = (TextView) v.findViewById(R.id.num_singleplayer_games_lost);
         v3.setText(String.valueOf(ctrl.gamesLost()));
         TextView v4 = (TextView) v.findViewById(R.id.percentage_singleplayer_games_won);
-        String gamesWinningPercentage = new DecimalFormat("#.#").format((float) (ctrl.gamesPlayed() - ctrl.gamesLost()) / (float) ctrl.gamesPlayed());
+        String gamesWinningPercentage = new DecimalFormat("#.# %").format((float) (ctrl.gamesPlayed() - ctrl.gamesLost()) / (float) ctrl.gamesPlayed());
         v4.setText(gamesWinningPercentage);
         TextView v5 = (TextView) v.findViewById(R.id.num_singleplayer_duels);
         v5.setText(String.valueOf(ctrl.duelsMade()));
@@ -86,7 +86,7 @@ public class StatisticFragment extends Fragment {
         TextView v7 = (TextView) v.findViewById(R.id.num_singleplayer_duels_lost);
         v7.setText(String.valueOf(ctrl.duelsLost()));
         TextView v8 = (TextView) v.findViewById(R.id.percentage_singleplayer_duels_won);
-        String duelsWinningPercentage = new DecimalFormat("#.#").format((float) (ctrl.duelsMade() - ctrl.duelsLost()) / (float) ctrl.duelsMade());
+        String duelsWinningPercentage = new DecimalFormat("#.# %").format((float) (ctrl.duelsMade() - ctrl.duelsLost()) / (float) ctrl.duelsMade());
         v8.setText(duelsWinningPercentage);
 
         return v;

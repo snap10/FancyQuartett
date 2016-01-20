@@ -686,4 +686,19 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         this.gameActivity = gameActivity;
     }
 
+    public Timestamp getLastPlayed() {
+        return lastPlayed;
+    }
+
+    public KILevel getKiLevel() {
+        return kiLevel;
+    }
+
+    public TextView getTvRoundsLeft() {
+        return tvRoundsLeft;
+    }
+
+    public TextView getTvTimeLeft() {
+        return tvTimeLeft;
+    }
 }

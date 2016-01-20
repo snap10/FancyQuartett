@@ -76,8 +76,8 @@ public class StartFragment extends Fragment {
             resumeGameCard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getContext(),GameActivity.class);
-                    intent.putExtra("engine",engine);
+                    Intent intent = new Intent(getContext(), GameActivity.class);
+                    intent.putExtra("engine", engine);
                     startActivity(intent);
                 }
             });
@@ -87,7 +87,11 @@ public class StartFragment extends Fragment {
             lastGameDeckName.setText(engine.getGameDeck().getName());
             TextView lastGameDeckDescription = (TextView) v.findViewById(R.id.lastgame_deckdescription);
             lastGameDeckDescription.setText(engine.getGameDeck().getDescription());
+            TextView lastPlayedTextView = (TextView) v.findViewById(R.id.lastgame_lastplayed);
+            lastPlayedTextView.setText(getString(R.string.last_played_on)+": " + engine.getLastPlayed());
+            TextView kiLevel = (TextView) v.findViewById(R.id.lastgame_ki_level);
 
+            kiLevel.setText(getString(R.string.ki_level)+": " + engine.getKiLevel().toString());
         }
         Button newSinglePlayerButton = (Button) v.findViewById(R.id.newSingleplayerButton);
         newSinglePlayerButton.setOnClickListener(new View.OnClickListener() {

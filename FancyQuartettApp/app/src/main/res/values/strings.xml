@@ -122,6 +122,8 @@
     <string name="deckdeleted">Successfully deleted!</string>
     <string name="deleteSavedAlert">You have a saved Game for this Deck. You loose the saved Game when deleting the Deck.</string>
     <string name="deleteWarningTitle">Warning, there is a saved Game</string>
+    <string name="last_played_on">Last played on</string>
+    <string name="ki_level">AI Level</string>
 
 
 </resources>
