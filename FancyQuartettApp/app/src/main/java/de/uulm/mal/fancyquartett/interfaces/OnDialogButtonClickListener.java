@@ -1,6 +1,6 @@
 package de.uulm.mal.fancyquartett.interfaces;
 
-import android.app.DialogFragment;
+import android.support.v4.app.DialogFragment;
 
 /**
  * Created by Lukas on 14.01.2016.

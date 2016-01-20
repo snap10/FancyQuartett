@@ -2,13 +2,14 @@ package de.uulm.mal.fancyquartett.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.activities.GameActivity;
+import de.uulm.mal.fancyquartett.utils.GameEngine;
 
 
 /**
@@ -16,7 +17,7 @@ import de.uulm.mal.fancyquartett.activities.GameActivity;
  */
 public class KiPlaysDialog extends DialogFragment {
 
-    private GameActivity.GameEngine engine;
+    private GameEngine engine;
 
     /**
      *
@@ -30,7 +31,7 @@ public class KiPlaysDialog extends DialogFragment {
      * @param engine
      * @return
      */
-    public static KiPlaysDialog newInstance (GameActivity.GameEngine engine) {
+    public static KiPlaysDialog newInstance (GameEngine engine) {
         KiPlaysDialog dialog = new KiPlaysDialog();
         Bundle args = new Bundle();
         args.putSerializable("gameEngine", engine);
@@ -44,7 +45,7 @@ public class KiPlaysDialog extends DialogFragment {
         super.onCreateDialog(savedInstanceState);
         Bundle args = getArguments();
         if(args != null) {
-            this.engine = (GameActivity.GameEngine) args.getSerializable("gameEngine");
+            this.engine = (GameEngine) args.getSerializable("gameEngine");
         }
 
         // get the dialogbuilder

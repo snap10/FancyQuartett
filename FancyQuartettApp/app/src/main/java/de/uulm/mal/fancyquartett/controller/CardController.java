@@ -8,19 +8,20 @@ import de.uulm.mal.fancyquartett.activities.GameActivity;
 import de.uulm.mal.fancyquartett.data.Card;
 import de.uulm.mal.fancyquartett.data.Player;
 import de.uulm.mal.fancyquartett.data.Property;
+import de.uulm.mal.fancyquartett.utils.GameEngine;
 
 /**
  * Created by Lukas on 14.01.2016.
  */
 public class CardController implements Serializable {
 
-    transient private GameActivity.GameEngine engine;
+    transient private GameEngine engine;
 
     /**
      *
      * @param engine
      */
-    public CardController(GameActivity.GameEngine engine) {
+    public CardController(GameEngine engine) {
         this.engine = engine;
     }
 
@@ -180,7 +181,7 @@ public class CardController implements Serializable {
     }
 
 
-    public void setEngine(GameActivity.GameEngine engine) {
+    public void setEngine(GameEngine engine) {
         this.engine = engine;
     }
 }

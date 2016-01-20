@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import de.uulm.mal.fancyquartett.activities.GameActivity;
 import de.uulm.mal.fancyquartett.data.CardAttribute;
 import de.uulm.mal.fancyquartett.data.Player;
+import de.uulm.mal.fancyquartett.utils.GameEngine;
 
 /**
  * Created by Lukas on 19.01.2016.
@@ -18,9 +19,9 @@ public class GameTimeTask extends AsyncTask<Void, Long, Void> {
 
     private long breakpoint = 0;
 
-    private GameActivity.GameEngine engine;
+    private GameEngine engine;
 
-    public GameTimeTask(GameActivity.GameEngine engine) {
+    public GameTimeTask(GameEngine engine) {
         this.engine = engine;
         if(engine.getCurTime() > (engine.getGameTime() - MINUTE)) {
             breakpoint = 1000;

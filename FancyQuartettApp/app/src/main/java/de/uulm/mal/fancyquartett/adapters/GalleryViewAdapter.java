@@ -32,6 +32,7 @@ import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.data.OnlineDeck;
 import de.uulm.mal.fancyquartett.data.Settings;
 import de.uulm.mal.fancyquartett.utils.DeckDownloader;
+import de.uulm.mal.fancyquartett.utils.GameEngine;
 import de.uulm.mal.fancyquartett.utils.LocalDecksLoader;
 import de.uulm.mal.fancyquartett.utils.OnlineDecksLoader;
 
@@ -403,11 +404,11 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
         if (R.id.deleteDeckMenuItem==item.getItemId()){
             OfflineDeck offlineDeck = (OfflineDeck)item.getIntent().getExtras().get("offlinedeck");
             SharedPreferences prefs = context.getSharedPreferences("savedGame",context.MODE_PRIVATE);
-            GameActivity.GameEngine engine =null;
+            GameEngine engine =null;
             if (prefs.getBoolean("savedAvailable", false)) {
                 Gson gson = new Gson();
                 String json = prefs.getString("savedEngine", null);
-                engine = gson.fromJson(json, GameActivity.GameEngine.class);
+                engine = gson.fromJson(json, GameEngine.class);
             }
             if (engine!=null&&engine.getGameDeck().getId()==offlineDeck.getId()){
                     showDeleteSavedAlertDialog(swipeRefreshLayout,offlineDeck,this);

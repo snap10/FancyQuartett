@@ -5,19 +5,20 @@ import java.io.Serializable;
 import de.uulm.mal.fancyquartett.activities.GameActivity;
 import de.uulm.mal.fancyquartett.data.Player;
 import de.uulm.mal.fancyquartett.enums.GameMode;
+import de.uulm.mal.fancyquartett.utils.GameEngine;
 
 /**
  * Created by Lukas on 14.01.2016.
  */
 public class PlayerController implements Serializable {
 
-   transient private GameActivity.GameEngine engine;
+   transient private GameEngine engine;
 
     /**
      *
      * @param engine
      */
-    public PlayerController(GameActivity.GameEngine engine) {
+    public PlayerController(GameEngine engine) {
         this.engine = engine;
     }
 
@@ -103,7 +104,7 @@ public class PlayerController implements Serializable {
     }
 
 
-    public void setEngine(GameActivity.GameEngine engine) {
+    public void setEngine(GameEngine engine) {
         this.engine = engine;
     }
 }

@@ -16,12 +16,10 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.activities.GameActivity;
 import de.uulm.mal.fancyquartett.activities.NewGameSettingsActivity;
+import de.uulm.mal.fancyquartett.utils.GameEngine;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,7 +31,7 @@ import de.uulm.mal.fancyquartett.activities.NewGameSettingsActivity;
  */
 public class StartFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
-    private GameActivity.GameEngine engine;
+    private GameEngine engine;
 
     public StartFragment() {
         // Required empty public constructor
@@ -70,7 +68,7 @@ public class StartFragment extends Fragment {
         if (prefs.getBoolean("savedAvailable", false)) {
             Gson gson = new Gson();
             String json = prefs.getString("savedEngine", null);
-            engine = gson.fromJson(json, GameActivity.GameEngine.class);
+            engine = gson.fromJson(json, GameEngine.class);
         }
 
         if (engine != null) {

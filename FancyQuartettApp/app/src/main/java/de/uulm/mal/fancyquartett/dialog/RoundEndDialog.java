@@ -2,35 +2,27 @@ package de.uulm.mal.fancyquartett.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import de.uulm.mal.fancyquartett.R;
-import de.uulm.mal.fancyquartett.activities.GameActivity;
-import de.uulm.mal.fancyquartett.data.Card;
 import de.uulm.mal.fancyquartett.data.CardAttribute;
 import de.uulm.mal.fancyquartett.data.Player;
 import de.uulm.mal.fancyquartett.data.Property;
-import de.uulm.mal.fancyquartett.interfaces.OnDialogButtonClickListener;
+import de.uulm.mal.fancyquartett.utils.GameEngine;
 
 /**
  * Created by Lukas on 11.01.2016.
  */
 public class RoundEndDialog extends DialogFragment {
 
-    private GameActivity.GameEngine engine;
+    private GameEngine engine;
     private CardAttribute cardAttribute;
     private int playerWon;
     private Player p1, p2;
@@ -51,7 +43,7 @@ public class RoundEndDialog extends DialogFragment {
      * @param playerWon
      * @return
      */
-    public static RoundEndDialog newInstance(GameActivity.GameEngine engine, Player p1, Player p2, CardAttribute cardAttribute, int playerWon) {
+    public static RoundEndDialog newInstance(GameEngine engine, Player p1, Player p2, CardAttribute cardAttribute, int playerWon) {
         RoundEndDialog dialog = new RoundEndDialog();
         Bundle args = new Bundle();
         args.putSerializable("gameEngine", engine);
@@ -69,7 +61,7 @@ public class RoundEndDialog extends DialogFragment {
         super.onCreateDialog(savedInstanceState);
         Bundle args = getArguments();
         if(args != null) {
-            this.engine = (GameActivity.GameEngine) args.getSerializable("gameEngine");
+            this.engine = (GameEngine) args.getSerializable("gameEngine");
             this.p1 = (Player) args.get("p1");
             this.p2 = (Player) args.get("p2");
             this.cardAttribute = (CardAttribute) args.getSerializable("cardAttribute");

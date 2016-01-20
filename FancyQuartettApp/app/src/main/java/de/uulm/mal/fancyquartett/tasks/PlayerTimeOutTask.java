@@ -9,6 +9,7 @@ import de.uulm.mal.fancyquartett.activities.GameActivity;
 import de.uulm.mal.fancyquartett.data.Card;
 import de.uulm.mal.fancyquartett.data.CardAttribute;
 import de.uulm.mal.fancyquartett.data.Player;
+import de.uulm.mal.fancyquartett.utils.GameEngine;
 
 /**
  * Created by Lukas on 18.01.2016.
@@ -16,10 +17,10 @@ import de.uulm.mal.fancyquartett.data.Player;
 public class PlayerTimeOutTask extends AsyncTask<Void, Integer, Void> {
 
     private GameActivity listener;
-    private GameActivity.GameEngine engine;
+    private GameEngine engine;
     private ProgressBar progressBar;
 
-    public PlayerTimeOutTask(GameActivity listener, GameActivity.GameEngine engine, ProgressBar progressBar){
+    public PlayerTimeOutTask(GameActivity listener, GameEngine engine, ProgressBar progressBar){
         this.listener = listener;
         this.engine = engine;
         this.progressBar = progressBar;

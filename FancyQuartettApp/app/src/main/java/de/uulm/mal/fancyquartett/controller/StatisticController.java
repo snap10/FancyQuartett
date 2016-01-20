@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.activities.GameActivity;
+import de.uulm.mal.fancyquartett.utils.GameEngine;
 import layout.StatisticFragment;
 
 /**
@@ -28,7 +29,7 @@ public class StatisticController implements Serializable {
      * Constructor used by game
      * @param game
      */
-    public StatisticController(GameActivity.GameEngine game) {
+    public StatisticController(GameEngine game) {
         context = game.getContext();
         init();
     }

@@ -2,9 +2,9 @@ package de.uulm.mal.fancyquartett.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -12,13 +12,14 @@ import android.widget.TextView;
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.activities.GameActivity;
 import de.uulm.mal.fancyquartett.data.Player;
+import de.uulm.mal.fancyquartett.utils.GameEngine;
 
 /**
  * Created by Lukas on 11.01.2016.
  */
 public class GameEndDialog extends DialogFragment {
 
-    private GameActivity.GameEngine engine;
+    private GameEngine engine;
     private Player playerWon;
 
     /**
@@ -34,7 +35,7 @@ public class GameEndDialog extends DialogFragment {
      * @param playerWon
      * @return
      */
-    public static GameEndDialog newInstance(GameActivity.GameEngine engine, Player playerWon) {
+    public static GameEndDialog newInstance(GameEngine engine, Player playerWon) {
         GameEndDialog dialog = new GameEndDialog();
         Bundle args = new Bundle();
         args.putSerializable("gameEngine", engine);
@@ -51,7 +52,7 @@ public class GameEndDialog extends DialogFragment {
         super.onCreateDialog(savedInstanceState);
         Bundle args = getArguments();
         if(args != null) {
-            this.engine = (GameActivity.GameEngine) args.getSerializable("gameEngine");
+            this.engine = (GameEngine) args.getSerializable("gameEngine");
             this.playerWon = (Player) args.getSerializable("playerWon");
             // TODO: read statistics
         }
