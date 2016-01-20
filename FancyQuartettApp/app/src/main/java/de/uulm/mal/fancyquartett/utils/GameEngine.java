@@ -161,6 +161,11 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
     }
 
 
+    /*
+    SETUP
+     */
+
+
     /**
      * Initialise all necessary game data.
      */
@@ -231,7 +236,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
 
 
     /*
-        GAME - CONTROLLING
+    GAME
     */
 
 
@@ -287,6 +292,49 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
     }
 
     /**
+     * Stops current game.
+     */
+    public void stop() {
+        stopAllTasks();
+        //... are there more things to clean up?
+    }
+
+    /**
+     * Stops all running tasks.
+     */
+    private void stopAllTasks() {
+        stopAiTasks();
+        stopPlayerTimeoutTask();
+        stopGameTimeTask();
+        //TODO cancel others too...
+    }
+
+    /**
+     * Stops all running ai-tasks.
+     */
+    private void stopAiTasks() {
+        if (softAiTask != null) softAiTask.cancel(true);
+        /*
+        if(mediumAiTask != null) mediumAiTask.cancel(true);
+        if(hardAiTask != null) mediumAiTask.cancel(true);
+        */
+    }
+
+    /**
+     * Stops PlayerTimeoutTask if running.
+     */
+    private void stopPlayerTimeoutTask() {
+        if (playerTimeOutTask!=null&&!playerTimeOutTask.isCancelled()) playerTimeOutTask.cancel(true);
+    }
+
+    /**
+     * Stops GameTimeTask if running.
+     */
+    private void stopGameTimeTask() {
+        if (gameTimeTask!=null&&!gameTimeTask.isCancelled()) gameTimeTask.cancel(true);
+    }
+
+    /**
      * Starts a new Ki-Task.
      */
     private void startKiTask() {
@@ -302,41 +350,9 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         }
     }
 
-    public void exitGame() {
-        // TODO: show confirm-dialog
-        stop();
-    }
-
-    private void stopAllTasks() {
-        stopAiTasks();
-        stopPlayerTimeoutTask();
-        stopGameTimeTask();
-        //TODO cancel others too...
-    }
-
-    private void stopAiTasks() {
-        if (softAiTask != null) softAiTask.cancel(true);
-        /*
-        if(mediumAiTask != null) mediumAiTask.cancel(true);
-        if(hardAiTask != null) mediumAiTask.cancel(true);
-        */
-    }
-
-    private void stopPlayerTimeoutTask() {
-        if (playerTimeOutTask!=null&&!playerTimeOutTask.isCancelled()) playerTimeOutTask.cancel(true);
-    }
-
-    private void stopGameTimeTask() {
-        if (gameTimeTask!=null&&!gameTimeTask.isCancelled()) gameTimeTask.cancel(true);
-    }
-
-    public void stop() {
-        stopAllTasks();
-        //... are there more things to clean up?
-    }
-
     /**
-     *
+     * This function identify which player is winner of current round and shows RoundEndDialog.
+     * Call this function after a player selected any card attribute.
      * @param cardAttribute
      */
     public void handleCardAttrSelect(CardAttribute cardAttribute) {
@@ -358,9 +374,9 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
     }
 
     /**
-     * Next round will be initialised if there isn't any winner.
+     * Next round will be started if there isn't any winner.
      */
-    public void initialiseNextRound() {
+    public void startNextRound() {
         // handleCards
         if (!cardCtrl.handlePlayerCards(playerWonRound)) {
             // one player's deck is empty
@@ -390,6 +406,21 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         }
     }
 
+
+    /**
+     * Shows the first card in current players card-deck.
+     */
+    public void showCurrentPlayerCard() {
+        cardFragment = CardFragment.newInstance(getPlayer(curPlayer).getCurrentCard());
+        fragmentManager.beginTransaction().replace(R.id.linLayout_Container, cardFragment).commit();
+    }
+
+
+    /*
+    HANDLER
+     */
+
+
     /**
      * Sets Balance UI-Elements and displays it.
      */
@@ -406,26 +437,27 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
 
     /**
      * Sets up timeout-progressbar and starts TimeOutTask. If current player is KI,
-     * then it will show a waiting-dialog.
+     * then it will show kiPlaysDialog.
      */
     public void handlePlayerTimeout() {
+        // display current players name
         tvCurPlayer.setText("Current Player: " + getPlayer(curPlayer).getName());
         if (curPlayer == PLAYER1) {
-            if (hasPlayerTimeout) {
+            if (hasPlayerTimeout) { // start timeout
                 pbTimeout.setMax(timeout);
                 pbTimeout.setProgress(timeout);
                 // start task
                 playerTimeOutTask.cancel(false);
                 playerTimeOutTask = new PlayerTimeOutTask(gameActivity, this, pbTimeout);
                 playerTimeOutTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
-            } else {
+            } else { // 'disable' progressbar
                 pbTimeout.setMax(0);
                 pbTimeout.setProgress(0);
             }
         } else {
             if (isMultiplayer) {
                 // TODO: set player2 timeout (copy from above?!)
-            } else {
+            } else { // 'disable' progressbar
                 pbTimeout.setMax(0);
                 pbTimeout.setProgress(0);
                 // show dialog
@@ -439,7 +471,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
      * Displays Time-Left and Rounds-Left in Toolbar if necessary.
      */
     public void handleToolbarInfo() {
-        // check if info is necessary
+        // check if time info is necessary
         if (gameMode != GameMode.Time) {
             linLayoutTime.setVisibility(View.GONE);
         } else {
@@ -460,19 +492,9 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
             }
             tvTimeLeft.setText(time);
         }
-        if (!hasMaxRounds) {
-            linLayoutRound.setVisibility(View.GONE);
-        } else {
-            tvRoundsLeft.setText((curRound + 1) + " / " + maxRounds);
-        }
-    }
-
-    /**
-     * Shows the first card in current players card-deck.
-     */
-    public void showCurrentPlayerCard() {
-        cardFragment = CardFragment.newInstance(getPlayer(curPlayer).getCurrentCard());
-        fragmentManager.beginTransaction().replace(R.id.linLayout_Container, cardFragment).commit();
+        // check if rounds info is necessary
+        if (!hasMaxRounds) linLayoutRound.setVisibility(View.GONE);
+        else tvRoundsLeft.setText((curRound + 1) + " / " + maxRounds);
     }
 
 
@@ -520,14 +542,13 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         // check if Callback is from GameEndDialog
         if (dialog instanceof GameEndDialog) {
             stopAllTasks();
-            // TODO: write statistics
             // close game and go back to main_activity
             Intent intent = new Intent(gameActivity, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             gameActivity.startActivity(intent);
         } else {
             // initialise next Round
-            initialiseNextRound();
+            startNextRound();
         }
     }
 
@@ -544,11 +565,13 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
     @Override
     public void onGameTimeUpdate(long time) {
         if (time == 0) {
+            // game ends
             int playerWonGame = playerCtrl.checkPlayerWon();
             if (playerWonGame == PLAYER1 || playerWonGame == PLAYER2) {
                 finishGame(playerWonGame);
             } // TODO: else play +1 round
         } else {
+            // display curTime
             curTime = time;
             handleToolbarInfo();
         }
@@ -580,10 +603,6 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         maxRounds++;
     }
 
-    public boolean getHasPlayerTimeout() {
-        return hasPlayerTimeout;
-    }
-
     public int getTimeout() {
         return timeout;
     }
@@ -594,10 +613,6 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
 
     public int getCurPlayer() {
         return curPlayer;
-    }
-
-    public KILevel getKiLevel() {
-        return kiLevel;
     }
 
     public Player getP1() {
@@ -649,10 +664,6 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
 
     public void setCurPlayer(int curPlayer) {
         this.curPlayer = curPlayer;
-    }
-
-    public void setPlayerWonRound(int playerWonRound) {
-        this.playerWonRound = playerWonRound;
     }
 
     public OfflineDeck getGameDeck() {
