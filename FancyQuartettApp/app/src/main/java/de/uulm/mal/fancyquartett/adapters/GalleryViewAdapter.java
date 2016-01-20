@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
@@ -18,10 +20,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.activities.CardGalleryActivity;
+import de.uulm.mal.fancyquartett.activities.GameActivity;
 import de.uulm.mal.fancyquartett.data.GalleryModel;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.data.OnlineDeck;
@@ -34,7 +39,7 @@ import de.uulm.mal.fancyquartett.utils.OnlineDecksLoader;
 /**
  * Created by Snap10 on 04/01/16.
  */
-public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.GalleryViewHolder> implements MenuItem.OnMenuItemClickListener, OnlineDecksLoader.OnOnlineDecksLoaded, LocalDecksLoader.OnLocalDecksLoadedListener, DeckDownloader.OnDeckDownloadedListener {
+public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.GalleryViewHolder> implements  OnlineDecksLoader.OnOnlineDecksLoaded, LocalDecksLoader.OnLocalDecksLoadedListener, DeckDownloader.OnDeckDownloadedListener {
 
     public static final int LISTLAYOUT = 0;
     public static final int GRIDLAYOUT = 1;
@@ -133,6 +138,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
             galleryViewHolder.deckIcon.setImageBitmap(onlineDeck.getDeckimage().getBitmap());
             galleryViewHolder.view.setOnClickListener(getItemClickListener(onlineDeck, this));
             galleryViewHolder.downloadButton.setVisibility(View.VISIBLE);
+            galleryViewHolder.downloadButton.setOnClickListener(getDownloadClicklistener(onlineDeck,this));
             galleryViewHolder.view.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
                 @Override
                 public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -162,6 +168,15 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
 
     }
 
+    private View.OnClickListener getDownloadClicklistener(final OnlineDeck onlineDeck, final DeckDownloader.OnDeckDownloadedListener listener) {
+        View.OnClickListener clickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                downloadOnlineDeck(onlineDeck,listener,swipeRefreshLayout);
+            }
+        };
+        return clickListener;
+    }
 
 
     public Context getContext() {
@@ -277,35 +292,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
         // Add the buttons
         builder.setPositiveButton(R.string.download, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                try {
-                    final DeckDownloader downloader = new DeckDownloader(Settings.serverAdress, getContext().getFilesDir() + Settings.localFolder, Settings.serverRootPath,onlinedeck.getId(), listener);
-                    downloader.execute();
-                    // instantiate it within the onCreate method
-                    mProgressDialog = new ProgressDialog(v.getContext());
-                    mProgressDialog.setMessage(context.getString(R.string.downloadProgressText));
-                    mProgressDialog.setIndeterminate(true);
-                    mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                    mProgressDialog.setCancelable(true);
-                    mProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            downloader.cancel(true);
-                            dialog.dismiss();
-                        }
-                    });
-                    mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            downloader.cancel(true);
-                        }
-                    });
-                    mProgressDialog.show();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    //TODO REMOVE TOAST
-                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
+                downloadOnlineDeck(onlinedeck, listener, v);
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -317,6 +304,70 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
         AlertDialog dialog = builder.create();
         dialog.show();
 
+    }
+
+    /**
+     * @param offlineDeck
+     * @param listener
+     */
+    public void showDeleteSavedAlertDialog(final View v, final OfflineDeck offlineDeck, final OnlineDecksLoader.OnOnlineDecksLoaded listener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+        builder.setMessage(R.string.deleteSavedAlert).setTitle(R.string.deleteWarningTitle);
+
+        // Add the buttons
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                offlineDeck.removeFromFileSystem(getContext());
+                galleryModel.remove(offlineDeck);
+                Toast.makeText(context, R.string.deckdeleted, Toast.LENGTH_SHORT).show();
+                SharedPreferences prefs = context.getSharedPreferences("savedGame",context.MODE_PRIVATE);
+                prefs.edit().remove("savedGame").putBoolean("savedAvailable",false).commit();
+                swipeRefreshLayout.setRefreshing(true);
+                new OnlineDecksLoader(Settings.serverAdress, Settings.serverRootPath,getContext().getCacheDir().getAbsolutePath(), listener).execute();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //DO nothing
+
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
+
+
+    private void downloadOnlineDeck(OnlineDeck onlinedeck, DeckDownloader.OnDeckDownloadedListener listener, View v) {
+        try {
+            final DeckDownloader downloader = new DeckDownloader(Settings.serverAdress, getContext().getFilesDir() + Settings.localFolder, Settings.serverRootPath,onlinedeck.getId(), listener);
+            downloader.execute();
+            // instantiate it within the onCreate method
+            mProgressDialog = new ProgressDialog(v.getContext());
+            mProgressDialog.setMessage(context.getString(R.string.downloadProgressText));
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            mProgressDialog.setCancelable(true);
+            mProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    downloader.cancel(true);
+                    dialog.dismiss();
+                }
+            });
+            mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    downloader.cancel(true);
+                }
+            });
+            mProgressDialog.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            //TODO REMOVE TOAST
+            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -335,6 +386,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
             if (offlineDeck != null) {
                 galleryModel.addOfflineDeck(offlineDeck);
                 notifyDataSetChanged();
+                Toast.makeText(context, R.string.downloaded, Toast.LENGTH_SHORT).show();
             }
         } else {
             Toast.makeText(getContext(), possibleException.getMessage(), Toast.LENGTH_SHORT).show();
@@ -345,23 +397,33 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
         this.swipeRefreshLayout=swipeRefreshLayout;
     }
 
-    /**
-     * Called when a menu item has been invoked.  This is the first code
-     * that is executed; if it returns true, no other callbacks will be
-     * executed.
-     *
-     * @param item The menu item that was invoked.
-     * @return Return true to consume this click and prevent others from
-     * executing.
-     */
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
+
+
+    public void onContextItemSelected(MenuItem item) {
         if (R.id.deleteDeckMenuItem==item.getItemId()){
-           CharSequence tmp= item.getTitle();
-            System.out.println(tmp);
+            OfflineDeck offlineDeck = (OfflineDeck)item.getIntent().getExtras().get("offlinedeck");
+            SharedPreferences prefs = context.getSharedPreferences("savedGame",context.MODE_PRIVATE);
+            GameActivity.GameEngine engine =null;
+            if (prefs.getBoolean("savedAvailable", false)) {
+                Gson gson = new Gson();
+                String json = prefs.getString("savedEngine", null);
+                engine = gson.fromJson(json, GameActivity.GameEngine.class);
+            }
+            if (engine!=null&&engine.getGameDeck().getId()==offlineDeck.getId()){
+                    showDeleteSavedAlertDialog(swipeRefreshLayout,offlineDeck,this);
+            }else{
+                offlineDeck.removeFromFileSystem(this.getContext());
+                galleryModel.remove(offlineDeck);
+                Toast.makeText(context, R.string.deckdeleted, Toast.LENGTH_SHORT).show();
+                swipeRefreshLayout.setRefreshing(true);
+                new OnlineDecksLoader(Settings.serverAdress, Settings.serverRootPath,getContext().getCacheDir().getAbsolutePath(), this).execute();
+            }
+
+        }else if(R.id.downloadDeckMenuItem==item.getItemId()){
+            OnlineDeck onlineDeck = (OnlineDeck)item.getIntent().getExtras().get("onlinedeck");
+            downloadOnlineDeck(onlineDeck,this,swipeRefreshLayout);
         }
-        return false;
-    }
+            }
 
     /**
      * InnerClass TimerViewHolder extends RecyclerView.ViewHolder

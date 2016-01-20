@@ -57,13 +57,6 @@ public class StartFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences prefs = getActivity().getSharedPreferences("savedGame", Context.MODE_PRIVATE);
-
-        if (prefs.getBoolean("savedAvailable", false)) {
-            Gson gson = new Gson();
-            String json = prefs.getString("savedEngine", null);
-            engine = gson.fromJson(json, GameActivity.GameEngine.class);
-        }
 
 
     }
@@ -73,6 +66,13 @@ public class StartFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_main_start, container, false);
+        SharedPreferences prefs = getActivity().getSharedPreferences("savedGame", Context.MODE_PRIVATE);
+        if (prefs.getBoolean("savedAvailable", false)) {
+            Gson gson = new Gson();
+            String json = prefs.getString("savedEngine", null);
+            engine = gson.fromJson(json, GameActivity.GameEngine.class);
+        }
+
         if (engine != null) {
             CardView resumeGameCard = (CardView) v.findViewById(R.id.resumeGameCard);
             resumeGameCard.setOnClickListener(new View.OnClickListener() {

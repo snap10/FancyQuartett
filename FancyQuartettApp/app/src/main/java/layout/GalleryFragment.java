@@ -45,6 +45,7 @@ public class GalleryFragment extends Fragment {
     private Menu menu;
     private LocalDecksLoader loader;
     private OnlineDecksLoader onlineLoader;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public GalleryFragment() {
         // Required empty public constructor
@@ -102,17 +103,7 @@ public class GalleryFragment extends Fragment {
      */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        if (R.id.deleteDeckMenuItem==item.getItemId()){
-            OfflineDeck offlineDeck = (OfflineDeck)item.getIntent().getExtras().get("offlinedeck");
-            offlineDeck.removeFromFileSystem(this.getContext());
-            galleryViewAdapter.getGalleryModel().remove(offlineDeck);
-            new OnlineDecksLoader(Settings.serverAdress, Settings.serverRootPath,getContext().getCacheDir().getAbsolutePath(), galleryViewAdapter).execute();
-
-        }else if(R.id.downloadDeckMenuItem==item.getItemId()){
-                OnlineDeck onlineDeck = (OnlineDeck)item.getIntent().getExtras().get("onlinedeck");
-                galleryViewAdapter.showDownloadAlertDialog(onlineDeck,galleryViewAdapter,this.getView());
-        }
-
+            galleryViewAdapter.onContextItemSelected(item);
         return super.onContextItemSelected(item);
     }
 
@@ -121,7 +112,7 @@ public class GalleryFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_main_gallery, container, false);
-        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefreshlayout);
+        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefreshlayout);
         swipeRefreshLayout.setEnabled(true);
         if (loader!=null&&loader.getStatus()== AsyncTask.Status.RUNNING){
             swipeRefreshLayout.setRefreshing(true);
@@ -216,6 +207,7 @@ public class GalleryFragment extends Fragment {
             recList.setLayoutManager(llm);
             galleryViewAdapter = new GalleryViewAdapter(getContext(), galleryViewAdapter.getGalleryModel(), GalleryViewAdapter.LISTLAYOUT);
             recList.setAdapter(galleryViewAdapter);
+            galleryViewAdapter.setRefreshLayout(swipeRefreshLayout);
             item.setVisible(false);
             MenuItem item2 = menu.findItem(R.id.gridLayoutButton);
             item2.setVisible(true);
@@ -223,6 +215,7 @@ public class GalleryFragment extends Fragment {
             recList.setLayoutManager(glm);
             galleryViewAdapter = new GalleryViewAdapter(getContext(), galleryViewAdapter.getGalleryModel(), GalleryViewAdapter.GRIDLAYOUT);
             recList.setAdapter(galleryViewAdapter);
+            galleryViewAdapter.setRefreshLayout(swipeRefreshLayout);
             item.setVisible(false);
             MenuItem item2 = menu.findItem(R.id.listLayoutButton);
             item2.setVisible(true);

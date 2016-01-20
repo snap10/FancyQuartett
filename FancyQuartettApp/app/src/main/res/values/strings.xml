@@ -118,6 +118,10 @@
     <string name="statisticNumSingleplayerDuelsWonKey">numSingleplayerDuelsWon</string>
     <string name="statisticNumSingleplayerDuelsLostKey">numSingleplayerDuelsLost</string>
     <string name="statisticSingleplayerDuelsWinningPercentageKey">singleplayerDuelsWinningPercentage</string>
+    <string name="downloaded">Successfully downloaded!</string>
+    <string name="deckdeleted">Successfully deleted!</string>
+    <string name="deleteSavedAlert">You have a saved Game for this Deck. You loose the saved Game when deleting the Deck.</string>
+    <string name="deleteWarningTitle">Warning, there is a saved Game</string>
 
 
 </resources>
