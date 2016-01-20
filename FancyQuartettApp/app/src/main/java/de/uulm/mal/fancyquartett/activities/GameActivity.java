@@ -52,12 +52,6 @@ import layout.CardFragment;
 
 public class GameActivity extends AppCompatActivity implements CardFragment.OnFragmentInteractionListener, LocalDeckLoader.OnLocalDeckLoadedListener {
 
-    // view components
-    private TextView tvCardQuantityP1, tvCardQuantityP2, tvCurPlayer, tvRoundsLeft, tvTimeLeft;
-    private LinearLayout linLayoutRound, linLayoutTime;
-    private ProgressBar pbBalance;
-    private ProgressBar pbTimeout;
-    private CardFragment cardFragment;
     private Menu menu;
 
     // game components
@@ -74,12 +68,13 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
     private boolean bundleIsMultiplayer;
     private String bundleP1Name;
     private String bundleP2Name;
+    private View v;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-
+        v = findViewById(R.id.gameContainer);
         // disable device display-timeout in this activity
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -89,16 +84,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        // find view components
-        linLayoutRound = (LinearLayout) findViewById(R.id.linLayout_Rounds);
-        linLayoutTime = (LinearLayout) findViewById(R.id.linLayout_Time);
-        tvCardQuantityP1 = (TextView) findViewById(R.id.textView_YourCards);
-        tvCardQuantityP2 = (TextView) findViewById(R.id.textView_OpponendsCards);
-        tvCurPlayer = (TextView) findViewById(R.id.textView_CurPlayer);
-        tvRoundsLeft = (TextView) findViewById(R.id.textView_Rounds_Left);
-        tvTimeLeft = (TextView) findViewById(R.id.textView_Time_Left);
-        pbBalance = (ProgressBar) findViewById(R.id.progressBar_Balance);
-        pbTimeout = (ProgressBar) findViewById(R.id.progressBar_Timeout);
+
 
         // check Bundle
         Bundle intentbundle = getIntent().getExtras();
@@ -120,13 +106,18 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             }
             onDeckLoaded(offlineDeck);
         } else {
-            engine = (GameEngine) intentbundle.getSerializable("engine");
-            //TODO @Lukas: Kannst du alle Sachen in der Engine dann wieder herstellen, welche transient waren bzw. die aktuelle Karte wieder anzeigen und so...
-            // hab keine Ahnung wie dein Game funktioniert...
-            // Du kannst dir ja mal hier einen Breakpoint setzen und dann schauen, was in dem Engine Objekt noch vorhanden ist wenn es in dem Intent übergeben wird.
-            engine.setContext(getApplicationContext());
-            engine.setFragmentManager(getFragmentManager());
-            engine.startGame();
+            SharedPreferences prefs = getSharedPreferences("savedGame", Context.MODE_PRIVATE);
+            if (prefs.getBoolean("savedAvailable", false)) {
+                Gson gson = new Gson();
+                String json = prefs.getString("savedEngine", null);
+                engine = gson.fromJson(json, GameActivity.GameEngine.class);
+            }if(engine!=null){
+                engine.findViewComponents(v);
+                engine.setContext(getApplicationContext());
+                engine.setFragmentManager(getFragmentManager());
+                engine.startGame();
+
+            }
         }
     }
 
@@ -183,6 +174,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
     public void onDeckLoaded(OfflineDeck offlineDeck) {
         // create gameEngine
         engine = new GameEngine(getApplicationContext(), offlineDeck);
+        engine.findViewComponents(v);
         engine.initialiseGame();
         engine.startGame();
     }
@@ -215,6 +207,14 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         private int playerWonRound = 0;
         private Player p1;
         private Player p2;
+        //View Components
+
+        // view components
+        private transient TextView tvCardQuantityP1, tvCardQuantityP2, tvCurPlayer, tvRoundsLeft, tvTimeLeft;
+        private transient LinearLayout linLayoutRound, linLayoutTime;
+        private transient  ProgressBar pbBalance;
+        private transient ProgressBar pbTimeout;
+        private transient CardFragment cardFragment;
 
         // tasks
         private transient SoftKiTask softAiTask;
@@ -248,6 +248,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         private boolean gameover = false;
 
         // app attributes
+        private transient GameActivity gameActivity;
         private transient Context context;
         private transient FragmentManager fragmentManager;
 
@@ -263,6 +264,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         public GameEngine(Context context, OfflineDeck gameDeck) {
             this.context = context;
             this.gameDeck = gameDeck;
+
         }
 
         /**
@@ -276,7 +278,18 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             this.lastPlayed = lastPlayed;
         }
 
-
+        public void findViewComponents(View v){
+            // find view components
+            linLayoutRound = (LinearLayout) v.findViewById(R.id.linLayout_Rounds);
+            linLayoutTime = (LinearLayout) v.findViewById(R.id.linLayout_Time);
+            tvCardQuantityP1 = (TextView) v.findViewById(R.id.textView_YourCards);
+            tvCardQuantityP2 = (TextView) v.findViewById(R.id.textView_OpponendsCards);
+            tvCurPlayer = (TextView) v.findViewById(R.id.textView_CurPlayer);
+            tvRoundsLeft = (TextView) v.findViewById(R.id.textView_Rounds_Left);
+            tvTimeLeft = (TextView) v.findViewById(R.id.textView_Time_Left);
+            pbBalance = (ProgressBar) v.findViewById(R.id.progressBar_Balance);
+            pbTimeout = (ProgressBar) v.findViewById(R.id.progressBar_Timeout);
+        }
         /**
          * Reads all necessary data from GameActivity for Game.
          */

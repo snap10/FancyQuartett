@@ -8,7 +8,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="de.uulm.mal.fancyquartett.activities.GameActivity"
-    android:background="#fbfbfb">
+    android:background="#fbfbfb"
+    android:id="@+id/gameContainer">
 
     <android.support.v7.widget.Toolbar
         android:layout_width="fill_parent"
