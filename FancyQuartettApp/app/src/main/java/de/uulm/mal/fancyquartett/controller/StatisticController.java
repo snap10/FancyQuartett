@@ -3,6 +3,8 @@ package de.uulm.mal.fancyquartett.controller;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.io.Serializable;
+
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.activities.GameActivity;
 import layout.StatisticFragment;
@@ -13,14 +15,14 @@ import layout.StatisticFragment;
  * Through this controller the game writes to shared preferences and the statistic reads from them.
  * Shared preferences handling is encapsulated here. (mk)
  */
-public class StatisticController {
+public class StatisticController implements Serializable {
 
     /**
      * Context of either the game activity or the main activity
      */
-    Context context = null;
+    transient Context context = null;
 
-    private SharedPreferences sharedPref = null;
+    transient private SharedPreferences sharedPref = null;
 
     /**
      * Constructor used by game
@@ -110,5 +112,9 @@ public class StatisticController {
 
     public int duelsLost() {
         return read(R.string.statisticNumSingleplayerDuelsLostKey);
+    }
+
+    public void setContext(GameActivity context) {
+        this.context = context;
     }
 }

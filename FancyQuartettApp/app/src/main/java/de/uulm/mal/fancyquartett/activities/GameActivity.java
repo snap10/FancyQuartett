@@ -5,6 +5,7 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +18,10 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.Serializable;
@@ -108,7 +113,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             bundleGameMode = (GameMode) intentbundle.get("gamemode");
             bundleKILevel = (KILevel) intentbundle.get("kilevel");
             bundleIsMultiplayer = intentbundle.getBoolean("multiplayer");
-            if(bundleIsMultiplayer){
+            if (bundleIsMultiplayer) {
                 bundleP1Name = intentbundle.getString("playername1");
                 bundleP2Name = intentbundle.getString("playername2");
             }
@@ -121,9 +126,15 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             }
             onDeckLoaded(offlineDeck);
         } else {
-            //sth went wrong with the Intent or an old Method is used ...
-            int deckID = getIntent().getExtras().getInt("deckid");
-            new LocalDeckLoader(getFilesDir() + Settings.localFolder, deckID, this).execute();
+            engine= (GameEngine)intentbundle.getSerializable("engine");
+            //TODO @Lukas: Kannst du alle Sachen in der Engine dann wieder herstellen, welche transient waren bzw. die aktuelle Karte wieder anzeigen und so...
+            // hab keine Ahnung wie dein Game funktioniert...
+            // Du kannst dir ja mal hier einen Breakpoint setzen und dann schauen, was in dem Engine Objekt noch vorhanden ist wenn es in dem Intent übergeben wird.
+            engine.cardCtrl.setEngine(engine);
+            engine.playerCtrl.setEngine(engine);
+            engine.statisticCtrl.setContext(this);
+            engine.setContext(this);
+
         }
     }
 
@@ -138,6 +149,10 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
     @Override
     protected void onStop() {
         engine.stop();
+        SharedPreferences prefs = getSharedPreferences("savedGame", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = gson.toJson(engine);
+        prefs.edit().putString("savedEngine", json).putBoolean("savedAvailable", true).commit();
         super.onStop();
     }
 
@@ -183,6 +198,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
 
     /**
      * Callback for computer player thread
+     *
      * @param property
      * @param value
      * @param cardAttribute
@@ -240,7 +256,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         private boolean gameover = false;
 
         // app attributes
-        private final Context context;
+        private transient Context context;
 
         // controller
         private CardController cardCtrl;
@@ -248,7 +264,6 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         private StatisticController statisticCtrl;
 
         /**
-         *
          * @param context
          * @param gameDeck
          */
@@ -258,7 +273,6 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         }
 
         /**
-         *
          * @param context
          * @param gameDeck
          * @param lastPlayed
@@ -290,24 +304,24 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             this.kiLevel = bundleKILevel;
             this.isMultiplayer = bundleIsMultiplayer;
             this.maxRounds = bundleMaxRounds;
-            if(this.maxRounds != 0) {
+            if (this.maxRounds != 0) {
                 this.hasMaxRounds = true;
             }
-            this.timeout = bundleRoundTimeout*1000; // in ms
-            if(this.timeout != 0) {
+            this.timeout = bundleRoundTimeout * 1000; // in ms
+            if (this.timeout != 0) {
                 this.hasPlayerTimeout = true;
                 System.out.println(timeout);
             }
             this.maxPoints = bundleGamePoints;
-            if(this.maxPoints != 0) {
+            if (this.maxPoints != 0) {
                 this.hasMaxPoints = true;
             }
-            if(gameMode == GameMode.Time) {
-                this.gameTime = bundleGameTime*1000*60;
+            if (gameMode == GameMode.Time) {
+                this.gameTime = bundleGameTime * 1000 * 60;
                 System.out.println(this.gameTime);
             }
             // identify player for first move
-            if(Math.random() < 0.5) {
+            if (Math.random() < 0.5) {
                 this.curPlayer = PLAYER1;
             } else {
                 this.curPlayer = PLAYER2;
@@ -323,7 +337,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
          */
         public void initialisePlayers() {
             // create players
-            if(isMultiplayer) {
+            if (isMultiplayer) {
                 p1 = new Player(PLAYER1, bundleP1Name);
                 p2 = new Player(PLAYER2, bundleP2Name);
             } else {
@@ -358,16 +372,16 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             // set lastPlayer Timestamp
             updateLastPlayed();
             // start game
-            if(curPlayer != PLAYER1) {
+            if (curPlayer != PLAYER1) {
                 // start KI
-               startKiTask();
+                startKiTask();
             } else {
                 // workaround for later dismiss()
                 kiPlaysDialog.show(getFragmentManager(), "KiPlaysDialog");
                 kiPlaysDialog.dismiss();
             }
             // start GameTimeTask if GameMode is Time
-            if(gameMode == GameMode.Time) {
+            if (gameMode == GameMode.Time) {
                 System.out.println("TASK EXECUTED");
                 gameTimeTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
             }
@@ -380,11 +394,11 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         }
 
         public void finishGame(int playerWonGame) {
-            if(!gameover) {
+            if (!gameover) {
                 // show dialog
                 engine.showGameEndDialog(this, playerWonGame);
                 // write statistic
-                statisticCtrl.gamesPlayedPlusOne(playerWonGame==PLAYER1);
+                statisticCtrl.gamesPlayedPlusOne(playerWonGame == PLAYER1);
                 gameover = true;
             }
         }
@@ -392,15 +406,16 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         /**
          * Starts a new Ki-Task.
          */
-        private void startKiTask(){
-            if(kiLevel == KILevel.Soft) {
+        private void startKiTask() {
+            if (kiLevel == KILevel.Soft) {
                 softAiTask = new SoftKiTask(p2.getCurrentCard(), GameActivity.this);
-                softAiTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);;
+                softAiTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
+                ;
             }
-            if(kiLevel == KILevel.Medium) {
+            if (kiLevel == KILevel.Medium) {
                 // TODO: MediumKiTask
             }
-            if(kiLevel == KILevel.Hard) {
+            if (kiLevel == KILevel.Hard) {
                 // TODO: HardKiTask
             }
         }
@@ -418,17 +433,17 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         }
 
         private void stopAiTasks() {
-            if(softAiTask != null) softAiTask.cancel(true);
+            if (softAiTask != null) softAiTask.cancel(true);
             //if(mediumAiTask != null) mediumAiTask.cancel(true);
             //if(hardAiTask != null) mediumAiTask.cancel(true);
         }
 
-        private void stopPlayerTimeoutTask(){
-            if(!playerTimeOutTask.isCancelled()) playerTimeOutTask.cancel(true);
+        private void stopPlayerTimeoutTask() {
+            if (playerTimeOutTask!=null&&!playerTimeOutTask.isCancelled()) playerTimeOutTask.cancel(true);
         }
 
-        private void stopGameTimeTask(){
-            if(!gameTimeTask.isCancelled()) gameTimeTask.cancel(true);
+        private void stopGameTimeTask() {
+            if (gameTimeTask!=null&&!gameTimeTask.isCancelled()) gameTimeTask.cancel(true);
         }
 
         public void stop() {
@@ -441,14 +456,14 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             stopPlayerTimeoutTask();
             // identify winner of round
             int playerWonRound = cardCtrl.compareCardsProperty(cardAttribute.getProperty());
-            if(playerWonRound == -1) {
+            if (playerWonRound == -1) {
                 // standoff (TODO: bug if player only has 1 card left)
             }
             engine.setPlayerWonRound(playerWonRound);
             // increase rounds played
             curRound++;
             // dismiss KiPlaysDialog
-            if(!kiPlaysDialog.isHidden()) kiPlaysDialog.dismiss();
+            if (!kiPlaysDialog.isHidden()) kiPlaysDialog.dismiss();
             // show RoundEndDialog
             engine.showRoundEndDialog(cardAttribute, playerWonRound);
             statisticCtrl.duelsMadePlusOne(playerWonRound == PLAYER1);
@@ -457,22 +472,22 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         /**
          * Next round will be initialised if there isn't any winner.
          */
-        public void initialiseNextRound(){
+        public void initialiseNextRound() {
             // handleCards
-            if(!cardCtrl.handlePlayerCards(playerWonRound)) {
+            if (!cardCtrl.handlePlayerCards(playerWonRound)) {
                 // one player's deck is empty
             }
             // check if player won game
             int playerWonGame = playerCtrl.checkPlayerWon();
-            if(playerWonGame == PLAYER1 || playerWonGame == PLAYER2) {
+            if (playerWonGame == PLAYER1 || playerWonGame == PLAYER2) {
                 finishGame(playerWonGame);
             } else {
                 // change current player if necessary
-                if(curPlayer != playerWonRound && playerWonRound != STANDOFF) {
+                if (curPlayer != playerWonRound && playerWonRound != STANDOFF) {
                     playerCtrl.changeCurrentPlayer();
                 }
                 // initialise next round
-                if(curPlayer != PLAYER1) {
+                if (curPlayer != PLAYER1) {
                     // show p2 next card
                     showPlayer2NextCard();
                     // start KI
@@ -497,7 +512,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             double gameDeckSize = gameDeck.getCards().size();
             double p1Size = p1.getCards().size();
             double p2Size = p2.getCards().size();
-            double progress = 100 * ( (gameDeckSize - p2Size) / gameDeckSize );
+            double progress = 100 * ((gameDeckSize - p2Size) / gameDeckSize);
             tvCardQuantityP1.setText(p1.getName() + ": " + (int) p1Size);
             tvCardQuantityP2.setText(p2.getName() + ": " + (int) p2Size);
             pbBalance.setProgress((int) progress);
@@ -509,8 +524,8 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
          */
         public void handlePlayerTimeout() {
             tvCurPlayer.setText("Current Player: " + getPlayer(curPlayer).getName());
-            if(curPlayer == PLAYER1) {
-                if(hasPlayerTimeout) {
+            if (curPlayer == PLAYER1) {
+                if (hasPlayerTimeout) {
                     pbTimeout.setMax(timeout);
                     pbTimeout.setProgress(timeout);
                     // start task
@@ -522,7 +537,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
                     pbTimeout.setProgress(0);
                 }
             } else {
-                if(isMultiplayer) {
+                if (isMultiplayer) {
                     // TODO: set player2 timeout (copy from above?!)
                 } else {
                     pbTimeout.setMax(0);
@@ -539,7 +554,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
          */
         public void handleToolbarInfo() {
             // check if info is necessary
-            if(gameMode != GameMode.Time) {
+            if (gameMode != GameMode.Time) {
                 linLayoutTime.setVisibility(View.GONE);
             } else {
                 long timeLeft = gameTime - curTime;
@@ -550,22 +565,21 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
                 timeLeft = timeLeft - (minutes * 60000);
                 int secons = (int) TimeUnit.MILLISECONDS.toSeconds(timeLeft);
                 String time = "";
-                if(hours > 0) {
+                if (hours > 0) {
                     time = hours + "h " + minutes + "m";
-                }else if(hours == 0 && minutes > 0) {
-                    time = minutes +"m";
+                } else if (hours == 0 && minutes > 0) {
+                    time = minutes + "m";
                 } else {
                     time = secons + "s";
                 }
                 tvTimeLeft.setText(time);
             }
-            if(!hasMaxRounds){
+            if (!hasMaxRounds) {
                 linLayoutRound.setVisibility(View.GONE);
             } else {
-                tvRoundsLeft.setText((curRound+1) + " / " + maxRounds);
+                tvRoundsLeft.setText((curRound + 1) + " / " + maxRounds);
             }
         }
-
 
 
         /**
@@ -587,11 +601,11 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         }
 
 
-        public void disableCard(){
+        public void disableCard() {
             // TODO
         }
 
-        public void enableCard(){
+        public void enableCard() {
             // TODO
         }
 
@@ -604,6 +618,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         /**
          * Creates and shows a dialog, in which the winner and the loser of a game-round will be
          * displayed. Game continues after callback from this dialog.
+         *
          * @param cardAttribute
          * @param playerWonRound
          */
@@ -629,7 +644,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         @Override
         public void OnDialogPositiveClick(DialogFragment dialog) {
             // check if Callback is from GameEndDialog
-            if(dialog instanceof GameEndDialog) {
+            if (dialog instanceof GameEndDialog) {
                 stopAllTasks();
                 // TODO: write statistics
                 // close game and go back to main_activity
@@ -655,9 +670,9 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
 
         @Override
         public void onGameTimeUpdate(long time) {
-            if(time == 0) {
+            if (time == 0) {
                 int playerWonGame = playerCtrl.checkPlayerWon();
-                if(playerWonGame == PLAYER1 || playerWonGame == PLAYER2) {
+                if (playerWonGame == PLAYER1 || playerWonGame == PLAYER2) {
                     finishGame(playerWonGame);
                 } // TODO: else play +1 round
             } else {
@@ -719,7 +734,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         }
 
         public Player getPlayer(int playerId) {
-            if(playerId == PLAYER1) {
+            if (playerId == PLAYER1) {
                 return p1;
             } else {
                 return p2;
@@ -738,7 +753,9 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             return maxPoints;
         }
 
-        public Context getContext() { return context; }
+        public Context getContext() {
+            return context;
+        }
 
         /*
         SETTERS
@@ -761,6 +778,13 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             this.playerWonRound = playerWonRound;
         }
 
+        public OfflineDeck getGameDeck() {
+            return gameDeck;
+        }
+
+        public void setContext(GameActivity context) {
+            this.context = context;
+        }
     }
 
 

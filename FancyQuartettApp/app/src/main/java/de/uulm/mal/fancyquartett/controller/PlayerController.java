@@ -1,5 +1,7 @@
 package de.uulm.mal.fancyquartett.controller;
 
+import java.io.Serializable;
+
 import de.uulm.mal.fancyquartett.activities.GameActivity;
 import de.uulm.mal.fancyquartett.data.Player;
 import de.uulm.mal.fancyquartett.enums.GameMode;
@@ -7,9 +9,9 @@ import de.uulm.mal.fancyquartett.enums.GameMode;
 /**
  * Created by Lukas on 14.01.2016.
  */
-public class PlayerController {
+public class PlayerController implements Serializable {
 
-    private GameActivity.GameEngine engine;
+   transient private GameActivity.GameEngine engine;
 
     /**
      *
@@ -101,7 +103,7 @@ public class PlayerController {
     }
 
 
-
-
-
+    public void setEngine(GameActivity.GameEngine engine) {
+        this.engine = engine;
+    }
 }

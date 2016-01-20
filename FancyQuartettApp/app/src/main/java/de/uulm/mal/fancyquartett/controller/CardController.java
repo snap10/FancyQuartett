@@ -1,5 +1,6 @@
 package de.uulm.mal.fancyquartett.controller;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -11,9 +12,9 @@ import de.uulm.mal.fancyquartett.data.Property;
 /**
  * Created by Lukas on 14.01.2016.
  */
-public class CardController {
+public class CardController implements Serializable {
 
-    private GameActivity.GameEngine engine;
+    transient private GameActivity.GameEngine engine;
 
     /**
      *
@@ -179,5 +180,7 @@ public class CardController {
     }
 
 
-
+    public void setEngine(GameActivity.GameEngine engine) {
+        this.engine = engine;
+    }
 }
