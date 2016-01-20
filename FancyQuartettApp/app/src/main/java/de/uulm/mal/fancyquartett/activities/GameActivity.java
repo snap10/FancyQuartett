@@ -2,6 +2,7 @@ package de.uulm.mal.fancyquartett.activities;
 
 import android.app.AlertDialog;
 import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,14 +21,8 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
-
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -41,7 +36,6 @@ import de.uulm.mal.fancyquartett.data.CardAttribute;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.data.Player;
 import de.uulm.mal.fancyquartett.data.Property;
-import de.uulm.mal.fancyquartett.data.Settings;
 import de.uulm.mal.fancyquartett.dialog.GameEndDialog;
 import de.uulm.mal.fancyquartett.dialog.KiPlaysDialog;
 import de.uulm.mal.fancyquartett.dialog.RoundEndDialog;
@@ -126,15 +120,13 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             }
             onDeckLoaded(offlineDeck);
         } else {
-            engine= (GameEngine)intentbundle.getSerializable("engine");
+            engine = (GameEngine) intentbundle.getSerializable("engine");
             //TODO @Lukas: Kannst du alle Sachen in der Engine dann wieder herstellen, welche transient waren bzw. die aktuelle Karte wieder anzeigen und so...
             // hab keine Ahnung wie dein Game funktioniert...
             // Du kannst dir ja mal hier einen Breakpoint setzen und dann schauen, was in dem Engine Objekt noch vorhanden ist wenn es in dem Intent übergeben wird.
-            engine.cardCtrl.setEngine(engine);
-            engine.playerCtrl.setEngine(engine);
-            engine.statisticCtrl.setContext(this);
-            engine.setContext(this);
-
+            engine.setContext(getApplicationContext());
+            engine.setFragmentManager(getFragmentManager());
+            engine.startGame();
         }
     }
 
@@ -257,6 +249,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
 
         // app attributes
         private transient Context context;
+        private transient FragmentManager fragmentManager;
 
         // controller
         private CardController cardCtrl;
@@ -291,12 +284,12 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             // set start-time
             Date date = new Date();
             this.startTime = new Timestamp(date.getTime());
-            // create controller(s)
-            this.cardCtrl = new CardController(this);
-            this.playerCtrl = new PlayerController(this);
-            this.statisticCtrl = new StatisticController(this);
             // create task(s)
             this.playerTimeOutTask = new PlayerTimeOutTask(GameActivity.this, this, pbBalance);
+            // create controller(s)
+            createControllers();
+            // get fragmentManager
+            this.fragmentManager = getFragmentManager();
             // create sting-stack
             this.stingStack = new ArrayList<Card>();
             // get game-specific parameters
@@ -359,6 +352,15 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             getSupportFragmentManager().beginTransaction().replace(R.id.linLayout_Container, cardFragment).commit();
         }
 
+        /**
+         * Creates all necessary Controller.
+         */
+        public void createControllers() {
+            this.cardCtrl = new CardController(this);
+            this.playerCtrl = new PlayerController(this);
+            this.statisticCtrl = new StatisticController(this);
+        }
+
     /*
         GAME - CONTROLLING
     */
@@ -366,6 +368,8 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         public void startGame() {
             // create Tasks
             gameTimeTask = new GameTimeTask(this);
+            // create controller(s)
+            createControllers();
             // create KiPlaysDialog
             kiPlaysDialog = new KiPlaysDialog().newInstance(this);
             kiPlaysDialog.setCancelable(false);
@@ -377,7 +381,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
                 startKiTask();
             } else {
                 // workaround for later dismiss()
-                kiPlaysDialog.show(getFragmentManager(), "KiPlaysDialog");
+                kiPlaysDialog.show(fragmentManager, "KiPlaysDialog");
                 kiPlaysDialog.dismiss();
             }
             // start GameTimeTask if GameMode is Time
@@ -782,8 +786,12 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             return gameDeck;
         }
 
-        public void setContext(GameActivity context) {
+        public void setContext(Context context) {
             this.context = context;
+        }
+
+        public void setFragmentManager(FragmentManager fragmentManager){
+            this.fragmentManager = fragmentManager;
         }
     }
 
