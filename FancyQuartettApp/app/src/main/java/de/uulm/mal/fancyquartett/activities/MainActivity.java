@@ -1,6 +1,10 @@
 package de.uulm.mal.fancyquartett.activities;
 
+
 import android.content.Context;
+
+import android.app.Dialog;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -16,6 +20,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -148,7 +153,18 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_rules) {
-            //TODO start new Activity with Rules 
+            //TODO start new Activity with Rules
+            final Dialog rules = new Dialog(this);
+            rules.setContentView(R.layout.rules_dialog);
+            View rules_close_button = rules.findViewById(R.id.rules_close_button);
+            rules_close_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    rules.dismiss();
+                }
+            });
+            rules.setTitle("Rules");
+            rules.show();
         }
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {

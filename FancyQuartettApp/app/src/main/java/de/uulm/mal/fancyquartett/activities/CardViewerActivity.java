@@ -2,9 +2,12 @@ package de.uulm.mal.fancyquartett.activities;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
 import de.uulm.mal.fancyquartett.R;
+import de.uulm.mal.fancyquartett.data.Card;
 import de.uulm.mal.fancyquartett.data.CardAttribute;
 import de.uulm.mal.fancyquartett.data.Property;
 import layout.CardFragment;
@@ -17,14 +20,15 @@ public class CardViewerActivity extends AppCompatActivity implements CardFragmen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_viewer);
 
+        CardViewerFragment cardViewerFragment = CardViewerFragment.newInstance(getIntent().getExtras());
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.card_viewer_fragment_container , CardViewerFragment.newInstance(getIntent().getExtras())).commit();
+                    .add(R.id.card_viewer_fragment_container, cardViewerFragment).commit();
         }
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
     }
-
 
     @Override
     public void onFragmentInteraction(Uri uri) {

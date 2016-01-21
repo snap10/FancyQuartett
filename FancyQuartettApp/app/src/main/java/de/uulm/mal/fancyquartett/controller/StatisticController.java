@@ -3,10 +3,7 @@ package de.uulm.mal.fancyquartett.controller;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.io.Serializable;
-
 import de.uulm.mal.fancyquartett.R;
-import de.uulm.mal.fancyquartett.activities.GameActivity;
 import de.uulm.mal.fancyquartett.utils.GameEngine;
 import layout.StatisticFragment;
 
@@ -16,14 +13,14 @@ import layout.StatisticFragment;
  * Through this controller the game writes to shared preferences and the statistic reads from them.
  * Shared preferences handling is encapsulated here. (mk)
  */
-public class StatisticController implements Serializable {
+public class StatisticController {
 
     /**
      * Context of either the game activity or the main activity
      */
-    transient Context context = null;
+    private Context context = null;
 
-    transient private SharedPreferences sharedPref = null;
+    private SharedPreferences sharedPref = null;
 
     /**
      * Constructor used by game
@@ -67,15 +64,8 @@ public class StatisticController implements Serializable {
      */
     public void gamesPlayedPlusOne(boolean won) {
         plusOne(R.string.statisticNumSingleplayerGamesPlayedKey);
-        if(won) {
-            plusOne(R.string.statisticNumSingleplayerGamesWonKey);
-            System.out.println("won " + read(R.string.statisticNumSingleplayerGamesWonKey));
-        }
-        else {
-            plusOne(R.string.statisticNumSingleplayerGamesLostKey);
-            System.out.println("lost " + read(R.string.statisticNumSingleplayerGamesLostKey));
-        }
-        System.out.println("won="+gamesWon()+" lost="+gamesLost());
+        if(won) plusOne(R.string.statisticNumSingleplayerGamesWonKey);
+        else plusOne(R.string.statisticNumSingleplayerGamesLostKey);
     }
 
     public void duelsMadePlusOne(boolean won) {
@@ -113,9 +103,5 @@ public class StatisticController implements Serializable {
 
     public int duelsLost() {
         return read(R.string.statisticNumSingleplayerDuelsLostKey);
-    }
-
-    public void setContext(GameActivity context) {
-        this.context = context;
     }
 }

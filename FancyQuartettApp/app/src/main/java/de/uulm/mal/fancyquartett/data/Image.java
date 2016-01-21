@@ -175,6 +175,7 @@ public class Image implements Serializable {
             String extension = sourcePath.substring(sourcePath.lastIndexOf('.') + 1);
             Bitmap img;
             URL u = new URL(sourcePath);
+            System.out.println(u.toString());
             HttpURLConnection c = (HttpURLConnection) u.openConnection();
             c.setRequestProperty("Authorization", Settings.serverAuthorization);
             c.setRequestProperty("Content-Type", "image/"+extension);

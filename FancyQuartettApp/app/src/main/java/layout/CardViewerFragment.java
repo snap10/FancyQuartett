@@ -1,17 +1,20 @@
 package layout;
 
+import android.content.Context;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import de.uulm.mal.fancyquartett.R;
+import de.uulm.mal.fancyquartett.data.Card;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.data.Settings;
 import de.uulm.mal.fancyquartett.utils.LocalDeckLoader;
@@ -33,7 +36,7 @@ public class CardViewerFragment extends Fragment{
 
     /**
      * Called to do initial creation of a fragment.  This is called after
-     * {@link #onAttach(Activity)} and before
+     * onAttach and before
      * {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
      * <p/>
      * <p>Note that this can be called while the fragment's activity is
@@ -53,6 +56,7 @@ public class CardViewerFragment extends Fragment{
             clickedPosition = getArguments().getInt("clickedPosition");
             offlineDeck = (OfflineDeck)getArguments().getSerializable("offlinedeck");
             if (offlineDeck!=null) {
+                ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(offlineDeck.getName());
                 decksize = offlineDeck.getCards().size();
                 deckID = offlineDeck.getId();
             }else{
@@ -89,8 +93,6 @@ public class CardViewerFragment extends Fragment{
 
             }
         });
-
-
         return v;
     }
 
@@ -130,7 +132,6 @@ public class CardViewerFragment extends Fragment{
                 //get CardFragment showing the position-th Card of the Deck
             }else{
                 fragment = CardFragment.newInstance(offlineDeck.getCards().get(position), false);
-
             }
             return fragment;
         }
