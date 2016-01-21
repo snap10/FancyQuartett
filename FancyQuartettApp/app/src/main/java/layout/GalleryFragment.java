@@ -75,11 +75,9 @@ public class GalleryFragment extends Fragment {
         loader = new LocalDecksLoader(getContext().getFilesDir() + Settings.localFolder, galleryViewAdapter);
         loader.execute();
 
-       onlineLoader =new OnlineDecksLoader(Settings.serverAdress, Settings.serverRootPath,getContext().getCacheDir().getAbsolutePath(), galleryViewAdapter);
+        onlineLoader = new OnlineDecksLoader(Settings.serverAdress, Settings.serverRootPath, getContext().getCacheDir().getAbsolutePath(), galleryViewAdapter);
         onlineLoader.execute();
-        glm = new GridLayoutManager(getContext(), 2);
-        llm = new LinearLayoutManager(this.getContext());
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
+
 
 
     }
@@ -90,10 +88,10 @@ public class GalleryFragment extends Fragment {
      * happen (calling the item's Runnable or sending a message to its Handler
      * as appropriate). You can use this method for any items for which you
      * would like to do processing without those other facilities.
-     * <p>
+     * <p/>
      * Use {@link MenuItem#getMenuInfo()} to get extra information set by the
      * View that added this menu item.
-     * <p>
+     * <p/>
      * Derived classes should call through to the base class for it to perform
      * the default menu handling.
      *
@@ -103,7 +101,7 @@ public class GalleryFragment extends Fragment {
      */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-            galleryViewAdapter.onContextItemSelected(item);
+        galleryViewAdapter.onContextItemSelected(item);
         return super.onContextItemSelected(item);
     }
 
@@ -114,9 +112,9 @@ public class GalleryFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main_gallery, container, false);
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefreshlayout);
         swipeRefreshLayout.setEnabled(true);
-        if (loader!=null&&loader.getStatus()== AsyncTask.Status.RUNNING){
+        if (loader != null && loader.getStatus() == AsyncTask.Status.RUNNING) {
             swipeRefreshLayout.setRefreshing(true);
-        }else if(onlineLoader!=null &&onlineLoader.getStatus()== AsyncTask.Status.RUNNING){
+        } else if (onlineLoader != null && onlineLoader.getStatus() == AsyncTask.Status.RUNNING) {
             swipeRefreshLayout.setRefreshing(true);
         }
         galleryViewAdapter.setRefreshLayout(swipeRefreshLayout);
@@ -125,14 +123,20 @@ public class GalleryFragment extends Fragment {
             public void onRefresh() {
                 galleryViewAdapter.setRefreshLayout(swipeRefreshLayout);
                 galleryViewAdapter.setGalleryModel(new GalleryModel());
-                new OnlineDecksLoader(Settings.serverAdress, Settings.serverRootPath,getContext().getCacheDir().getAbsolutePath(), galleryViewAdapter).execute();
+                new OnlineDecksLoader(Settings.serverAdress, Settings.serverRootPath, getContext().getCacheDir().getAbsolutePath(), galleryViewAdapter).execute();
                 new LocalDecksLoader(getContext().getFilesDir() + Settings.localFolder, galleryViewAdapter).execute();
             }
         });
+        recList=null;
+        glm = new GridLayoutManager(getContext(), 2);
+        llm = new LinearLayoutManager(this.getContext());
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList = (RecyclerView) rootView.findViewById(R.id.recycler_gallery_list);
         recList.setHasFixedSize(true);
 
         recList.setLayoutManager(llm);
+
+
         recList.setAdapter(galleryViewAdapter);
         registerForContextMenu(recList);
 

@@ -1,5 +1,6 @@
 package de.uulm.mal.fancyquartett.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -24,11 +25,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.io.IOException;
 
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.data.Settings;
 import de.uulm.mal.fancyquartett.utils.AssetsInstaller;
+import de.uulm.mal.fancyquartett.utils.GameEngine;
 import layout.GalleryFragment;
 import layout.StartFragment;
 import layout.StatisticFragment;
@@ -54,13 +58,26 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
     private static final int GALLERYPOSITION = 1;
     private static final int STATISTICSPOSITION = 2;
     private Menu menu;
+    private GameEngine engine;
+    private Bundle engineBundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean secondRun = pref.getBoolean("filesInstalled", false);
-       //TODO implement AssetsInstaller for new Json Modell and set !secondRun
+        SharedPreferences prefs = getSharedPreferences("savedGame", Context.MODE_PRIVATE);
+        if (prefs.getBoolean("savedAvailable", false)) {
+            Gson gson = new Gson();
+            String json = prefs.getString("savedEngine", null);
+            engine = gson.fromJson(json, GameEngine.class);
+            engineBundle = new Bundle();
+            if (engine!=null){
+
+                engineBundle.putSerializable("savedEngine",engine);
+            }
+        }
+        //TODO implement AssetsInstaller for new Json Modell and set !secondRun
         if (false) {
 
             AssetsInstaller installer = null;
@@ -82,12 +99,12 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
+        // Create the adapter that will return a fragment for each of the three
+        // primary sections of the activity.
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -147,6 +164,20 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
         //TODO
     }
 
+    /**
+     * Dispatch onResume() to fragments.  Note that for better inter-operation
+     * with older versions of the platform, at the point of this call the
+     * fragments attached to the activity are <em>not</em> resumed.  This means
+     * that in some cases the previous state may still be saved, not allowing
+     * fragment transactions that modify the state.  To correctly interact
+     * with fragments in their proper state, you should instead override
+     * {@link #onResumeFragments()}.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
 
     /**
      * Callback method for onPostExecute of AsyncTask
@@ -184,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
         public Fragment getItem(int position) {
             switch (position) {
                 case STARTPOSITION:
-                    return new StartFragment().newInstance();
+                    return new StartFragment().newInstance(engineBundle);
                 case GALLERYPOSITION:
                     return new GalleryFragment().newInstance(null);
                 case STATISTICSPOSITION:

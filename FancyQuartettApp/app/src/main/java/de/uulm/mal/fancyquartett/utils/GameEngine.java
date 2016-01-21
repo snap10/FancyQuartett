@@ -2,6 +2,7 @@ package de.uulm.mal.fancyquartett.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -411,7 +414,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
      */
     public void showCurrentPlayerCard() {
         cardFragment = CardFragment.newInstance(getPlayer(curPlayer).getCurrentCard(), true);
-        fragmentManager.beginTransaction().replace(R.id.linLayout_Container, cardFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.linLayout_Container, cardFragment).commitAllowingStateLoss();
     }
 
 
@@ -541,6 +544,8 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         // check if Callback is from GameEndDialog
         if (dialog instanceof GameEndDialog) {
             stopAllTasks();
+            SharedPreferences prefs = gameActivity.getSharedPreferences("savedGame", context.MODE_PRIVATE);
+            prefs.edit().remove("savedEngine").putBoolean("savedAvailable",false);
             // close game and go back to main_activity
             Intent intent = new Intent(gameActivity, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

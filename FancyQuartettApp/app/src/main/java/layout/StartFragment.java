@@ -45,9 +45,9 @@ public class StartFragment extends Fragment {
      * @return A new instance of fragment StartFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static StartFragment newInstance() {
+    public static StartFragment newInstance(Bundle bundle) {
         StartFragment fragment = new StartFragment();
-        Bundle args = new Bundle();
+        Bundle args = bundle;
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,7 +55,10 @@ public class StartFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments()!=null){
 
+            engine = (GameEngine)getArguments().getSerializable("savedEngine");
+        }
 
     }
 
@@ -64,13 +67,6 @@ public class StartFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_main_start, container, false);
-        SharedPreferences prefs = getActivity().getSharedPreferences("savedGame", Context.MODE_PRIVATE);
-        if (prefs.getBoolean("savedAvailable", false)) {
-            Gson gson = new Gson();
-            String json = prefs.getString("savedEngine", null);
-            engine = gson.fromJson(json, GameEngine.class);
-        }
-
         if (engine != null) {
             CardView resumeGameCard = (CardView) v.findViewById(R.id.resumeGameCard);
             resumeGameCard.setOnClickListener(new View.OnClickListener() {

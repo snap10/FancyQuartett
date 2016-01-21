@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -94,7 +95,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         offlineDeck = (OfflineDeck) args.getSerializable("offlinedeck");
         if (offlineDeck != null) {
             engine = new GameEngine(this, getApplicationContext(), rootView, args);
-            engine.startGame();
+           // engine.startGame();
         } else {
             SharedPreferences prefs = getSharedPreferences("savedGame", Context.MODE_PRIVATE);
             if (prefs.getBoolean("savedAvailable", false)) {
@@ -107,7 +108,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
                 engine.setRootView(rootView);
                 engine.setContext(getApplicationContext());
                 engine.setFragmentManager(getSupportFragmentManager());
-                engine.startGame();
+                //engine.startGame();
             }
         }
     }
@@ -143,9 +144,14 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        engine.stop();
+                        SharedPreferences prefs = getSharedPreferences("savedGame", MODE_PRIVATE);
+                        Gson gson = new Gson();
+                        String json = gson.toJson(engine);
+                        prefs.edit().putString("savedEngine", json).putBoolean("savedAvailable", true).commit();
                         Intent intent = new Intent(GameActivity.this, MainActivity.class);
-                        startActivity(intent);
                         finish(); // calls onStop too
+                        startActivity(intent);
                     }
                 })
                 .setNegativeButton("No", null)
@@ -159,7 +165,19 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         Gson gson = new Gson();
         String json = gson.toJson(engine);
         prefs.edit().putString("savedEngine", json).putBoolean("savedAvailable", true).commit();
+
         super.onStop();
+    }
+
+
+    @Override
+    protected void onPostResume() {
+        engine.setGameActivity(this);
+        engine.setRootView(rootView);
+        engine.setContext(getApplicationContext());
+        engine.setFragmentManager(getSupportFragmentManager());
+        engine.startGame();
+        super.onPostResume();
     }
 
     /**

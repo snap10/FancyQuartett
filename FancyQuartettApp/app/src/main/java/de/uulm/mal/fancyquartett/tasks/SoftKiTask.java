@@ -53,8 +53,11 @@ public class SoftKiTask extends AsyncTask<Void, Void, CardAttribute> {
             // calculate difference
             double diffTemp = 100 * ( (median - value) / median );
             // check if diffTemp > difference
+            //TODO what value has difference?????
+            //TODO please consider biggerWins==false, therefore use Math.abs() to have the absolute Value
             if(diffTemp > difference && diffTemp > 0) {
                 cardAttribute = ca;
+
             }
             // check if cardAttribute was found
             if(cardAttribute == null) {
