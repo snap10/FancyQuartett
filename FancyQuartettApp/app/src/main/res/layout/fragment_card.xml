@@ -12,7 +12,8 @@
         android:padding="6dp"
         cardview:cardBackgroundColor="@color/colorPrimaryDark"
         cardview:cardCornerRadius="2dp"
-        cardview:cardElevation="2dp">
+        cardview:cardElevation="2dp"
+        android:background="@color/card_background">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,23 +27,27 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="5dp"
                 android:gravity="center_horizontal"
                 android:text="CardName"
                 android:textAlignment="center"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title.Inverse" />
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title.Inverse"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:background="@color/card_title_background"
+                android:elevation="4dp"/>
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/viewPager_SlideShow"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="@color/primary" />
+                android:background="@color/card_background" />
 
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_card_attributes"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+                android:layout_height="match_parent"
+                android:background="@color/card_background"></android.support.v7.widget.RecyclerView>
 
         </LinearLayout>
 

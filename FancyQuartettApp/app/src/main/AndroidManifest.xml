@@ -10,30 +10,36 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <!-- MAIN ACTIVITY -->
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- GAME ACTIVITY -->
         <activity
             android:name=".activities.GameActivity"
             android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar.Fullscreen"/>
+            android:theme="@style/AppTheme.NoActionBar.Fullscreen">
+        </activity>
+        <!-- CARD GALLERY ACTIVITY -->
         <activity
             android:name=".activities.CardGalleryActivity"
             android:parentActivityName=".activities.MainActivity">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value="de.uulm.mal.fancyquartett.activities.MainActivity" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.uulm.mal.fancyquartett.activities.MainActivity" />
         </activity>
+        <!-- NEW GAME SETTINGS ACTIVITY -->
         <activity
             android:name=".activities.NewGameSettingsActivity"
             android:parentActivityName=".activities.MainActivity" />
+        <!-- NEW GAME GALLERY ACTIVITY -->
         <activity
             android:name=".activities.NewGameGalleryActivity"
             android:label="@string/title_activity_deck_gallery"
@@ -42,6 +48,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.uulm.mal.fancyquartett.activities.NewGameSettingsActivity" />
         </activity>
+        <!-- CARD VIEWER ACTIVITY -->
         <activity
             android:name=".activities.CardViewerActivity"
             android:label="@string/title_activity_card_detail_viewer"
@@ -50,6 +57,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.uulm.mal.fancyquartett.activities.CardGalleryActivity" />
         </activity>
+        <!-- SETTINGS ACTIVITY -->
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings"
@@ -58,6 +66,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.uulm.mal.fancyquartett.activities.MainActivity" />
         </activity>
+
     </application>
 
 </manifest>

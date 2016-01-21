@@ -95,23 +95,6 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         if (offlineDeck != null) {
             engine = new GameEngine(this, getApplicationContext(), rootView, args);
             engine.startGame();
-            /*
-            bundleGameMode = (GameMode) intentbundle.get("gamemode");
-            bundleKILevel = (KILevel) intentbundle.get("kilevel");
-            bundleIsMultiplayer = intentbundle.getBoolean("multiplayer");
-            if (bundleIsMultiplayer) {
-                bundleP1Name = intentbundle.getString("playername1");
-                bundleP2Name = intentbundle.getString("playername2");
-            }
-            bundleRoundTimeout = intentbundle.getInt("roundtimeout");
-            bundleMaxRounds = intentbundle.getInt("maxrounds");
-            if (bundleGameMode == GameMode.Time) {
-                bundleGameTime = intentbundle.getInt("gametime");
-            } else if (bundleGameMode == GameMode.Points) {
-                bundleGamePoints = intentbundle.getInt("gamepoints");
-            }
-            onDeckLoaded(offlineDeck);
-            */
         } else {
             SharedPreferences prefs = getSharedPreferences("savedGame", Context.MODE_PRIVATE);
             if (prefs.getBoolean("savedAvailable", false)) {
@@ -138,23 +121,17 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
     }
 
     @Override
-    protected void onStop() {
-        engine.stop();
-        SharedPreferences prefs = getSharedPreferences("savedGame", MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = gson.toJson(engine);
-        prefs.edit().putString("savedEngine", json).putBoolean("savedAvailable", true).commit();
-        super.onStop();
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_rules) {
-            // TODO: show Dialog with Rules
-            return true;
+        switch(id) {
+            case android.R.id.home:
+                onBackPressed();
+            case R.id.action_rules:
+                // TODO: show Dialog with Rules
+                return true;
+            default:
+                return false;
         }
-        return false;
     }
 
     @Override
@@ -166,11 +143,23 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(GameActivity.this, MainActivity.class);
+                        startActivity(intent);
                         finish(); // calls onStop too
                     }
                 })
                 .setNegativeButton("No", null)
                 .show();
+    }
+
+    @Override
+    protected void onStop() {
+        engine.stop();
+        SharedPreferences prefs = getSharedPreferences("savedGame", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = gson.toJson(engine);
+        prefs.edit().putString("savedEngine", json).putBoolean("savedAvailable", true).commit();
+        super.onStop();
     }
 
     /**

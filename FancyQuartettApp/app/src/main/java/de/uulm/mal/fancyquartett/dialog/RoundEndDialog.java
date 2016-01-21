@@ -2,6 +2,7 @@ package de.uulm.mal.fancyquartett.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import de.uulm.mal.fancyquartett.utils.GameEngine;
  */
 public class RoundEndDialog extends DialogFragment {
 
+    private Context context;
     private GameEngine engine;
     private CardAttribute cardAttribute;
     private int playerWon;
@@ -59,6 +61,7 @@ public class RoundEndDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // read bundle data
         super.onCreateDialog(savedInstanceState);
+        this.context = getContext();
         Bundle args = getArguments();
         if(args != null) {
             this.engine = (GameEngine) args.getSerializable("gameEngine");
@@ -118,16 +121,16 @@ public class RoundEndDialog extends DialogFragment {
         // display winner / loser
         if(playerWon != engine.STANDOFF) {
             if(playerWon == player.getId()) {
-                tvInfo.setText("WINNER");
-                tvInfo.setBackgroundColor(Color.GREEN);
+                tvInfo.setText(context.getResources().getString(R.string.winner));
+                tvInfo.setBackgroundColor(context.getResources().getColor(R.color.background_winner_opaque));
             } else {
-                tvInfo.setText("LOSER");
-                tvInfo.setBackgroundColor(Color.RED);
+                tvInfo.setText(context.getResources().getString(R.string.loser));
+                tvInfo.setBackgroundColor(context.getResources().getColor(R.color.background_loser_opaque));
             }
         } else {
-            tvInfo.setText("STANDOFF");
-            tvInfo.setBackgroundColor(Color.BLACK);
-            tvInfo.setTextColor(Color.WHITE);
+            tvInfo.setText(context.getResources().getString(R.string.standoff));
+            tvInfo.setBackgroundColor(context.getResources().getColor(R.color.background_standoff_opaque));
+            tvInfo.setTextColor(context.getResources().getColor(android.R.color.white));
         }
 
     }

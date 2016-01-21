@@ -160,7 +160,7 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
     /**
      * Disables click event on all card attributes.
      * Returns true if events could be disabled.
-     * Returns false if events could not be disabled. 
+     * Returns false if events could not be disabled.
      * @return
      */
     public boolean disableCardAttrClick() {

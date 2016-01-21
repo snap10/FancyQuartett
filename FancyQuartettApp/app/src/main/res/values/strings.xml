@@ -126,4 +126,30 @@
     <string name="ki_level">AI Level</string>
 
 
+    <!-- Strings used in GameActivity -->
+    <string name="overall_balance">Overall Balance</string>
+    <string name="time_left">Time left:</string>
+    <string name="round">Round:</string>
+
+    <!-- Strings used by GameEngine -->
+    <string name="p1_name_singleplayer">You</string>
+    <string name="p2_name_singleplayer">KI</string>
+    <string name="current_player">Current player:</string>
+
+    <!-- Strings used by Dialog -->
+    <string name="ok">ok</string>
+
+    <!-- Strings used by GameEndDialog -->
+    <string name="winner_gameend">WINNER&#58;</string>
+
+    <!-- Strings used by RoundEndDialog -->
+    <string name="winner">WINNER</string>
+    <string name="loser">LOSER</string>
+    <string name="standoff">STANDOFF</string>
+
+
+
+
+
+
 </resources>

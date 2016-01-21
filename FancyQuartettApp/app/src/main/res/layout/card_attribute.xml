@@ -8,12 +8,14 @@
     android:layout_margin="2dp"
     cardview:cardCornerRadius="2dp"
     cardview:cardElevation="2dp"
-    cardview:cardBackgroundColor="@color/grey">
+    cardview:cardBackgroundColor="@color/grey"
+    android:background="@color/card_attribute_background">
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="?android:attr/listPreferredItemHeightSmall"
-        android:padding="5dp">
+        android:padding="5dp"
+        android:background="@color/card_attribute_background">
 
         <ImageView
             android:id="@+id/imageView_attrIcon"

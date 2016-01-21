@@ -3,6 +3,7 @@
     <color name="colorPrimary">#ffeb3b</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
     <color name="primary">#2196F3</color>
     <color name="primary_dark">#1976D2</color>
     <color name="primary_dark_AAopacity">#AA1976D2</color>
@@ -15,4 +16,15 @@
     <color name="grey">#e4e4e4</color>
     <color name="background_opaque">#88000000</color>
     <color name="background_white_opaque">#88FFFFFF</color>
+
+    <!-- Card colors -->
+    <color name="card_background">#FAFAFA</color>
+    <color name="card_title_background">@color/primary</color>
+    <color name="card_attribute_background">#EEEEEE</color>
+
+    <!-- Dialog colors -->
+    <color name="background_winner_opaque">#AA8BC34A</color>
+    <color name="background_loser_opaque">#AAF44336</color>
+    <color name="background_standoff_opaque">#AA2196F3</color>
+
 </resources>

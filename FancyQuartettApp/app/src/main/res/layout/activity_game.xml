@@ -39,14 +39,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Round:"
+                    android:text="@string/round"
                     android:id="@+id/textView10"
                     android:paddingRight="5dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0/0"
+                    android:text="xx/xx"
                     android:id="@+id/textView_Rounds_Left" />
 
             </LinearLayout>
@@ -61,14 +61,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Time left:"
+                    android:text="@string/time_left"
                     android:id="@+id/textView12"
                     android:paddingRight="5dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="-1min"
+                    android:text="xx"
                     android:layout_gravity="center"
                     android:id="@+id/textView_Time_Left" />
 
@@ -95,7 +95,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="You: 5"
+            android:text="P1: xxx"
             android:id="@+id/textView_YourCards"
             android:minWidth="50dp"
             android:maxWidth="75dp"
@@ -106,7 +106,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Overall Balance"
+            android:text="@string/overall_balance"
             android:id="@+id/textView_BalanceTitle"
             android:textAlignment="center"
             android:layout_below="@+id/gameActivity_Toolbar"
@@ -117,7 +117,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="AI: 17"
+            android:text="P2: xxx"
             android:id="@+id/textView_OpponendsCards"
             android:minWidth="50dp"
             android:maxWidth="75dp"
@@ -169,7 +169,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Your turn!"
+            android:text="@string/current_player"
             android:id="@+id/textView_CurPlayer"
             android:textAlignment="center" />
 

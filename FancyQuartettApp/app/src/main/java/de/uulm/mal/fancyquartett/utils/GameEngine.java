@@ -192,12 +192,11 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
             p1 = new Player(PLAYER1, p1Name);
             p2 = new Player(PLAYER2, p2Name);
         } else {
-            p1 = new Player(PLAYER1, "You");
-            p2 = new Player(PLAYER2, "KI");
+            p1 = new Player(PLAYER1, context.getResources().getString(R.string.p1_name_singleplayer));
+            p2 = new Player(PLAYER2, context.getResources().getString(R.string.p2_name_singleplayer));
         }
         // shuffle cards
         cardCtrl = new CardController(this);
-        if(gameDeck == null) System.out.println("TEST");
         ArrayList<Card> cards = cardCtrl.shuffleCards(gameDeck.getCards());
         // spread cards
         cardCtrl.spreadCards(cards, p1, p2);
@@ -441,7 +440,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
      */
     public void handlePlayerTimeout() {
         // display current players name
-        tvCurPlayer.setText("Current Player: " + getPlayer(curPlayer).getName());
+        tvCurPlayer.setText(context.getResources().getString(R.string.current_player) + " " + getPlayer(curPlayer).getName());
         if (curPlayer == PLAYER1) {
             if (hasPlayerTimeout) { // start timeout
                 pbTimeout.setMax(timeout);
