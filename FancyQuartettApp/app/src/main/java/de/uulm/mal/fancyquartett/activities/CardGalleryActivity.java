@@ -1,17 +1,12 @@
 package de.uulm.mal.fancyquartett.activities;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
-import de.uulm.mal.fancyquartett.data.Settings;
-import de.uulm.mal.fancyquartett.utils.LocalDeckLoader;
 import layout.CardGalleryFragment;
-import layout.StartFragment;
 import android.support.v7.app.ActionBar;
 
 public class CardGalleryActivity extends AppCompatActivity implements CardGalleryFragment.OnFragmentInteractionListener {
@@ -36,7 +31,9 @@ public class CardGalleryActivity extends AppCompatActivity implements CardGaller
         transaction.commit();
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setTitle(offlineDeck.getName());
+        if(offlineDeck != null) {
+            actionbar.setTitle(offlineDeck.getName());
+        }
 
 
     }

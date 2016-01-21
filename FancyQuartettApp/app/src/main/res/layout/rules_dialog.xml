@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView2" >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="The game is easy. There are decks with a number of cards. Each card has a number of values. The deck is equally spread on two players so that each player has a stack of cards with only the top card visible. One player begins by choosing a value. This value is compared with the respective value of the other player&apos;s card. The better value, which is not always the higher one, wins. The winning player receives his and his opponent&apos;s card and both are placed at the bottom of his stack. If two values are equal, the cards are placed aside and the game is continued with the next cards until a winner can be named, who then additionally receives the cards aside. When the game is over decides the game mode chosen by you."
+                android:id="@+id/textView16"
+                android:textColor="@color/background_opaque" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="There are 3 game modes:"
+                android:id="@+id/textView15"
+                android:textColor="@color/background_opaque"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="To the end: The game is over when one player ownes all cards. You can also preset a maximum amount of rounds."
+                android:id="@+id/textView17"
+                android:textColor="@color/background_opaque"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time: The game is over after a preset amount of time."
+                android:id="@+id/textView18"
+                android:textColor="@color/background_opaque"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Points: The game is over after one player reaches a preset amount of points."
+                android:id="@+id/textView19"
+                android:textColor="@color/background_opaque"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="How can points be gained?"
+                android:id="@+id/textView20"
+                android:textColor="@color/background_opaque"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A player receives more points when selecting a weak value and wins the duel nevertheless. The strength of a value is indicated by the arrow icon next to a value. The arrow points up if the value is relatively strong. The arrow points down if the value is relatively weak."
+                android:id="@+id/textView21"
+                android:textColor="@color/background_opaque"
+                android:layout_marginTop="5dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Decks"
+                android:id="@+id/textView22"
+                android:textColor="@color/background_opaque"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="You can view available decks in the gallery. Some decks are stored on a server and have to be downloaded before playing with them."
+                android:id="@+id/textView23"
+                android:textColor="@color/background_opaque"
+                android:layout_marginTop="5dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="close"
+                android:id="@+id/rules_close_button"
+                android:layout_margin="0dp"
+                android:allowUndo="false"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:height="50dp"
+                android:singleLine="false"
+                android:textSize="16dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
