@@ -26,6 +26,8 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
     private List<CardAttribute> attrList;
     private Card card;
     private OnCardAttrClickListener attrClickListener;
+    private boolean isClickable = false;
+
     /**
      *
      * @param context
@@ -81,10 +83,11 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
       View.OnClickListener onClickListener = new View.OnClickListener() {
           @Override
           public void onClick(View v) {
-              //TODO highlight selected Item
-                CardView view = (CardView)v;
-                view.setCardBackgroundColor(getContext().getResources().getColor(R.color.colorPrimary));
-                attrClickListener.onCardAttrClicked(property, value, attribute);
+              if(isClickable) {
+                  CardView view = (CardView)v;
+                  view.setCardBackgroundColor(getContext().getResources().getColor(R.color.colorPrimary));
+                  attrClickListener.onCardAttrClicked(property, value, attribute);
+              }
           }
       };
         return onClickListener;
@@ -112,6 +115,15 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
         attrList=card.getAttributes();
         notifyDataSetChanged();
     }
+
+    public void enableClicks() {
+        this.isClickable = true;
+    }
+
+    public void disableClicks() {
+        this.isClickable = false;
+    }
+
     /*
      * Listener-Interface for CardAttr-OnClick forwarding
      */

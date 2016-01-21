@@ -30,6 +30,7 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
     private static final String ARG_CARDID = "card_id";
     private static final String ARG_CARD = "card";
     private static final String ARG_DECKID = "deck_name";
+    private static final String ARG_ISCLICKABLE = "is_clickable";
 
     // view attributes
     private RecyclerView recList;
@@ -42,7 +43,9 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
     private int cardID;
     private int deckID;
     private View cardFragmentView;
+    private CardAttrViewAdapter cardAttrViewAdapter;
     private OnFragmentInteractionListener mListener;
+    private boolean isClickable;
 
     public CardFragment() {
         // required empty public constructor
@@ -66,10 +69,11 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
      * @param card
      * @return
      */
-    public static CardFragment newInstance(Card card) {
+    public static CardFragment newInstance(Card card, boolean isClickable) {
         CardFragment fragment = new CardFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_CARD, card);
+        args.putBoolean(ARG_ISCLICKABLE, isClickable);
         fragment.setArguments(args);
         return fragment;
     }
@@ -82,11 +86,12 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
      *
      * @return
      */
-    public static CardFragment newInstance(int cardId, int deckid) {
+    public static CardFragment newInstance(int cardId, int deckid, boolean isClickable) {
         CardFragment fragment = new CardFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_CARDID, cardId);
         args.putInt(ARG_DECKID, deckid);
+        args.putBoolean(ARG_ISCLICKABLE, isClickable);
         fragment.setArguments(args);
         return fragment;
     }
@@ -94,16 +99,17 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            cardID = getArguments().getInt(ARG_CARDID);
-            card = (Card) getArguments().getSerializable(ARG_CARD);
-            deckID = getArguments().getInt(ARG_DECKID);
+        Bundle args = getArguments();
+        if (args != null) {
+            cardID = args.getInt(ARG_CARDID);
+            card = (Card) args.getSerializable(ARG_CARD);
+            deckID = args.getInt(ARG_DECKID);
+            isClickable = args.getBoolean(ARG_ISCLICKABLE);
         }
         if (card != null) {
             cardID = card.getID();
             deckID = card.getDeckID();
         }
-
     }
 
     @Override
@@ -120,10 +126,11 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
         glm = new GridLayoutManager(getContext(), 2);
         if (recList.getLayoutManager() == null) {
             recList.setLayoutManager(glm);
-
         }
         // create cardAttrViewAdapter
-        CardAttrViewAdapter cardAttrViewAdapter = new CardAttrViewAdapter(getContext(), card.getAttributes(), this);
+        cardAttrViewAdapter = new CardAttrViewAdapter(getContext(), card.getAttributes(), this);
+        if(!isClickable) disableCardAttrClick();
+        else enableCardAttrClick();
         recList.setAdapter(cardAttrViewAdapter);
         // create ViewPager
         ViewPager viewPager = (ViewPager) cardFragmentView.findViewById(R.id.viewPager_SlideShow);
@@ -134,6 +141,34 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
         cardAttrViewAdapter.setCard(card);
 
         return cardFragmentView;
+    }
+
+    /**
+     * Enables click event on all card attributes.
+     * Returns true if events could be activated.
+     * Returns false if events could not be activated.
+     * @return
+     */
+    public boolean enableCardAttrClick() {
+        if(cardAttrViewAdapter != null) {
+            cardAttrViewAdapter.enableClicks();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Disables click event on all card attributes.
+     * Returns true if events could be disabled.
+     * Returns false if events could not be disabled. 
+     * @return
+     */
+    public boolean disableCardAttrClick() {
+        if(cardAttrViewAdapter != null) {
+            cardAttrViewAdapter.disableClicks();
+            return true;
+        }
+        return false;
     }
 
     /**

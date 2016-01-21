@@ -124,12 +124,12 @@ public class CardViewerFragment extends Fragment{
         public CardFragment getItem(int position) {
             CardFragment fragment;
             if (offlineDeck==null){
-                fragment= CardFragment.newInstance(cardnumber, deckID);
+                fragment= CardFragment.newInstance(cardnumber, deckID, false);
                 loader = new LocalDeckLoader(getContext().getFilesDir() + Settings.localFolder, deckID, fragment);
                 loader.execute();
                 //get CardFragment showing the position-th Card of the Deck
             }else{
-                fragment = CardFragment.newInstance(offlineDeck.getCards().get(position));
+                fragment = CardFragment.newInstance(offlineDeck.getCards().get(position), false);
 
             }
             return fragment;

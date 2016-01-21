@@ -411,7 +411,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
      * Shows the first card in current players card-deck.
      */
     public void showCurrentPlayerCard() {
-        cardFragment = CardFragment.newInstance(getPlayer(curPlayer).getCurrentCard());
+        cardFragment = CardFragment.newInstance(getPlayer(curPlayer).getCurrentCard(), true);
         fragmentManager.beginTransaction().replace(R.id.linLayout_Container, cardFragment).commit();
     }
 
