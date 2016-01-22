@@ -1,6 +1,7 @@
 package de.uulm.mal.fancyquartett.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -68,12 +69,17 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
             holder.cardAttrName.setText(property.getAttributeName());
             holder.cardAttrValue.setText("" + value);
             holder.cardAttrUnit.setText(property.getUnit());
-            // TODO: set right icons
-            holder.cardAttrIcon.setImageResource(android.R.drawable.ic_menu_report_image);
+            Bitmap tmpIcon = property.getAttributeImage().getBitmap();
+            if (tmpIcon!=null){
+                holder.cardAttrIcon.setImageBitmap(tmpIcon);
+            }else{
+                holder.cardAttrIcon.setVisibility(View.GONE);
+                holder.cardAttrIcon.setEnabled(false);
+            }
             if(property.biggerWins()) {
-                holder.cardAttrArrow.setImageResource(android.R.drawable.arrow_up_float);
+                holder.cardAttrArrow.setImageResource(R.drawable.ic_arrow_drop_up_24dp);
             } else {
-                holder.cardAttrArrow.setImageResource(android.R.drawable.arrow_down_float);
+                holder.cardAttrArrow.setImageResource(R.drawable.ic_arrow_drop_down_24dp);
             }
             if (!isClickable){
                 holder.cardAttrMedian.setText("Med:"+property.getMedian());

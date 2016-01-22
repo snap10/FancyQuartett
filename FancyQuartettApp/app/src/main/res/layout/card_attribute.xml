@@ -40,8 +40,8 @@
 
         <ImageView
             android:id="@+id/imageView_attrArrow"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:src="@android:drawable/ic_menu_report_image"
             android:layout_alignTop="@+id/imageView_attrIcon"
             android:layout_alignParentRight="true"

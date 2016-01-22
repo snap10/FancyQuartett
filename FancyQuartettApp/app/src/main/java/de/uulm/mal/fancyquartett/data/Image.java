@@ -144,16 +144,16 @@ public class Image implements Serializable {
         return null;
     }
 
-    public Bitmap getBitmap() {
-        Bitmap bitmap = BitmapFactory.decodeFile(fullLocalPath);
-        return bitmap;
-    }
+    public Bitmap getBitmap()  {
+        if (fullLocalPath==null){
+            return null;
+        }else{
 
-
-    public boolean deleteLocalCopy() {
-        //TODO write code to delete image
-        return false;
+            Bitmap bitmap = BitmapFactory.decodeFile(fullLocalPath);
+            return bitmap;
+        }
     }
+    
 
     protected void downloadCallback(String localPath) {
         if (localPath!=null){
