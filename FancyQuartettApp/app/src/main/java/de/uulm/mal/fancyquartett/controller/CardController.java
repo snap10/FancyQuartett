@@ -93,6 +93,15 @@ public class CardController implements Serializable {
     }
 
     /**
+     * Adds a card of player1 or player2 into stingStack.
+     * @param card
+     */
+    public void addCardToStingStag(Card card) {
+        ArrayList<Card> stingStack = engine.getStingStack();
+        stingStack.add(card);
+    }
+
+    /**
      * Removes all cards from stingStack and adds them to given players card-deck.
      * @param playerId
      */
@@ -110,30 +119,37 @@ public class CardController implements Serializable {
      * @param winnerId
      * @return if successful or not. problems can be e.g. that a player's deck is empty.
      */
-    public boolean handlePlayerCards(int winnerId) {
+    public void handlePlayerCards(int winnerId) {
         if(winnerId != engine.STANDOFF) {
             if(winnerId == engine.PLAYER1) {
                 Card card = removeCardFromPlayer(engine.PLAYER2);
                 queueCard(winnerId);
-                if(card == null) return false;
                 addCardToPlayer(card, winnerId);
             }
             if(winnerId == engine.PLAYER2) {
                 Card card = removeCardFromPlayer(engine.PLAYER1);
                 queueCard(winnerId);
-                if(card == null) return false;
                 addCardToPlayer(card, winnerId);
             }
             if(engine.getStingStack().size() > 0) {
                 removeCardsFromStingStag(winnerId);
             }
         } else {
-            Card p1Card = removeCardFromPlayer(engine.PLAYER1);
-            Card p2Card = removeCardFromPlayer(engine.PLAYER2);
-            if(p1Card == null || p2Card == null) return false;
-            addCardsToStingStag(p1Card, p2Card);
+            Card p1Card = null;
+            Card p2Card = null;
+            if(engine.getPlayer(engine.PLAYER1).getCards().size() > 1) {
+                p1Card = removeCardFromPlayer(engine.PLAYER1);
+            }
+            if (engine.getPlayer(engine.PLAYER2).getCards().size() > 1) {
+                p2Card = removeCardFromPlayer(engine.PLAYER2);
+            }
+            if(p1Card == null || p2Card == null) {
+                if(p1Card != null) addCardToStingStag(p1Card);
+                if(p2Card != null) addCardToStingStag(p2Card);
+            } else {
+                addCardsToStingStag(p1Card, p2Card);
+            }
         }
-        return true;
     }
 
     /**
