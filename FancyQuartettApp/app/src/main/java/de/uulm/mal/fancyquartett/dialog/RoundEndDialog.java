@@ -1,14 +1,17 @@
 package de.uulm.mal.fancyquartett.dialog;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -60,7 +63,6 @@ public class RoundEndDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // read bundle data
-        super.onCreateDialog(savedInstanceState);
         this.context = getContext();
         Bundle args = getArguments();
         if(args != null) {
@@ -79,7 +81,7 @@ public class RoundEndDialog extends DialogFragment {
         // pass null as the parent view because its going in the dialog layout
         View view = inflater.inflate(R.layout.dialog_round_end, null);
         builder.setView(view)
-                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         engine.OnDialogPositiveClick(RoundEndDialog.this);
@@ -87,13 +89,21 @@ public class RoundEndDialog extends DialogFragment {
                 });
         // build dialog
         Dialog dialog = builder.create();
+        // color buttons
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.accent));
+            }
+        });
 
         // read player1 gui elements
         TextView tvP1Name = (TextView) view.findViewById(R.id.textView_P1Name);
         ImageView ivP1Image = (ImageView) view.findViewById(R.id.imageView_ImageP1Card);
         TextView tvP1Info = (TextView) view.findViewById(R.id.textView_InfoP1Card);
+        TextView tvP1Card = (TextView) view.findViewById(R.id.textView_P1CardName);
         // set player1 gui
-        setPlayerGUI(tvP1Name, ivP1Image, tvP1Info, p1);
+        setPlayerGUI(tvP1Name, ivP1Image, tvP1Info, tvP1Card, p1);
 
         // set center gui elements
         Property property = cardAttribute.getProperty();
@@ -107,15 +117,18 @@ public class RoundEndDialog extends DialogFragment {
         TextView tvP2Name = (TextView) view.findViewById(R.id.textView_P2Name);
         ImageView ivP2Image = (ImageView) view.findViewById(R.id.imageView_ImageP2Card);
         TextView tvP2Info = (TextView) view.findViewById(R.id.textView_InfoP2Card);
+        TextView tvP2Card = (TextView) view.findViewById(R.id.textView_P2CardName);
         // set player2 gui
-        setPlayerGUI(tvP2Name, ivP2Image, tvP2Info, p2);
+        setPlayerGUI(tvP2Name, ivP2Image, tvP2Info, tvP2Card, p2);
 
         return  dialog;
     }
 
-    public void setPlayerGUI(TextView tvName, ImageView ivImage, TextView tvInfo, Player player) {
+    public void setPlayerGUI(TextView tvName, ImageView ivImage, TextView tvInfo, TextView tvCard, Player player) {
         // display player name
         tvName.setText(player.getName() + ":");
+        // display card name
+        tvCard.setText(player.getCurrentCard().getName());
         // display first image from current player card
         ivImage.setImageBitmap(player.getCurrentCard().getImages().get(0).getBitmap());
         // display winner / loser

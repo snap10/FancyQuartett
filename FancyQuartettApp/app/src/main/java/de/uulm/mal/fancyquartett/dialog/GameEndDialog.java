@@ -1,10 +1,10 @@
 package de.uulm.mal.fancyquartett.dialog;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -73,6 +73,14 @@ public class GameEndDialog extends DialogFragment {
                 });
         // build dialog
         Dialog dialog = builder.create();
+        // color buttons
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                ((android.support.v7.app.AlertDialog) getDialog()).getButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.accent));
+                ((android.support.v7.app.AlertDialog) getDialog()).getButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.accent));
+            }
+        });
 
         // read playerWon gui elements
         TextView tvPName = (TextView) view.findViewById(R.id.textView_pName);
