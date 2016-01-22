@@ -240,12 +240,14 @@ public class DeckDownloader extends AsyncTask<Void, Void, Exception> {
      */
     private double[] calculateMedian(ArrayList<double[]> valuesList) {
         double[] median = new double[valuesList.get(0).length];
-        double[] tmp = new double[valuesList.size()];
+
         for (int i = 0; i < median.length; i++) {
+            double[] tmp = new double[valuesList.size()];
             for (int k = 0; k < valuesList.size(); k++) {
                 tmp[k] = valuesList.get(k)[i];
-                median[i] = returnMedian(tmp);
+
             }
+            median[i] = returnMedian(tmp);
         }
         return median;
     }

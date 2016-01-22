@@ -146,10 +146,7 @@
     <string name="winner">WINNER</string>
     <string name="loser">LOSER</string>
     <string name="standoff">STANDOFF</string>
-
-
-
-
+    <string name="medianis">Median is:</string>
 
 
 </resources>

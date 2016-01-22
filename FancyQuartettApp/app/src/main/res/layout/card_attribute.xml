@@ -14,7 +14,7 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="?android:attr/listPreferredItemHeightSmall"
-        android:padding="5dp"
+        android:padding="2dp"
         android:background="@color/card_attribute_background">
 
         <ImageView
@@ -22,10 +22,9 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:src="@android:drawable/ic_menu_report_image"
-            android:layout_alignParentTop="false"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true" />
+            android:layout_alignTop="@+id/textView_attrName"
+            android:layout_alignLeft="@+id/medianTextView"
+            android:layout_alignStart="@+id/medianTextView" />
 
         <TextView
             android:id="@+id/textView_attrName"
@@ -44,18 +43,18 @@
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:src="@android:drawable/ic_menu_report_image"
-            android:layout_alignParentTop="false"
+            android:layout_alignTop="@+id/imageView_attrIcon"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true" />
+            android:layout_alignParentEnd="true" />
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/linearLayout3"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true">
+            android:layout_below="@+id/textView_attrName"
+
+            android:layout_centerInParent="true">
 
             <TextView
                 android:id="@+id/textView_attrValue"
@@ -80,6 +79,16 @@
                 android:layout_alignParentBottom="false"
                 android:layout_centerInParent="true" />
         </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+           android:textSize="10dp"
+            android:text="Median"
+            android:id="@+id/medianTextView"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
     </RelativeLayout>
 

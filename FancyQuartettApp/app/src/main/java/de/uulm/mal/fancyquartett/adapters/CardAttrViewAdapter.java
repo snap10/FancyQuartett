@@ -75,6 +75,12 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
             } else {
                 holder.cardAttrArrow.setImageResource(android.R.drawable.arrow_down_float);
             }
+            if (!isClickable){
+                holder.cardAttrMedian.setText("Med:"+property.getMedian());
+            }else{
+                holder.cardAttrMedian.setVisibility(View.GONE);
+
+            }
             holder.view.setOnClickListener(getOnClickListener(property,value,cardAttr,position));
         }
     }
@@ -87,6 +93,8 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
                   CardView view = (CardView)v;
                   view.setCardBackgroundColor(getContext().getResources().getColor(R.color.colorPrimary));
                   attrClickListener.onCardAttrClicked(property, value, attribute);
+              }else{
+                 // Toast.makeText(context,context.getString(R.string.medianis)+property.getMedian(), Toast.LENGTH_SHORT).show();
               }
           }
       };
@@ -147,9 +155,11 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
 
         public TextView cardAttrName;
         public TextView cardAttrValue;
+        public TextView cardAttrMedian;
         public TextView cardAttrUnit;
         public ImageView cardAttrIcon;
         public ImageView cardAttrArrow;
+
 
         protected int index;
         protected Context context;
@@ -176,6 +186,7 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
             this.cardAttrUnit = (TextView) v.findViewById(R.id.textView_attrUnit);
             this.cardAttrIcon = (ImageView) v.findViewById(R.id.imageView_attrIcon);
             this.cardAttrArrow = (ImageView) v.findViewById(R.id.imageView_attrArrow);
+            this.cardAttrMedian = (TextView)v.findViewById(R.id.medianTextView);
         }
     }
 }
