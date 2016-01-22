@@ -18,9 +18,9 @@ public class StatisticController {
     /**
      * Context of either the game activity or the main activity
      */
-    private Context context = null;
+    private transient Context context = null;
 
-    private SharedPreferences sharedPref = null;
+    private transient SharedPreferences sharedPref = null;
 
     /**
      * Constructor used by game

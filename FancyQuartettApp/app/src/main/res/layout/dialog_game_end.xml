@@ -41,6 +41,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageView_imageWinner"
         android:src="@drawable/ic_winner_black_24dp"
+        android:scaleType="centerCrop"
         android:adjustViewBounds="true"
         android:padding="15dp"
         android:layout_below="@+id/linearLayout4"

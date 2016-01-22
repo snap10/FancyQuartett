@@ -145,13 +145,13 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         engine.stop();
-                        SharedPreferences prefs = getSharedPreferences("savedGame", MODE_PRIVATE);
+                        SharedPreferences prefs = getSharedPreferences("savedGame", Context.MODE_PRIVATE);
                         Gson gson = new Gson();
                         String json = gson.toJson(engine);
                         prefs.edit().putString("savedEngine", json).putBoolean("savedAvailable", true).commit();
                         Intent intent = new Intent(GameActivity.this, MainActivity.class);
-                        finish(); // calls onStop too
                         startActivity(intent);
+                        finish(); // calls onStop too
                     }
                 })
                 .setNegativeButton("No", null)
