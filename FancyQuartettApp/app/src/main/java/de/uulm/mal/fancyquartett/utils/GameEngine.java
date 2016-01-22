@@ -363,7 +363,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         // identify round winner
         playerWonRound = cardCtrl.compareCardsProperty(cardAttribute.getProperty());
         if (playerWonRound == -1) {
-            // standoff (TODO: bug if player only has 1 card left)
+            // standoff ()
         }
         // increase rounds played
         /*if(hasMaxRounds)*/ curRound++;
@@ -387,6 +387,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
     public void startNextRound() {
         // handleCards
         if (!cardCtrl.handlePlayerCards(playerWonRound)) {
+            // TODO: bug if player only has 1 card left
             // one player's deck is empty
         }
         // check if player won game

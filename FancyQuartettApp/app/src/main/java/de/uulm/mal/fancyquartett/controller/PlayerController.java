@@ -58,8 +58,14 @@ public class PlayerController implements Serializable {
         }
         // regular win by GameMode-End
         if(gameMode == GameMode.Points) {
-            if(p1.getPoints() >= maxPoints) return engine.PLAYER1;
-            if(p2.getPoints() >= maxPoints) return engine.PLAYER2;
+            if(p1.getCards().isEmpty() || p2.getCards().isEmpty()) {
+                if(p1.getPoints() > p2.getPoints()) return engine.PLAYER1;
+                if(p2.getPoints() > p1.getPoints()) return engine.PLAYER2;
+                if(p1.getPoints() == p2.getPoints()) return engine.STANDOFF;
+            } else {
+                if(p1.getPoints() >= maxPoints) return engine.PLAYER1;
+                if(p2.getPoints() >= maxPoints) return engine.PLAYER2;
+            }
         } else if(gameMode == GameMode.Time) {
             if(engine.getCurTime() >= engine.getGameTime()) {
                 if(p1.getCards().size() > p2.getCards().size()) return engine.PLAYER1;

@@ -106,7 +106,7 @@ public class CardController implements Serializable {
 
     /**
      * Removes card from loser and adds it to winners card-deck. If stingStack contains some
-     * cards, then they will be added to to winners card-deck.
+     * cards, then they will be added too to winners card-deck.
      * @param winnerId
      * @return if successful or not. problems can be e.g. that a player's deck is empty.
      */
