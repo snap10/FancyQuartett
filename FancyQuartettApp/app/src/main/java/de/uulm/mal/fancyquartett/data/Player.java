@@ -38,11 +38,11 @@ public class Player implements Serializable {
 
     public void setPoints(int points) {this.points = points;}
 
-
-
     public int getPoints() {
         return points;
     }
+
+    public void addPoints(int points) {this.points += points;}
 
     public void setRoundsWon(int roundsWon) {
         this.roundsWon = roundsWon;

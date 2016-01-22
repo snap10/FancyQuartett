@@ -116,6 +116,14 @@ public class Card implements Serializable {
 
     }
 
+    public int getPoints() {
+        // TODO: calculate Points (check biggerWins!!!)
+        // +-5% better than Median -> 2Points
+        // > +-5% better than Median --> 1Point
+        // -+5% worse than Median --> 5Points
+        return 0;
+    }
+
     /**
      * @return
      */

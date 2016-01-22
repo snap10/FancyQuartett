@@ -366,7 +366,13 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
             // standoff (TODO: bug if player only has 1 card left)
         }
         // increase rounds played
-        if(hasMaxRounds) curRound++;
+        /*if(hasMaxRounds)*/ curRound++;
+        // add points to winner
+        if(gameMode == GameMode.Points) {
+            Player p = getPlayer(playerWonRound);
+            int points = p.getCurrentCard().getPoints();
+            p.addPoints(points);
+        }
         // dismiss KiPlaysDialog
         if (!kiPlaysDialog.isHidden()) kiPlaysDialog.dismiss();
         // show RoundEndDialog
