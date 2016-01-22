@@ -15,7 +15,8 @@
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -31,7 +32,8 @@
         <!-- CARD GALLERY ACTIVITY -->
         <activity
             android:name=".activities.CardGalleryActivity"
-            android:parentActivityName=".activities.MainActivity">
+            android:parentActivityName=".activities.MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.uulm.mal.fancyquartett.activities.MainActivity" />
@@ -39,12 +41,14 @@
         <!-- NEW GAME SETTINGS ACTIVITY -->
         <activity
             android:name=".activities.NewGameSettingsActivity"
-            android:parentActivityName=".activities.MainActivity" />
+            android:parentActivityName=".activities.MainActivity"
+            android:screenOrientation="portrait"/>
         <!-- NEW GAME GALLERY ACTIVITY -->
         <activity
             android:name=".activities.NewGameGalleryActivity"
             android:label="@string/title_activity_deck_gallery"
-            android:parentActivityName=".activities.NewGameSettingsActivity">
+            android:parentActivityName=".activities.NewGameSettingsActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.uulm.mal.fancyquartett.activities.NewGameSettingsActivity" />
@@ -53,7 +57,8 @@
         <activity
             android:name=".activities.CardViewerActivity"
             android:label="@string/title_activity_card_detail_viewer"
-            android:parentActivityName=".activities.CardGalleryActivity">
+            android:parentActivityName=".activities.CardGalleryActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.uulm.mal.fancyquartett.activities.CardGalleryActivity" />
@@ -62,7 +67,8 @@
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".activities.MainActivity">
+            android:parentActivityName=".activities.MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.uulm.mal.fancyquartett.activities.MainActivity" />
