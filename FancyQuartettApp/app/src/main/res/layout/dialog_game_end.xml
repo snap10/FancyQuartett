@@ -40,7 +40,7 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:id="@+id/imageView_imageWinner"
-        android:src="@drawable/ic_winner_black_24dp"
+        android:src="@drawable/ic_winner_black"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"
         android:padding="15dp"

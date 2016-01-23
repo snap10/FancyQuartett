@@ -77,14 +77,14 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
                 holder.cardAttrIcon.setEnabled(false);
             }
             if(property.biggerWins()) {
-                holder.cardAttrArrow.setImageResource(R.drawable.ic_arrow_drop_up_24dp);
+                holder.cardAttrArrow.setImageResource(R.drawable.ic_arrow_drop_up_black);
             } else {
-                holder.cardAttrArrow.setImageResource(R.drawable.ic_arrow_drop_down_24dp);
+                holder.cardAttrArrow.setImageResource(R.drawable.ic_arrow_drop_down_black);
             }
             if (!isClickable){
-                holder.cardAttrMedian.setText("Med:"+property.getMedian());
+                holder.cardAttrExtraInfo.setText("+"+card.getPoints()+" points");
             }else{
-                holder.cardAttrMedian.setVisibility(View.GONE);
+                holder.cardAttrExtraInfo.setVisibility(View.GONE);
 
             }
             holder.view.setOnClickListener(getOnClickListener(property,value,cardAttr,position));
@@ -161,7 +161,7 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
 
         public TextView cardAttrName;
         public TextView cardAttrValue;
-        public TextView cardAttrMedian;
+        public TextView cardAttrExtraInfo;
         public TextView cardAttrUnit;
         public ImageView cardAttrIcon;
         public ImageView cardAttrArrow;
@@ -192,7 +192,7 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
             this.cardAttrUnit = (TextView) v.findViewById(R.id.textView_attrUnit);
             this.cardAttrIcon = (ImageView) v.findViewById(R.id.imageView_attrIcon);
             this.cardAttrArrow = (ImageView) v.findViewById(R.id.imageView_attrArrow);
-            this.cardAttrMedian = (TextView)v.findViewById(R.id.medianTextView);
+            this.cardAttrExtraInfo = (TextView)v.findViewById(R.id.textView_ExtraInfo);
         }
     }
 }

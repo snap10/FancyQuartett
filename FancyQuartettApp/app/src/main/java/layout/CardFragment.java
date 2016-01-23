@@ -24,6 +24,7 @@ import de.uulm.mal.fancyquartett.data.Card;
 import de.uulm.mal.fancyquartett.data.CardAttribute;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.data.Property;
+import de.uulm.mal.fancyquartett.utils.GameEngine;
 import de.uulm.mal.fancyquartett.utils.LocalDeckLoader;
 
 
@@ -36,6 +37,7 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
     private static final String ARG_CARD = "card";
     private static final String ARG_DECKID = "deck_name";
     private static final String ARG_ISCLICKABLE = "is_clickable";
+    private static final String ARG_EXTRAINFO = "extra_info";
 
     // view attributes
     private RecyclerView recList;

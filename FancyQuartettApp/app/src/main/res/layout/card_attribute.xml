@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="2dp"
     cardview:cardCornerRadius="2dp"
-    cardview:cardElevation="2dp"
+    cardview:cardElevation="0dp"
     cardview:cardBackgroundColor="@color/grey"
     android:background="@color/card_attribute_background">
 
@@ -84,8 +84,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
            android:textSize="10dp"
-            android:text="Median"
-            android:id="@+id/medianTextView"
+            android:text="ExtraInfo"
+            android:id="@+id/textView_ExtraInfo"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />

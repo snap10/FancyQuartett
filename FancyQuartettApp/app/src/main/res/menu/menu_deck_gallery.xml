@@ -7,7 +7,7 @@
         android:id="@+id/listLayoutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:icon="@drawable/ic_view_list_24dp"
+        android:icon="@drawable/ic_view_list_white"
         android:title="@string/change_content_layout"
         android:visible="false"
         app:showAsAction="ifRoom" />
@@ -15,7 +15,7 @@
         android:id="@+id/gridLayoutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:icon="@drawable/ic_view_module_24dp"
+        android:icon="@drawable/ic_view_module_white"
         android:title="@string/change_content_layout"
         android:visible="false"
         app:showAsAction="ifRoom" />

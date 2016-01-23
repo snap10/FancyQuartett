@@ -1,14 +1,10 @@
 package de.uulm.mal.fancyquartett.activities;
 
 import android.app.AlertDialog;
-import android.app.DialogFragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -16,37 +12,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
 import de.uulm.mal.fancyquartett.R;
-import de.uulm.mal.fancyquartett.controller.CardController;
-import de.uulm.mal.fancyquartett.controller.PlayerController;
-import de.uulm.mal.fancyquartett.controller.StatisticController;
-import de.uulm.mal.fancyquartett.data.Card;
 import de.uulm.mal.fancyquartett.data.CardAttribute;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
-import de.uulm.mal.fancyquartett.data.Player;
 import de.uulm.mal.fancyquartett.data.Property;
-import de.uulm.mal.fancyquartett.dialog.GameEndDialog;
-import de.uulm.mal.fancyquartett.dialog.KiPlaysDialog;
-import de.uulm.mal.fancyquartett.dialog.RoundEndDialog;
 import de.uulm.mal.fancyquartett.enums.GameMode;
 import de.uulm.mal.fancyquartett.enums.KILevel;
-import de.uulm.mal.fancyquartett.interfaces.OnDialogButtonClickListener;
-import de.uulm.mal.fancyquartett.interfaces.OnGameTimeUpdateListener;
-import de.uulm.mal.fancyquartett.tasks.GameTimeTask;
-import de.uulm.mal.fancyquartett.tasks.SoftKiTask;
-import de.uulm.mal.fancyquartett.tasks.PlayerTimeOutTask;
 import de.uulm.mal.fancyquartett.utils.GameEngine;
 import de.uulm.mal.fancyquartett.utils.LocalDeckLoader;
 import layout.CardFragment;
@@ -86,6 +60,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
 
         // build toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.gameActivity_Toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_clear_white);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -138,7 +113,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)
-                .setIcon(R.drawable.ic_error_black_24dp)
+                .setIcon(R.drawable.ic_error_accent)
                 .setTitle("Closing Game")
                 .setMessage("Are you sure you want to close the game? This game will be saved after closing.")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {

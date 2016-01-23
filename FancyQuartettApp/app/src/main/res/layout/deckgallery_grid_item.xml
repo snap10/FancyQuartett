@@ -31,7 +31,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:id="@+id/downloadIcon"
-                android:src="@drawable/ic_file_download_24dp"
+                android:src="@drawable/ic_file_download_white"
                 android:background="@drawable/ovalshapedsackground"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
@@ -78,7 +78,7 @@
                         android:layout_gravity="center"
                         android:adjustViewBounds="false"
                         android:padding="10dp"
-                        android:src="@drawable/ic_more_vert_24dp"
+                        android:src="@drawable/ic_more_vert_white"
                         android:background="@null"/>
                 </RelativeLayout>
 
