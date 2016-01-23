@@ -138,6 +138,8 @@
 
     <!-- Strings used by Dialog -->
     <string name="ok">ok</string>
+    <string name="cancle">cancle</string>
+    <string name="exit">exit</string>
 
     <!-- Strings used by GameEndDialog -->
     <string name="winner_gameend">WINNER&#58;</string>

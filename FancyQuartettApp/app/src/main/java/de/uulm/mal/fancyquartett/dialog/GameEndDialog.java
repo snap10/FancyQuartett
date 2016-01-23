@@ -78,7 +78,6 @@ public class GameEndDialog extends DialogFragment {
             @Override
             public void onShow(DialogInterface dialog) {
                 ((android.support.v7.app.AlertDialog) getDialog()).getButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.accent));
-                ((android.support.v7.app.AlertDialog) getDialog()).getButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.accent));
             }
         });
 

@@ -1,6 +1,7 @@
 package de.uulm.mal.fancyquartett.activities;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -112,11 +114,11 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
 
     @Override
     public void onBackPressed() {
-        new AlertDialog.Builder(this)
+        AlertDialog dialog = new AlertDialog.Builder(this)
                 .setIcon(R.drawable.ic_error_accent)
                 .setTitle("Closing Game")
                 .setMessage("Are you sure you want to close the game? This game will be saved after closing.")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getResources().getString(R.string.exit), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         engine.stop();
@@ -129,8 +131,17 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
                         finish(); // calls onStop too
                     }
                 })
-                .setNegativeButton("No", null)
-                .show();
+                .setNegativeButton(getResources().getString(R.string.cancel), null)
+                .create();
+        // workaround for button color
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                ((AlertDialog) dialog).getButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.accent));
+                ((AlertDialog) dialog).getButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.secondary_text));
+            }
+        });
+        dialog.show();
     }
 
     @Override
