@@ -14,7 +14,7 @@ import layout.CardFragment;
  */
 public class SoftKiTask extends AsyncTask<Void, Void, CardAttribute> {
 
-    private final long DELAY = 5000;
+    private final long DELAY = 2000;
 
     private CardFragment.OnFragmentInteractionListener listener;
     private Card card;
