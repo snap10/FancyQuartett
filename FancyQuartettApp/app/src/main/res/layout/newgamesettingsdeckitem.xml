@@ -12,7 +12,8 @@
         android:layout_marginRight="6dp"
         android:contentDescription="TODO"
         android:scaleType="centerCrop"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@drawable/ic_touch_app_black"
+        android:adjustViewBounds="false" />
 
     <TextView
         android:id="@+id/deckdescription"
@@ -23,7 +24,7 @@
         android:layout_toRightOf="@id/deckicon"
         android:ellipsize="marquee"
         android:singleLine="true"
-        android:text="Description"
+        android:text="Touch to select a deck."
         android:textSize="10sp" />
 
     <TextView
@@ -36,7 +37,7 @@
         android:layout_alignWithParentIfMissing="false"
         android:layout_toRightOf="@id/deckicon"
         android:gravity="center_vertical"
-        android:text="Example application"
+        android:text="No deck selected ..."
         android:textSize="14sp" />
 
 
