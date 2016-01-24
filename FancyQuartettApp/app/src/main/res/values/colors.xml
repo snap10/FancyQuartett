@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#ffeb3b</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">@color/primary</color>
+    <color name="colorPrimaryDark">@color/primary_dark</color>
+    <color name="colorAccent">@color/accent</color>
 
-    <color name="primary">#2196F3</color>
-    <color name="primary_dark">#1976D2</color>
-    <color name="primary_dark_AAopacity">#AA1976D2</color>
+    <!-- #2196F3 -->
+    <color name="primary">#607D8B</color>
+    <!-- #1976D2 -->
+    <color name="primary_dark">#455A64</color>
+    <color name="primary_light">#CFD8DC</color>
+    <!-- #AA1976D2 -->
+    <color name="primary_dark_AAopacity">#AA455A64</color>
+    <!-- #FF9800 -->
     <color name="accent">#FF9800</color>
+    <!-- #FFE0B2 -->
+    <color name="accent_dark">#F57C00</color>
     <color name="accent_light">#FFE0B2</color>
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#727272</color>
-    <color name="icons">#FFFFFF</color>
     <color name="divider">#B6B6B6</color>
+    <color name="icons">#FFFFFF</color>
     <color name="grey">#e4e4e4</color>
     <color name="background_opaque">#88000000</color>
     <color name="background_white_opaque">#88FFFFFF</color>
