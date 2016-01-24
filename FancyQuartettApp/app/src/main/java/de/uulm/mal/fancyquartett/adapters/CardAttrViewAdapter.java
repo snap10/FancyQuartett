@@ -82,7 +82,7 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
                 holder.cardAttrArrow.setImageResource(R.drawable.ic_arrow_drop_down_black);
             }
             if (!isClickable){
-                holder.cardAttrExtraInfo.setText("+"+card.getPoints()+" points");
+                holder.cardAttrExtraInfo.setText("+"+card.getPoints(cardAttr)+" points");
             }else{
                 holder.cardAttrExtraInfo.setVisibility(View.GONE);
 

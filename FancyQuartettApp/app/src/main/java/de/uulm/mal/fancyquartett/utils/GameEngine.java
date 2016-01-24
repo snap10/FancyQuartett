@@ -367,7 +367,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         // add points to winner
         if(gameMode == GameMode.Points) {
             Player p = getPlayer(playerWonRound);
-            int points = p.getCurrentCard().getPoints();
+            int points = p.getCurrentCard().getPoints(cardAttribute);
             p.addPoints(points);
         }
         // dismiss KiPlaysDialog
