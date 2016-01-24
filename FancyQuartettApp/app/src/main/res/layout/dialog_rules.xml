@@ -91,20 +91,6 @@
                 android:textColor="@color/background_opaque"
                 android:layout_marginTop="5dp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="close"
-                android:id="@+id/rules_close_button"
-                android:layout_margin="0dp"
-                android:allowUndo="false"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:clickable="true"
-                android:height="50dp"
-                android:singleLine="false"
-                android:textSize="16dp" />
-
         </LinearLayout>
     </ScrollView>
 

@@ -28,8 +28,7 @@
     <string name="numberofroundstext">Rounds at maximum</string>
     <string name="totheenddescription">You play until one player has won all cards</string>
     <string name="timeinminuitesdescription">Minutes maximum for one Game</string>
-    <string name="title_activity_deck_gallery">DeckGalleryActivity</string>
-    <string name="title_activity_card_detail_viewer">CardDetailViewerActivity</string>
+
     <string name="pointdescription">Points for one Player to win</string>
     <string name="noDeckSelectedForGame">You have to choose a Deck to start the Game!</string>
     <string name="noLocalDecksFound">No Local decks were found on the phone!</string>
@@ -125,6 +124,15 @@
     <string name="last_played_on">Last played on</string>
     <string name="ki_level">AI Level</string>
 
+    <!-- Strings relatet to Toolbar Title -->
+    <string name="title_activity_deck_gallery">DeckGalleryActivity</string>
+    <string name="title_activity_card_detail_viewer">CardDetailViewerActivity</string>
+
+    <string name="title_main">FancyQuartett</string>
+    <string name="title_new_game">New Game</string>
+    <string name="title_gallery">Gallery</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_gallery_select">Select a deck</string>
 
     <!-- Strings used in GameActivity -->
     <string name="overall_balance">Overall Balance</string>
@@ -137,9 +145,10 @@
     <string name="current_player">Current player:</string>
 
     <!-- Strings used by Dialog -->
-    <string name="ok">ok</string>
-    <string name="cancle">cancle</string>
-    <string name="exit">exit</string>
+    <string name="ok_caps">OK</string>
+    <string name="cancel_caps">CANCEL</string>
+    <string name="close_caps">CLOSE</string>
+    <string name="exit_caps">EXIT</string>
 
     <!-- Strings used by GameEndDialog -->
     <string name="winner_gameend">WINNER&#58;</string>

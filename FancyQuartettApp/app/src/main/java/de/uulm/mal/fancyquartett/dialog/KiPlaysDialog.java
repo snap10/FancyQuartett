@@ -49,7 +49,7 @@ public class KiPlaysDialog extends DialogFragment {
         }
 
         // get the dialogbuilder
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AppTheme_Dialog);
         // get the layout infalter
         LayoutInflater inflater = getActivity().getLayoutInflater();
         // inflate and set the layout for the dialog

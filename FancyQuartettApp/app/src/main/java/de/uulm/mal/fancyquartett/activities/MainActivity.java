@@ -1,17 +1,17 @@
 package de.uulm.mal.fancyquartett.activities;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
 
 import android.app.Dialog;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -20,14 +20,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.text.Layout;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -36,6 +32,7 @@ import java.io.IOException;
 
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.data.Settings;
+import de.uulm.mal.fancyquartett.dialog.RulesDialog;
 import de.uulm.mal.fancyquartett.utils.AssetsInstaller;
 import de.uulm.mal.fancyquartett.utils.GameEngine;
 import layout.GalleryFragment;
@@ -153,18 +150,8 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_rules) {
-            //TODO start new Activity with Rules
-            final Dialog rules = new Dialog(this);
-            rules.setContentView(R.layout.rules_dialog);
-            View rules_close_button = rules.findViewById(R.id.rules_close_button);
-            rules_close_button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    rules.dismiss();
-                }
-            });
-            rules.setTitle("Rules");
-            rules.show();
+            RulesDialog dialog = new RulesDialog().newInstance();
+            dialog.show(getSupportFragmentManager(),"RulesDialog");
         }
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
@@ -214,6 +201,31 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
             Toast toast = Toast.makeText(this, "Error installing Files " + possibleException.getMessage(), Toast.LENGTH_LONG);
             toast.show();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setIcon(R.drawable.ic_error_accent)
+                .setTitle("Leaving FancyQuartett")
+                .setMessage("Are you sure you want to leave this fancy app?")
+                .setPositiveButton(getResources().getString(R.string.exit_caps), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setNegativeButton(getResources().getString(R.string.cancel), null)
+                .create();
+        // workaround for button color
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                ((AlertDialog) dialog).getButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.accent));
+                ((AlertDialog) dialog).getButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.secondary_text));
+            }
+        });
+        dialog.show();
     }
 
     /**

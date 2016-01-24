@@ -39,7 +39,7 @@
                         android:layout_height="wrap_content"
                         android:singleLine="true"
                         android:text="@string/chosendeck"
-                        android:textSize="14sp" />
+                        android:textAppearance="?android:attr/textAppearanceLarge" />
 
                     <include
                         android:id="@+id/chosendecktitem"
@@ -64,7 +64,7 @@
                         android:layout_height="wrap_content"
                         android:singleLine="true"
                         android:text="@string/gamemode_chooser_title"
-                        android:textSize="14sp" />
+                        android:textAppearance="?android:attr/textAppearanceLarge" />
 
                     <android.support.design.widget.TabLayout
                         android:id="@+id/tabs"
@@ -100,7 +100,7 @@
                         android:layout_height="wrap_content"
                         android:singleLine="true"
                         android:text="@string/generalsettings_title"
-                        android:textSize="14sp" />
+                        android:textAppearance="?android:attr/textAppearanceLarge" />
 
                     <FrameLayout
                         android:id="@+id/multiplayerFragmentContainer"

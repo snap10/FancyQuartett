@@ -21,6 +21,7 @@ import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.data.CardAttribute;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.data.Property;
+import de.uulm.mal.fancyquartett.dialog.RulesDialog;
 import de.uulm.mal.fancyquartett.enums.GameMode;
 import de.uulm.mal.fancyquartett.enums.KILevel;
 import de.uulm.mal.fancyquartett.utils.GameEngine;
@@ -105,7 +106,8 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
             case android.R.id.home:
                 onBackPressed();
             case R.id.action_rules:
-                // TODO: show Dialog with Rules
+                final RulesDialog dialog = new RulesDialog().newInstance();
+                dialog.show(getSupportFragmentManager(),"RulesDialog");
                 return true;
             default:
                 return false;
@@ -118,7 +120,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
                 .setIcon(R.drawable.ic_error_accent)
                 .setTitle("Closing Game")
                 .setMessage("Are you sure you want to close the game? This game will be saved after closing.")
-                .setPositiveButton(getResources().getString(R.string.exit), new DialogInterface.OnClickListener() {
+                .setPositiveButton(getResources().getString(R.string.exit_caps), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         engine.stop();

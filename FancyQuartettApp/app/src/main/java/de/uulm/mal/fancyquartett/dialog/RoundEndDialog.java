@@ -74,14 +74,14 @@ public class RoundEndDialog extends DialogFragment {
         }
 
         // get the dialogbuilder
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AppTheme_Dialog);
         // get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
         // inflate and set the layout for the dialog
         // pass null as the parent view because its going in the dialog layout
         View view = inflater.inflate(R.layout.dialog_round_end, null);
         builder.setView(view)
-                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.ok_caps), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         engine.OnDialogPositiveClick(RoundEndDialog.this);
