@@ -151,11 +151,12 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
     @Override
     protected void onStop() {
         engine.stop();
-        SharedPreferences prefs = getSharedPreferences("savedGame", MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = gson.toJson(engine);
-        prefs.edit().putString("savedEngine", json).putBoolean("savedAvailable", true).commit();
-
+        if(!engine.isGameOver()) {
+            SharedPreferences prefs = getSharedPreferences("savedGame", MODE_PRIVATE);
+            Gson gson = new Gson();
+            String json = gson.toJson(engine);
+            prefs.edit().putString("savedEngine", json).putBoolean("savedAvailable", true).commit();
+        }
         super.onStop();
     }
 

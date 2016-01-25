@@ -100,7 +100,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
     private boolean hasPlayerTimeout = false;
     private boolean hasMaxRounds = false;
     private ArrayList<Card> stingStack;
-    private boolean gameover = false;   // flag used to prevent multiple dialoge showing and statistics counting
+    private boolean gameover = false;
 
     // controller
     private CardController cardCtrl;
@@ -285,13 +285,11 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
      * @param playerWonGame
      */
     private void finishGame(int playerWonGame) {
-        if (!gameover) {
-            // show dialog
-            showGameEndDialog(this, playerWonGame);
-            // write statistic
-            statisticCtrl.gamesPlayedPlusOne(playerWonGame == PLAYER1);
-            gameover = true;
-        }
+        // write statistic
+        statisticCtrl.gamesPlayedPlusOne(playerWonGame == PLAYER1);
+        gameover = true;
+        // show dialog
+        showGameEndDialog(this, playerWonGame);
     }
 
     /**
@@ -565,6 +563,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
     public void OnDialogPositiveClick(DialogFragment dialog) {
         // check if Callback is from GameEndDialog
         if (dialog instanceof GameEndDialog) {
+            System.out.println("GAMEOVER");
             stopAllTasks();
             SharedPreferences prefs = gameActivity.getSharedPreferences("savedGame", context.MODE_PRIVATE);
             prefs.edit().remove("savedEngine").putBoolean("savedAvailable",false);
@@ -694,6 +693,30 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         return context;
     }
 
+    public Timestamp getLastPlayed() {
+        return lastPlayed;
+    }
+
+    public KILevel getKiLevel() {
+        return kiLevel;
+    }
+
+    public TextView getTvRoundsLeft() {
+        return tvRoundsLeft;
+    }
+
+    public TextView getTvTimeLeft() {
+        return tvTimeLeft;
+    }
+
+    public OfflineDeck getGameDeck() {
+        return gameDeck;
+    }
+
+    public boolean isGameOver() {
+        return gameover;
+    }
+
 
     /*
     SETTER
@@ -713,10 +736,6 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         this.curPlayer = curPlayer;
     }
 
-    public OfflineDeck getGameDeck() {
-        return gameDeck;
-    }
-
     public void setContext(Context context) {
         this.context = context;
     }
@@ -731,21 +750,5 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
 
     public void setGameActivity(GameActivity gameActivity) {
         this.gameActivity = gameActivity;
-    }
-
-    public Timestamp getLastPlayed() {
-        return lastPlayed;
-    }
-
-    public KILevel getKiLevel() {
-        return kiLevel;
-    }
-
-    public TextView getTvRoundsLeft() {
-        return tvRoundsLeft;
-    }
-
-    public TextView getTvTimeLeft() {
-        return tvTimeLeft;
     }
 }
