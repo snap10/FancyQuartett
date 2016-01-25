@@ -225,6 +225,7 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
                 ((AlertDialog) dialog).getButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.secondary_text));
             }
         });
+        dialog.getWindow().setWindowAnimations(R.style.AppTheme_Dialog_Animation);
         dialog.show();
     }
 

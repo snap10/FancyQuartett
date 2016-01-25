@@ -130,6 +130,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
                         String json = gson.toJson(engine);
                         prefs.edit().putString("savedEngine", json).putBoolean("savedAvailable", true).commit();
                         Intent intent = new Intent(GameActivity.this, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         finish(); // calls onStop too
                     }
