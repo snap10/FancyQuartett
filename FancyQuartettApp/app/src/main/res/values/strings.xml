@@ -161,5 +161,8 @@
     <string name="standoff">STANDOFF</string>
     <string name="medianis">Median is:</string>
 
+    <!-- Strings used by PlayerChangedDialog -->
+    <string name="player_changed">Player changed</string>
+
 
 </resources>

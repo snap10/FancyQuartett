@@ -75,7 +75,6 @@ public class PlayerController implements Serializable {
             if(p1.getCards().size() == 0) return engine.PLAYER2;
             if(p2.getCards().size() == 0) return engine.PLAYER1;
         }
-
         return -1;
     }
 

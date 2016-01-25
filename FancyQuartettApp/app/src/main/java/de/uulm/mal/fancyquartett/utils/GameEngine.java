@@ -32,6 +32,7 @@ import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.data.Player;
 import de.uulm.mal.fancyquartett.dialog.GameEndDialog;
 import de.uulm.mal.fancyquartett.dialog.KiPlaysDialog;
+import de.uulm.mal.fancyquartett.dialog.PlayerChangedDialog;
 import de.uulm.mal.fancyquartett.dialog.RoundEndDialog;
 import de.uulm.mal.fancyquartett.enums.GameMode;
 import de.uulm.mal.fancyquartett.enums.KILevel;
@@ -99,6 +100,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
     private boolean isMultiplayer = false;
     private boolean hasPlayerTimeout = false;
     private boolean hasMaxRounds = false;
+    private boolean isAdditionalRound = false;
     private ArrayList<Card> stingStack;
     private boolean gameover = false;
 
@@ -375,7 +377,9 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
             p.addPoints(points);
         }
         // dismiss KiPlaysDialog
-        if (!kiPlaysDialog.isHidden()) kiPlaysDialog.dismiss();
+        if(!isMultiplayer) {
+            if (!kiPlaysDialog.isHidden()) kiPlaysDialog.dismiss();
+        }
         // show RoundEndDialog
         showRoundEndDialog(cardAttribute, playerWonRound);
         // statistic
@@ -396,6 +400,10 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
             // change current player if necessary
             if (curPlayer != playerWonRound && playerWonRound != STANDOFF) {
                 playerCtrl.changeCurrentPlayer();
+                // show player changed dialog if multiplayer
+                if(isMultiplayer) {
+                    showPlayerChangedDialog(getPlayer(curPlayer));
+                }
             }
             // show next card
             showCurrentPlayerCard();
@@ -460,31 +468,45 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         tvTimeoutLeft.setVisibility(View.GONE);
         // check if timeout is necessary
         if (curPlayer == PLAYER1) {
-            if (hasPlayerTimeout) { // start timeout
-                pbTimeout.setMax(timeout);
-                pbTimeout.setProgress(timeout);
-                // show timeout left
-                onTimeoutUpdate(timeout);
-                tvTimeoutLeft.setVisibility(View.VISIBLE);
-                // start task
-                playerTimeOutTask.cancel(false);
-                playerTimeOutTask = new PlayerTimeOutTask(gameActivity, this, pbTimeout);
-                playerTimeOutTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
-            } else { // 'disable' progressbar
+            if (hasPlayerTimeout) {
+                initialisePlayerTimeout();
+            } else {
+                // 'disable' progressbar
                 pbTimeout.setMax(0);
                 pbTimeout.setProgress(0);
             }
         } else {
             if (isMultiplayer) {
-                // TODO: set player2 timeout (copy from above?!)
-            } else { // 'disable' progressbar
+                if (hasPlayerTimeout) {
+                    initialisePlayerTimeout();
+                } else {
+                    // 'disable' progressbar
+                    pbTimeout.setMax(0);
+                    pbTimeout.setProgress(0);
+                }
+            } else {
+                // 'disable' progressbar
                 pbTimeout.setMax(0);
                 pbTimeout.setProgress(0);
                 // show dialog
                 kiPlaysDialog.show(fragmentManager, "KiPlaysDialog");
             }
-
         }
+    }
+
+    /**
+     * Initialise player timeout. This method is related to handlePlayerTimeout().
+     */
+    private void initialisePlayerTimeout() {
+        pbTimeout.setMax(timeout);
+        pbTimeout.setProgress(timeout);
+        // show timeout left
+        onTimeoutUpdate(timeout);
+        tvTimeoutLeft.setVisibility(View.VISIBLE);
+        // start task
+        playerTimeOutTask.cancel(false);
+        playerTimeOutTask = new PlayerTimeOutTask(gameActivity, this, pbTimeout);
+        playerTimeOutTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
     }
 
     /**
@@ -553,6 +575,11 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         dialog.show(fragmentManager, "GameEndDialog");
     }
 
+    public void showPlayerChangedDialog(Player player) {
+        PlayerChangedDialog dialog = new PlayerChangedDialog().newInstance(this);
+        dialog.show(fragmentManager, "PlayerChangedDialog");
+    }
+
 
     /*
     LISTENER
@@ -572,7 +599,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
             gameActivity.finish();
             gameActivity.startActivity(intent);
         } else {
-            // initialise next Round
+            // start next Round
             startNextRound();
         }
     }
@@ -589,16 +616,19 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
 
     @Override
     public void onGameTimeUpdate(long time) {
-        if (time == 0) {
+        // display curTime
+        curTime = time;
+        handleToolbarInfo();
+        if (curTime == gameTime) {
+            handleToolbarInfo();
             // game ends
             int playerWonGame = playerCtrl.checkPlayerWon();
             if (playerWonGame == PLAYER1 || playerWonGame == PLAYER2) {
                 finishGame(playerWonGame);
-            } // TODO: else play +1 round
-        } else {
-            // display curTime
-            curTime = time;
-            handleToolbarInfo();
+            } else {
+                // start extra round
+                startNextRound();
+            }
         }
     }
 
