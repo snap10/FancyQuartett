@@ -16,6 +16,6 @@
         android:layout_height="wrap_content"
         android:icon="@drawable/ic_view_module_white"
         android:title="@string/change_content_layout"
-        android:visible="true"
+        android:visible="false"
         app:showAsAction="ifRoom" />
 </menu>
