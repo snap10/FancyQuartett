@@ -54,6 +54,6 @@ public class PlayerTimeOutTask extends AsyncTask<Void, Integer, Void> {
     protected void onProgressUpdate(Integer... values) {
         super.onProgressUpdate(values);
         // display progress
-        engine.onTimeOutUpdate(values[0]);
+        engine.onTimeoutUpdate(values[0]);
     }
 }

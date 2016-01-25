@@ -289,7 +289,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         statisticCtrl.gamesPlayedPlusOne(playerWonGame == PLAYER1);
         gameover = true;
         // show dialog
-        showGameEndDialog(this, playerWonGame);
+        showGameEndDialog(playerWonGame);
     }
 
     /**
@@ -459,7 +459,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
                 pbTimeout.setMax(timeout);
                 pbTimeout.setProgress(timeout);
                 // show timeout left
-                onTimeOutUpdate(timeout);
+                onTimeoutUpdate(timeout);
                 tvTimeoutLeft.setVisibility(View.VISIBLE);
                 // start task
                 playerTimeOutTask.cancel(false);
@@ -533,10 +533,6 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
      * @param playerWonRound
      */
     public void showRoundEndDialog(CardAttribute cardAttribute, int playerWonRound) {
-        Card p1Card = p1.getCurrentCard();
-        Card p2Card = p2.getCurrentCard();
-        String p1Name = p1.getName();
-        String p2Name = p2.getName();
         DialogFragment dialog = new RoundEndDialog().newInstance(this, p1, p2, cardAttribute, playerWonRound);
         dialog.show(fragmentManager, "RoundEndDialog");
     }
@@ -544,10 +540,9 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
     /**
      * Creates and shows a dialog, in which the game winner will be displayed. Game terminates
      * after callback from this dialog.
-     * @param engine
      * @param playerWon
      */
-    public void showGameEndDialog(GameEngine engine, int playerWon) {
+    public void showGameEndDialog(int playerWon) {
         Player playerWonGame = getPlayer(playerWon);
         DialogFragment dialog = new GameEndDialog().newInstance(this, playerWonGame);
         dialog.show(fragmentManager, "GameEndDialog");
@@ -604,7 +599,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
     }
 
     @Override
-    public void onTimeOutUpdate(long time) {
+    public void onTimeoutUpdate(long time) {
         // display progress
         pbTimeout.setProgress((int) time);
         pbTimeout.invalidate();
