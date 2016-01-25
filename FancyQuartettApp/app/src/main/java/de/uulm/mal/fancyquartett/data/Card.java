@@ -117,10 +117,6 @@ public class Card implements Serializable {
     }
 
     public int getPoints(CardAttribute attr) {
-        // TODO: calculate Points (check biggerWins!!!)
-        // +-5% better than Median -> 2Points
-        // > +-5% better than Median --> 1Point
-        // -+5% worse than Median --> 5Points
         boolean biggerWins = attr.getProperty().biggerWins();
         double medianPlus5Percent = attr.getMedian() + 0.05*attr.getMedian();
         double medianMinus5Percent = attr.getMedian() - 0.05*attr.getMedian();

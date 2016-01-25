@@ -38,6 +38,8 @@ import de.uulm.mal.fancyquartett.enums.KILevel;
 import de.uulm.mal.fancyquartett.interfaces.OnDialogButtonClickListener;
 import de.uulm.mal.fancyquartett.interfaces.OnGameTimeUpdateListener;
 import de.uulm.mal.fancyquartett.tasks.GameTimeTask;
+import de.uulm.mal.fancyquartett.tasks.HardKiTask;
+import de.uulm.mal.fancyquartett.tasks.MediumKiTask;
 import de.uulm.mal.fancyquartett.tasks.PlayerTimeOutTask;
 import de.uulm.mal.fancyquartett.tasks.SoftKiTask;
 import layout.CardFragment;
@@ -68,10 +70,8 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
 
     // tasks
     private transient SoftKiTask softAiTask;
-    /* TODO
-    private transient MediumAITask mediumAiTask;
-    private transient HardATTask hardAiTask;
-    */
+    private transient MediumKiTask mediumKiTask;
+    private transient HardKiTask hardKiTask;
     private transient PlayerTimeOutTask playerTimeOutTask;
     private transient GameTimeTask gameTimeTask;
 
@@ -340,14 +340,19 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
      */
     private void startKiTask() {
         if (kiLevel == KILevel.Soft) {
-            softAiTask = new SoftKiTask(p2.getCurrentCard(), gameActivity);
+            if(gameMode != GameMode.Points) softAiTask = new SoftKiTask(p2.getCurrentCard(), gameActivity, true);
+            else softAiTask = new SoftKiTask(p2.getCurrentCard(), gameActivity, false);
             softAiTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
         }
         if (kiLevel == KILevel.Medium) {
-            // TODO: MediumKiTask
+            if(gameMode != GameMode.Points) mediumKiTask = new MediumKiTask(p2.getCurrentCard(), gameActivity, true);
+            else mediumKiTask = new MediumKiTask(p2.getCurrentCard(), gameActivity, false);
+            mediumKiTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
         }
         if (kiLevel == KILevel.Hard) {
-            // TODO: HardKiTask
+            if(gameMode != GameMode.Points) hardKiTask = new HardKiTask(p2.getCurrentCard(), gameActivity, true);
+            else hardKiTask = new HardKiTask(p2.getCurrentCard(), gameActivity, false);
+            hardKiTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
         }
     }
 
@@ -558,7 +563,6 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
     public void OnDialogPositiveClick(DialogFragment dialog) {
         // check if Callback is from GameEndDialog
         if (dialog instanceof GameEndDialog) {
-            System.out.println("GAMEOVER");
             stopAllTasks();
             SharedPreferences prefs = gameActivity.getSharedPreferences("savedGame", context.MODE_PRIVATE);
             prefs.edit().remove("savedEngine").putBoolean("savedAvailable",false);

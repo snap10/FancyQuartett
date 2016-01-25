@@ -3,20 +3,17 @@ package de.uulm.mal.fancyquartett.tasks;
 import android.os.AsyncTask;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 
-import de.uulm.mal.fancyquartett.adapters.CardAttrViewAdapter;
 import de.uulm.mal.fancyquartett.data.Card;
 import de.uulm.mal.fancyquartett.data.CardAttribute;
 import layout.CardFragment;
 
 /**
- * Created by Lukas on 13.01.2016.
+ * Created by Lukas on 25.01.2016.
  */
-public class SoftKiTask extends AsyncTask<Void, Void, CardAttribute> {
+public class HardKiTask extends AsyncTask<Void, Void, CardAttribute> {
 
     private final long DELAY = 2500;
 
@@ -29,7 +26,7 @@ public class SoftKiTask extends AsyncTask<Void, Void, CardAttribute> {
      * @param card
      * @param listener
      */
-    public SoftKiTask(Card card, CardFragment.OnFragmentInteractionListener listener, boolean isNormalMode) {
+    public HardKiTask(Card card, CardFragment.OnFragmentInteractionListener listener, boolean isNormalMode) {
         this.card = card;
         this.listener = listener;
         this.isNormalMode = isNormalMode;
@@ -86,29 +83,40 @@ public class SoftKiTask extends AsyncTask<Void, Void, CardAttribute> {
         for(double difference : diffList) {
             sortedAttrList.add(helperMap.get(difference));
         }
-        // select 1 of 2 worst attributes
+        // select 1 of 2 best attributes
         if(Math.random() < 0.5) {
-            return sortedAttrList.get(0);
+            return sortedAttrList.get(sortedAttrList.size()-1);
         } else {
-            return sortedAttrList.get(1);
+            return sortedAttrList.get(sortedAttrList.size()-2);
         }
     }
 
     private CardAttribute selectPointMode(){
+        // TODO
         ArrayList<CardAttribute> unsortedAttrList = card.getAttributes();
-        HashMap<Integer, CardAttribute> map = new HashMap<Integer, CardAttribute>();
-        // fill map
+        HashMap<Boolean, CardAttribute> checkMap = new HashMap<Boolean, CardAttribute>();
+        // fill map(s)
         for(CardAttribute cardAttribute : unsortedAttrList) {
-            map.put(card.getPoints(cardAttribute), cardAttribute);
+            // fill checkMap
+            int points = card.getPoints(cardAttribute);
+            if(points == 5 || points == 2) {
+                // check if good 5 or 2 point attribute exists
+                double median = cardAttribute.getMedian();
+                double value = cardAttribute.getValue();
+                boolean isHigherWins = cardAttribute.isHigherWins();
+                if(isHigherWins) {
+                    if(median < value) checkMap.put(true, cardAttribute);
+                    else checkMap.put(false, cardAttribute);
+                } else {
+                    if(median > value) checkMap.put(true, cardAttribute);
+                    else checkMap.put(false, cardAttribute);
+                }
+            } else {
+                checkMap.put(false, cardAttribute);
+            }
         }
-        // select 5 or 2 point attribute
-        if(Math.random() < 0.5) {
-            if(map.containsKey(2)) return map.get(2);
-            if(map.containsKey(5)) return map.get(5);
-        } else {
-            if(map.containsKey(5)) return map.get(5);
-            if(map.containsKey(2)) return map.get(2);
-        }
-        return map.get(1);
+        // check if good 5 point attribute is available
+        if(checkMap.containsKey(true)) return checkMap.get(true);
+        else return selectNormalMode();
     }
 }
