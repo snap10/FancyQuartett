@@ -37,7 +37,7 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
     private static final String ARG_CARD = "card";
     private static final String ARG_DECKID = "deck_name";
     private static final String ARG_ISCLICKABLE = "is_clickable";
-    private static final String ARG_EXTRAINFO = "extra_info";
+    private static final String ARG_ISUSEDINPOINTMODE = "is_used_in_point_mode";
 
     // view attributes
     private RecyclerView recList;
@@ -53,6 +53,7 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
     private CardAttrViewAdapter cardAttrViewAdapter;
     private OnFragmentInteractionListener mListener;
     private boolean isClickable;
+    private boolean isUsedInPointMode;
 
     public CardFragment() {
         // required empty public constructor
@@ -87,6 +88,23 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
 
     /**
      * Creates a new instance of this fragment using the provided prameters.
+     * @param card
+     * @param isClickable
+     * @param isUsedInPointMode
+     * @return
+     */
+    public static CardFragment newInstance(Card card, boolean isClickable, boolean isUsedInPointMode) {
+        CardFragment fragment = new CardFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_CARD, card);
+        args.putBoolean(ARG_ISCLICKABLE, isClickable);
+        args.putBoolean(ARG_ISUSEDINPOINTMODE, isUsedInPointMode);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    /**
+     * Creates a new instance of this fragment using the provided prameters.
      *
      * @param cardId
      * @param deckid
@@ -112,6 +130,7 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
             card = (Card) args.getSerializable(ARG_CARD);
             deckID = args.getInt(ARG_DECKID);
             isClickable = args.getBoolean(ARG_ISCLICKABLE);
+            isUsedInPointMode = args.getBoolean(ARG_ISUSEDINPOINTMODE);
         }
         if (card != null) {
             cardID = card.getID();
@@ -135,10 +154,16 @@ public class CardFragment extends Fragment implements LocalDeckLoader.OnLocalDec
             recList.setLayoutManager(glm);
         }
         // create cardAttrViewAdapter
-        cardAttrViewAdapter = new CardAttrViewAdapter(getContext(), card.getAttributes(), this);
+        if(isUsedInPointMode) {
+            cardAttrViewAdapter = new CardAttrViewAdapter(getContext(), card.getAttributes(), this, isUsedInPointMode);
+        }
+        else {
+            cardAttrViewAdapter = new CardAttrViewAdapter(getContext(), card.getAttributes(), this);
+        }
+        recList.setAdapter(cardAttrViewAdapter);
+        // check if clickable
         if(!isClickable) disableCardAttrClick();
         else enableCardAttrClick();
-        recList.setAdapter(cardAttrViewAdapter);
         // create ViewPager
         ViewPager viewPager = (ViewPager) cardFragmentView.findViewById(R.id.viewPager_SlideShow);
         // providing the ViewPager with the ImageViews

@@ -105,8 +105,9 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         switch(id) {
             case android.R.id.home:
                 onBackPressed();
+                return true;
             case R.id.action_rules:
-                final RulesDialog dialog = new RulesDialog().newInstance();
+                RulesDialog dialog = new RulesDialog().newInstance();
                 dialog.show(getSupportFragmentManager(),"RulesDialog");
                 return true;
             default:
@@ -118,9 +119,9 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
     public void onBackPressed() {
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setIcon(R.drawable.ic_error_accent)
-                .setTitle("Closing Game")
-                .setMessage("Are you sure you want to close the game? This game will be saved after closing.")
-                .setPositiveButton(getResources().getString(R.string.exit_caps), new DialogInterface.OnClickListener() {
+                .setTitle("Leaving current Game")
+                .setMessage("Are you sure you want to cancel the game? This game will be saved automatically.")
+                .setPositiveButton(getResources().getString(R.string.yes_caps), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         engine.stop();
@@ -133,7 +134,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
                         finish(); // calls onStop too
                     }
                 })
-                .setNegativeButton(getResources().getString(R.string.cancel), null)
+                .setNegativeButton(getResources().getString(R.string.no_caps), null)
                 .create();
         // workaround for button color
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -143,6 +144,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
                 ((AlertDialog) dialog).getButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.secondary_text));
             }
         });
+        dialog.getWindow().setWindowAnimations(R.style.AppTheme_Dialog_Animation);
         dialog.show();
     }
 

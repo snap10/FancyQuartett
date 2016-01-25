@@ -123,13 +123,14 @@ public class CardController implements Serializable {
         if(winnerId != engine.STANDOFF) {
             if(winnerId == engine.PLAYER1) {
                 Card card = removeCardFromPlayer(engine.PLAYER2);
-                queueCard(winnerId);
                 addCardToPlayer(card, winnerId);
+                queueCard(winnerId);
+
             }
             if(winnerId == engine.PLAYER2) {
                 Card card = removeCardFromPlayer(engine.PLAYER1);
-                queueCard(winnerId);
                 addCardToPlayer(card, winnerId);
+                queueCard(winnerId);
             }
             if(engine.getStingStack().size() > 0) {
                 removeCardsFromStingStag(winnerId);

@@ -135,7 +135,7 @@
     <string name="title_gallery_select">Select a deck</string>
 
     <!-- Strings used in GameActivity -->
-    <string name="overall_balance">Overall Balance</string>
+    <string name="balance">Balance</string>
     <string name="time_left">Time left:</string>
     <string name="round">Round:</string>
 
@@ -149,6 +149,8 @@
     <string name="cancel_caps">CANCEL</string>
     <string name="close_caps">CLOSE</string>
     <string name="exit_caps">EXIT</string>
+    <string name="no_caps">NO</string>
+    <string name="yes_caps">YES</string>
 
     <!-- Strings used by GameEndDialog -->
     <string name="winner_gameend">WINNER&#58;</string>

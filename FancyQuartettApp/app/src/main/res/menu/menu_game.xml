@@ -4,9 +4,9 @@
     tools:context=".activities.GameActivity">
 
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_rules"
         android:icon="@drawable/ic_info_white"
-        android:title="@string/action_settings"
+        android:title="@string/action_rules"
         app:showAsAction="always" />
 
 </menu>

@@ -6,4 +6,5 @@ package de.uulm.mal.fancyquartett.interfaces;
 public interface OnGameTimeUpdateListener {
 
     public void onGameTimeUpdate(long time);
+    public void onTimeOutUpdate(long time);
 }

@@ -23,7 +23,7 @@ public class GameTimeTask extends AsyncTask<Void, Long, Void> {
 
     public GameTimeTask(GameEngine engine) {
         this.engine = engine;
-        if(engine.getCurTime() > (engine.getGameTime() - MINUTE)) {
+        if(engine.getCurTime() >= (engine.getGameTime() - MINUTE)) {
             breakpoint = 1000;
         } else {
             breakpoint = 60000;

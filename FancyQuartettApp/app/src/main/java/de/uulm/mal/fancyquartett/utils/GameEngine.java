@@ -55,8 +55,8 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
 
     // view components
     private transient View rootView;
-    private transient TextView tvCardQuantityP1, tvCardQuantityP2, tvCurPlayer, tvRoundsLeft, tvTimeLeft;
-    private transient LinearLayout linLayoutRound, linLayoutTime;
+    private transient TextView tvCardQuantityP1, tvCardQuantityP2, tvCurPlayer, tvTimeoutLeft, tvRoundsLeft, tvPointsLeft, tvTimeLeft;
+    private transient LinearLayout linLayoutRound, linLayoutPoints, linLayoutTime;
     private transient ProgressBar pbBalance;
     private transient ProgressBar pbTimeout;
     private transient CardFragment cardFragment;
@@ -98,7 +98,6 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
     private KILevel kiLevel;
     private boolean isMultiplayer = false;
     private boolean hasPlayerTimeout = false;
-    private boolean hasMaxPoints = false;
     private boolean hasMaxRounds = false;
     private ArrayList<Card> stingStack;
     private boolean gameover = false;   // flag used to prevent multiple dialoge showing and statistics counting
@@ -183,7 +182,6 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         // game-specific parameters
         if (maxRounds != 0) hasMaxRounds = true;
         if (this.timeout != 0) hasPlayerTimeout = true;
-        if (this.maxPoints != 0) hasMaxPoints = true;
     }
 
     /**
@@ -215,11 +213,14 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
      */
     private void initialiseUi(View v){
         linLayoutRound = (LinearLayout) v.findViewById(R.id.linLayout_Rounds);
+        linLayoutPoints = (LinearLayout) v.findViewById(R.id.linLayout_Points);
         linLayoutTime = (LinearLayout) v.findViewById(R.id.linLayout_Time);
         tvCardQuantityP1 = (TextView) v.findViewById(R.id.textView_YourCards);
         tvCardQuantityP2 = (TextView) v.findViewById(R.id.textView_OpponendsCards);
         tvCurPlayer = (TextView) v.findViewById(R.id.textView_CurPlayer);
+        tvTimeoutLeft = (TextView) v.findViewById(R.id.textView_Timeout_Left);
         tvRoundsLeft = (TextView) v.findViewById(R.id.textView_Rounds_Left);
+        tvPointsLeft = (TextView) v.findViewById(R.id.textView_Points_Left);
         tvTimeLeft = (TextView) v.findViewById(R.id.textView_Time_Left);
         pbBalance = (ProgressBar) v.findViewById(R.id.progressBar_Balance);
         pbTimeout = (ProgressBar) v.findViewById(R.id.progressBar_Timeout);
@@ -414,7 +415,14 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
      * Shows the first card in current players card-deck.
      */
     public void showCurrentPlayerCard() {
-        cardFragment = CardFragment.newInstance(getPlayer(curPlayer).getCurrentCard(), true);
+        cardFragment = null;
+        if(gameMode == GameMode.Points) {
+            // show card with possible gained points
+            cardFragment = CardFragment.newInstance(getPlayer(curPlayer).getCurrentCard(), true, true);
+        } else {
+            // show card without points
+            cardFragment = CardFragment.newInstance(getPlayer(curPlayer).getCurrentCard(), true);
+        }
         fragmentManager.beginTransaction().replace(R.id.linLayout_Container, cardFragment).commitAllowingStateLoss();
     }
 
@@ -444,11 +452,17 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
      */
     public void handlePlayerTimeout() {
         // display current players name
-        tvCurPlayer.setText(context.getResources().getString(R.string.current_player) + " " + getPlayer(curPlayer).getName());
+        tvCurPlayer.setText(getPlayer(curPlayer).getName());
+        // hide timeout left
+        tvTimeoutLeft.setVisibility(View.GONE);
+        // check if timeout is necessary
         if (curPlayer == PLAYER1) {
             if (hasPlayerTimeout) { // start timeout
                 pbTimeout.setMax(timeout);
                 pbTimeout.setProgress(timeout);
+                // show timeout left
+                onTimeOutUpdate(timeout);
+                tvTimeoutLeft.setVisibility(View.VISIBLE);
                 // start task
                 playerTimeOutTask.cancel(false);
                 playerTimeOutTask = new PlayerTimeOutTask(gameActivity, this, pbTimeout);
@@ -494,6 +508,13 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
                 time = secons + "s";
             }
             tvTimeLeft.setText(time);
+        }
+        // check if point info is necessary
+        if(gameMode != GameMode.Points) {
+            linLayoutPoints.setVisibility(View.GONE);
+        } else {
+            int curPoints = getPlayer(curPlayer).getPoints();
+            tvPointsLeft.setText(curPoints + " / " + maxPoints);
         }
         // check if rounds info is necessary
         if (!hasMaxRounds) linLayoutRound.setVisibility(View.GONE);
@@ -580,6 +601,26 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
             // display curTime
             curTime = time;
             handleToolbarInfo();
+        }
+    }
+
+    @Override
+    public void onTimeOutUpdate(long time) {
+        // display progress
+        pbTimeout.setProgress((int) time);
+        pbTimeout.invalidate();
+        // display time left
+        if(time % 1000 == 0) {
+            int minutes = (int) TimeUnit.MILLISECONDS.toMinutes(time);
+            time = time- (minutes * 60000);
+            int secons = (int) TimeUnit.MILLISECONDS.toSeconds(time);
+            String timeStr = "";
+            if(minutes > 0) {
+                timeStr = minutes + "m " + secons + "s";
+            } else {
+                timeStr = secons + "s";
+            }
+            tvTimeoutLeft.setText(timeStr + " left!");
         }
     }
 

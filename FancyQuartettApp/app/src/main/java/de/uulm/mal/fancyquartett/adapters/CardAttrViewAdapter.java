@@ -28,7 +28,8 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
     private Card card;
     private OnCardAttrClickListener attrClickListener;
     private boolean isClickable = false;
-
+    private boolean showPoints = false;
+    private CardAttrViewHolder holder;
     /**
      *
      * @param context
@@ -42,10 +43,17 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
      * @param context
      * @param attrList
      */
-    public CardAttrViewAdapter(Context context, List<CardAttribute> attrList,OnCardAttrClickListener listener) {
+    public CardAttrViewAdapter(Context context, List<CardAttribute> attrList, OnCardAttrClickListener listener) {
         this.context = context;
         this.attrList = attrList;
         this.attrClickListener=listener;
+    }
+
+    public CardAttrViewAdapter(Context context, List<CardAttribute> attrList, OnCardAttrClickListener listener, boolean showPoints) {
+        this.context = context;
+        this.attrList = attrList;
+        this.attrClickListener=listener;
+        this.showPoints = showPoints;
     }
 
     @Override
@@ -59,6 +67,7 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
 
     @Override
     public void onBindViewHolder(CardAttrViewHolder holder, int position) {
+        this.holder = holder;
         final CardAttribute cardAttr = attrList.get(position);
         if(cardAttr == null) {
             Toast.makeText(this.getContext(), "Error:Some CardAttributes failed to load", Toast.LENGTH_SHORT).show();
@@ -81,8 +90,9 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
             } else {
                 holder.cardAttrArrow.setImageResource(R.drawable.ic_arrow_drop_down_black);
             }
-            if (!isClickable){
-                holder.cardAttrExtraInfo.setText("+"+card.getPoints(cardAttr)+" points");
+            if (isClickable){
+                if(showPoints) holder.cardAttrExtraInfo.setText("+"+card.getPoints(cardAttr)+" points");
+                else holder.cardAttrExtraInfo.setVisibility(View.GONE);
             }else{
                 holder.cardAttrExtraInfo.setVisibility(View.GONE);
 
@@ -96,7 +106,7 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
           @Override
           public void onClick(View v) {
               if(isClickable) {
-                  CardView view = (CardView)v;
+                  CardView view = (CardView) v;
                   view.setCardBackgroundColor(getContext().getResources().getColor(R.color.colorPrimary));
                   attrClickListener.onCardAttrClicked(property, value, attribute);
               }else{
@@ -136,6 +146,14 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
 
     public void disableClicks() {
         this.isClickable = false;
+    }
+
+    public void showPointInfo() {
+        holder.cardAttrExtraInfo.setVisibility(View.VISIBLE);
+    }
+
+    public void hidePointInfo() {
+        holder.cardAttrExtraInfo.setVisibility(View.GONE);
     }
 
     /*
