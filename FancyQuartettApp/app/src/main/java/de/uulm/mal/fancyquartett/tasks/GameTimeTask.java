@@ -40,7 +40,6 @@ public class GameTimeTask extends AsyncTask<Void, Long, Void> {
             if(isCancelled()) break;
             // increase counter
             counter += 1000;
-            System.out.println("COUNTER: " + counter);
             // check if breakpoint is reached
             if(counter == breakpoint) {
                 progressStatus += breakpoint;
@@ -60,7 +59,6 @@ public class GameTimeTask extends AsyncTask<Void, Long, Void> {
     @Override
     protected void onProgressUpdate(Long... values) {
         super.onProgressUpdate(values);
-        System.out.println("UPDATE: " + values[0]);
         engine.onGameTimeUpdate(values[0]);
     }
 }
