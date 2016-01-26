@@ -91,7 +91,7 @@ public class Deck implements Serializable {
         if (other == this) return true;
         if (!(other instanceof Deck))return false;
         Deck otherDeck = (Deck)other;
-        return (this.name.equals(otherDeck.name)&&this.description.equals(otherDeck.description));
+        return (this.id==otherDeck.id);
 
     }
 
