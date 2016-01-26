@@ -68,7 +68,13 @@ public class PlayerChangedDialog extends DialogFragment{
 
         // build dialog
         Dialog dialog = builder.create();
-        dialog.setCancelable(false);
+        // color buttons
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.accent));
+            }
+        });
 
         return dialog;
     }
