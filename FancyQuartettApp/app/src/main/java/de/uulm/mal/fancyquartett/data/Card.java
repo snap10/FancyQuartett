@@ -120,7 +120,16 @@ public class Card implements Serializable {
         boolean biggerWins = attr.getProperty().biggerWins();
         double medianPlus5Percent = attr.getMedian() + 0.05*attr.getMedian();
         double medianMinus5Percent = attr.getMedian() - 0.05*attr.getMedian();
-        double value = attr.getValue();
+        // search the attribute value for THIS CARD
+        double value = 0;
+        int searchId = attr.getId();
+        for(CardAttribute a : attributes) {
+            if(a.getId() == searchId) {
+                value = a.getValue();
+                break;
+            }
+        }
+        // return points based on difference from median
         if(value > medianPlus5Percent) {
             if(biggerWins) return 1;
             else return 5;
