@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 
+import java.text.SimpleDateFormat;
+
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.activities.GameActivity;
 import de.uulm.mal.fancyquartett.activities.NewGameSettingsActivity;
@@ -84,7 +86,7 @@ public class StartFragment extends Fragment {
             TextView lastGameDeckDescription = (TextView) v.findViewById(R.id.lastgame_deckdescription);
             lastGameDeckDescription.setText(engine.getGameDeck().getDescription());
             TextView lastPlayedTextView = (TextView) v.findViewById(R.id.lastgame_lastplayed);
-            lastPlayedTextView.setText(getString(R.string.last_played_on)+": " + engine.getLastPlayed());
+            lastPlayedTextView.setText(getString(R.string.last_played_on)+": " + new SimpleDateFormat("dd.MM.yyyy HH:mm").format(engine.getLastPlayed()));
             TextView kiLevel = (TextView) v.findViewById(R.id.lastgame_ki_level);
 
             kiLevel.setText(getString(R.string.ki_level)+": " + engine.getKiLevel().toString());
