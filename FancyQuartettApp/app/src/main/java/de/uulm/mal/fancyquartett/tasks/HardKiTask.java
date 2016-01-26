@@ -18,16 +18,13 @@ public class HardKiTask extends AsyncTask<Void, Void, CardAttribute> {
     private final long DELAY = 2500;
 
     private CardFragment.OnFragmentInteractionListener listener;
-    private Card card;
+    private Card computersCard;
+    private Card playersCard;
     private boolean isNormalMode;
 
-    /**
-     *
-     * @param card
-     * @param listener
-     */
-    public HardKiTask(Card card, CardFragment.OnFragmentInteractionListener listener, boolean isNormalMode) {
-        this.card = card;
+    public HardKiTask(Card computersCard, Card playersCard, CardFragment.OnFragmentInteractionListener listener, boolean isNormalMode) {
+        this.computersCard = computersCard;
+        this.playersCard = playersCard;
         this.listener = listener;
         this.isNormalMode = isNormalMode;
     }
@@ -60,7 +57,7 @@ public class HardKiTask extends AsyncTask<Void, Void, CardAttribute> {
      * @return
      */
     private CardAttribute selectNormalMode(){
-        ArrayList<CardAttribute> unsortedAttrList = card.getAttributes();
+        ArrayList<CardAttribute> unsortedAttrList = computersCard.getAttributes();
         // start ki selecting
         HashMap<Double, CardAttribute> helperMap = new HashMap<Double, CardAttribute>();
         ArrayList<Double> diffList = new ArrayList<Double>();
@@ -92,15 +89,45 @@ public class HardKiTask extends AsyncTask<Void, Void, CardAttribute> {
     }
 
     private CardAttribute selectPointMode(){
-        // TODO
+
+        // Variant 1: Spy out player's card and check if there is a 5-points-attribute that would win
+        CardAttribute fivePointsWinnerAttr = null;
+        for(CardAttribute playerattr : playersCard.getAttributes()) {
+            for(CardAttribute computerattr : computersCard.getAttributes()) {
+                boolean biggerWins = playerattr.getProperty().biggerWins();
+                boolean computerIsBigger = computerattr.getValue() > playerattr.getValue();
+                if((computerIsBigger && biggerWins) || (!computerIsBigger && !biggerWins)) {
+                    // comptuer would win
+                    if(computersCard.getPoints(computerattr) == 5) {
+                        fivePointsWinnerAttr = computerattr;
+                        System.out.println("AI found 5-points-attribute that would win!");
+                        break;
+                    }
+                } else {
+                    // player would win
+                }
+            }
+            break;
+        }
+        if(fivePointsWinnerAttr == null) System.out.println("AI found no 5-points-attribute that would win..");
+        // add a randomness parameter to make computer weaker
+        //TODO test out best value
+        boolean random = Math.random() < 0.5; // this is a fifty-fifty chance
+        if(fivePointsWinnerAttr != null && random) return fivePointsWinnerAttr;
+        else return selectNormalMode();
+
+        // Variant 2: Just search for a 5-or-2-points-attribute. Loses too often.
+        /*
         ArrayList<CardAttribute> unsortedAttrList = card.getAttributes();
         HashMap<Boolean, CardAttribute> checkMap = new HashMap<Boolean, CardAttribute>();
         // fill map(s)
         for(CardAttribute cardAttribute : unsortedAttrList) {
             // fill checkMap
-            int points = card.getPoints(cardAttribute);
+            int points = computersCard.getPoints(cardAttribute);
             if(points == 5 || points == 2) {
                 // check if good 5 or 2 point attribute exists
+                System.out.println("found "+points+" points attribute");
+                System.out.println("with value "+cardAttribute.getValue()+" and median "+cardAttribute.getMedian());
                 double median = cardAttribute.getMedian();
                 double value = cardAttribute.getValue();
                 boolean isHigherWins = cardAttribute.isHigherWins();
@@ -118,5 +145,6 @@ public class HardKiTask extends AsyncTask<Void, Void, CardAttribute> {
         // check if good 5 point attribute is available
         if(checkMap.containsKey(true)) return checkMap.get(true);
         else return selectNormalMode();
+        */
     }
 }

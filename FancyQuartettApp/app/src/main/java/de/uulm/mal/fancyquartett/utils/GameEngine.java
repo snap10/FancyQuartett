@@ -352,8 +352,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
             mediumKiTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
         }
         if (kiLevel == KILevel.Hard) {
-            if(gameMode != GameMode.Points) hardKiTask = new HardKiTask(p2.getCurrentCard(), gameActivity, true);
-            else hardKiTask = new HardKiTask(p2.getCurrentCard(), gameActivity, false);
+            hardKiTask = new HardKiTask(p2.getCurrentCard(), p1.getCurrentCard(), gameActivity, (gameMode != GameMode.Points));
             hardKiTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
         }
     }
