@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -341,13 +342,12 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
 
     private void downloadOnlineDeck(OnlineDeck onlinedeck, DeckDownloader.OnDeckDownloadedListener listener, View v) {
         try {
-            final DeckDownloader downloader = new DeckDownloader(Settings.serverAdress, getContext().getFilesDir() + Settings.localFolder, Settings.serverRootPath,onlinedeck.getId(), listener);
+            mProgressDialog = new ProgressDialog(v.getContext());
+            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            mProgressDialog.setMessage(context.getString(R.string.downloadProgressText));
+            final DeckDownloader downloader = new DeckDownloader(Settings.serverAdress, getContext().getFilesDir() + Settings.localFolder, Settings.serverRootPath,onlinedeck.getId(), listener,mProgressDialog);
             downloader.execute();
             // instantiate it within the onCreate method
-            mProgressDialog = new ProgressDialog(v.getContext());
-            mProgressDialog.setMessage(context.getString(R.string.downloadProgressText));
-            mProgressDialog.setIndeterminate(true);
-            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mProgressDialog.setCancelable(true);
             mProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                 @Override

@@ -70,14 +70,14 @@ public class NewGameGalleryViewAdapter extends GalleryViewAdapter {
         builder.setPositiveButton(R.string.download, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 try {
-                    final DeckDownloader downloader = new DeckDownloader(Settings.serverAdress, getContext().getFilesDir() + Settings.localFolder, Settings.serverRootPath, onlinedeck.getId(), listener);
-                    downloader.execute();
+                    // instantiate it within the onCreate method
 
-// instantiate it within the onCreate method
                     mProgressDialog = new ProgressDialog(v.getContext());
                     mProgressDialog.setMessage(context.getString(R.string.downloadProgressText));
-                    mProgressDialog.setIndeterminate(true);
                     mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                    final DeckDownloader downloader = new DeckDownloader(Settings.serverAdress, getContext().getFilesDir() + Settings.localFolder, Settings.serverRootPath, onlinedeck.getId(), listener,mProgressDialog);
+                    downloader.execute();
+
                     mProgressDialog.setCancelable(true);
                     mProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE, context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                         @Override

@@ -1,6 +1,8 @@
 package de.uulm.mal.fancyquartett.utils;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.widget.ProgressBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,9 +27,9 @@ import de.uulm.mal.fancyquartett.data.Settings;
 /**
  * Created by Snap10 on 12.01.16.
  */
-public class DeckDownloader extends AsyncTask<Void, Void, Exception> {
+public class DeckDownloader extends AsyncTask<Void, Integer, Exception> {
 
-
+    private ProgressDialog progressDialog;
     private String localpath;
     private String rootpath;
     private String host;
@@ -54,6 +56,25 @@ public class DeckDownloader extends AsyncTask<Void, Void, Exception> {
         this.localpath = localpath;
     }
 
+    /**
+     * @param host
+     * @param deckID
+     * @param listener
+     */
+    public DeckDownloader(String host, String localpath, String rootpath, int deckID, OnDeckDownloadedListener listener, ProgressDialog progressDialog) {
+        super();
+        this.host = host;
+        this.listener = listener;
+        this.deckID = deckID;
+        if (rootpath == null) {
+            this.rootpath = "/decks";
+        } else {
+            this.rootpath = rootpath;
+        }
+        this.localpath = localpath;
+        this.progressDialog = progressDialog;
+    }
+
 
     public interface OnDeckDownloadedListener {
         /**
@@ -73,58 +94,62 @@ public class DeckDownloader extends AsyncTask<Void, Void, Exception> {
     @Override
     protected Exception doInBackground(Void... v) {
         try {
-            String json = retrieveDataFromServer(host, rootpath + "/" + deckID,"application/json");
+            String json = retrieveDataFromServer(host, rootpath + "/" + deckID, "application/json");
 
             JSONObject deckjsonTmp = new JSONObject(json);
             int deckid = deckjsonTmp.getInt("id");
 
-            JSONObject deckjson = new JSONObject(retrieveDataFromServer(host, rootpath + "/" + deckid,"application/json"));
-            File outDir = new File(localpath + deckid+"/images");
+            JSONObject deckjson = new JSONObject(retrieveDataFromServer(host, rootpath + "/" + deckid, "application/json"));
+            File outDir = new File(localpath + deckid + "/images");
             outDir.mkdirs();
             String localPath = Image.downloadFromTo(deckjson.getString("image"), outDir);
-            if(localPath!=null){
-                deckjson.put("image",localPath);
+            if (localPath != null) {
+                deckjson.put("image", localPath);
             }
-            JSONArray cardsTmp = new JSONArray(retrieveDataFromServer(host, rootpath + "/" + deckid + "/cards","application/json"));
+            JSONArray cardsTmp = new JSONArray(retrieveDataFromServer(host, rootpath + "/" + deckid + "/cards", "application/json"));
             //Download Attribute Images
-            JSONArray tmpAttributes = new JSONArray(retrieveDataFromServer(host, rootpath + "/" + deckid + "/cards/" + cardsTmp.getJSONObject(0).getInt("id") + "/attributes","application/json"));
+            JSONArray tmpAttributes = new JSONArray(retrieveDataFromServer(host, rootpath + "/" + deckid + "/cards/" + cardsTmp.getJSONObject(0).getInt("id") + "/attributes", "application/json"));
             String[] localAttributeImagePath = new String[tmpAttributes.length()];
-            for (int i = 0; i <tmpAttributes.length() ; i++) {
-                JSONObject attribute =tmpAttributes.getJSONObject(i);
-                outDir = new File(localpath + deckid+"/images/attributes");
+            for (int i = 0; i < tmpAttributes.length(); i++) {
+                JSONObject attribute = tmpAttributes.getJSONObject(i);
+                outDir = new File(localpath + deckid + "/images/attributes");
                 outDir.mkdirs();
                 System.out.println(attribute.getString("image"));
-                localAttributeImagePath[i] = Image.downloadFromTo(attribute.getString("image"),outDir);
+                localAttributeImagePath[i] = Image.downloadFromTo(attribute.getString("image"), outDir);
             }
             JSONArray cardsJsonArray = new JSONArray();
 
             ArrayList<double[]> valuesList = new ArrayList<>();
+            if (progressDialog!=null){
+                progressDialog.setMax(cardsTmp.length());
+            }
             for (int j = 0; j < cardsTmp.length(); j++) {
                 int cardID = cardsTmp.getJSONObject(j).getInt("id");
-                JSONObject cardTmp = new JSONObject(retrieveDataFromServer(host, rootpath + "/" + deckid + "/cards/" + cardID,"application/json"));
+                JSONObject cardTmp = new JSONObject(retrieveDataFromServer(host, rootpath + "/" + deckid + "/cards/" + cardID, "application/json"));
                 //Attributes
-                JSONArray attributes = new JSONArray(retrieveDataFromServer(host, rootpath + "/" + deckid + "/cards/" + cardID + "/attributes","application/json"));
+                JSONArray attributes = new JSONArray(retrieveDataFromServer(host, rootpath + "/" + deckid + "/cards/" + cardID + "/attributes", "application/json"));
                 double[] attributesValues = new double[attributes.length()];
                 for (int k = 0; k < attributes.length(); k++) {
                     attributesValues[k] = attributes.getJSONObject(k).getDouble("value");
                     //If localImagePath is not null rewrite JSON Path to localpath
                     JSONObject attributeTmp = attributes.getJSONObject(k);
-                    attributeTmp.put("id",k);
-                    if (localAttributeImagePath[k]!=null){
+                    attributeTmp.put("id", k);
+                    if (localAttributeImagePath[k] != null) {
 
-                        attributeTmp.put("image",localAttributeImagePath[k]);
+                        attributeTmp.put("image", localAttributeImagePath[k]);
                     }
-                    attributes.put(k,attributeTmp);
+                    attributes.put(k, attributeTmp);
                 }
                 valuesList.add(attributesValues);
                 //Images
-                JSONArray images = new JSONArray(retrieveDataFromServer(host, rootpath + "/" + deckid + "/cards/" + cardID + "/images","application/json"));
-                images = downloadCardImages(deckjsonTmp, images,deckid);
+                JSONArray images = new JSONArray(retrieveDataFromServer(host, rootpath + "/" + deckid + "/cards/" + cardID + "/images", "application/json"));
+                images = downloadCardImages(deckjsonTmp, images, deckid);
                 cardTmp.put("attributes", attributes);
                 cardTmp.put("images", images);
                 cardsJsonArray.put(cardTmp);
+                publishProgress(j);
             }
-            cardsJsonArray=writeMedianToAttributeJson(cardsTmp, cardsJsonArray, valuesList);
+            cardsJsonArray = writeMedianToAttributeJson(cardsTmp, cardsJsonArray, valuesList);
 
             deckjson.put("cards", cardsJsonArray);
             String deckname = deckjson.getString("name").toLowerCase();
@@ -136,7 +161,7 @@ public class DeckDownloader extends AsyncTask<Void, Void, Exception> {
             out.write(deckjson.toString().getBytes(Charset.forName("UTF-8")));
             out.flush();
             out.close();
-            offlineDeck = new OfflineDeck(deckjson,true);
+            offlineDeck = new OfflineDeck(deckjson, true);
         } catch (IOException e) {
             System.out.println(e);
             return e;
@@ -149,28 +174,26 @@ public class DeckDownloader extends AsyncTask<Void, Void, Exception> {
     }
 
     /**
-     *
      * @param deckjsonTmp
      * @param images
      * @return
      * @throws JSONException
      */
     private JSONArray downloadCardImages(JSONObject deckjsonTmp, JSONArray images, int deckid) throws JSONException {
-        for (int i = 0; i <images.length() ; i++) {
-            JSONObject imageTmp =images.getJSONObject(i);
-            File outDir = new File(localpath + deckid+"/images/cards");
+        for (int i = 0; i < images.length(); i++) {
+            JSONObject imageTmp = images.getJSONObject(i);
+            File outDir = new File(localpath + deckid + "/images/cards");
             outDir.mkdirs();
             String localPath = Image.downloadFromTo(imageTmp.getString("image"), outDir);
-            if(localPath!=null){
-                imageTmp.put("image",localPath);
-                images.put(i,imageTmp);
+            if (localPath != null) {
+                imageTmp.put("image", localPath);
+                images.put(i, imageTmp);
             }
         }
         return images;
     }
 
     /**
-     *
      * @param cardsTmp
      * @param cardsJsonArray
      * @param valuesList
@@ -214,7 +237,7 @@ public class DeckDownloader extends AsyncTask<Void, Void, Exception> {
     }
 
 
-    private String retrieveDataFromServer(String host, String path,String contentType) throws IOException {
+    private String retrieveDataFromServer(String host, String path, String contentType) throws IOException {
         URL u = new URL("http://" + host + "/" + path);
         HttpURLConnection c = (HttpURLConnection) u.openConnection();
         c.setRequestProperty("Authorization", Settings.serverAuthorization);
@@ -263,4 +286,19 @@ public class DeckDownloader extends AsyncTask<Void, Void, Exception> {
         return median;
     }
 
+    /**
+     * Runs on the UI thread after {@link #publishProgress} is invoked.
+     * The specified values are the values passed to {@link #publishProgress}.
+     *
+     * @param values The values indicating progress.
+     * @see #publishProgress
+     * @see #doInBackground
+     */
+    @Override
+    protected void onProgressUpdate(Integer... values) {
+        super.onProgressUpdate(values);
+        if (progressDialog != null) {
+            progressDialog.setProgress(values[0]);
+        }
+    }
 }
