@@ -45,6 +45,7 @@
     <string name="delete_deck">Delete Deck</string>
 
     <!-- Bundle Keys -->
+    <!-- TODO: create Bundle Key values -->
 
     <!-- Preference Keys -->
     <string name="statisticSharedPreferencesKey">stats</string>
