@@ -1,10 +1,7 @@
 package de.uulm.mal.fancyquartett.activities;
 
-
 import android.app.AlertDialog;
 import android.content.Context;
-
-import android.app.Dialog;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,7 +19,6 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import android.widget.Toast;
 
@@ -41,7 +37,6 @@ import layout.StatisticFragment;
 
 public class MainActivity extends AppCompatActivity implements AssetsInstaller.OnAssetsInstallerCompletedListener, StartFragment.OnFragmentInteractionListener, GalleryFragment.OnFragmentInteractionListener, StatisticFragment.OnFragmentInteractionListener {
 
-
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -59,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
     private static final int STARTPOSITION = 0;
     private static final int GALLERYPOSITION = 1;
     private static final int STATISTICSPOSITION = 2;
+    private int currentTab;
     private Menu menu;
     private GameEngine engine;
     private Bundle engineBundle;
@@ -91,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
                 e.printStackTrace();
                 Toast toast = Toast.makeText(this, "Error installing Files " + e.getMessage(), Toast.LENGTH_LONG);
                 toast.show();
-                toast.show();
             }
 
 
@@ -116,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
 
             @Override
             public void onPageSelected(int position) {
-
+                currentTab = position;
             }
 
             @Override
@@ -205,17 +200,32 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
 
     @Override
     public void onBackPressed() {
+        // check if current tab is start-tab
+        if(currentTab == STARTPOSITION) {
+            // show dialog
+            showAppLeaveDialog();
+        } else {
+            // scroll back to start-tab
+            mViewPager.setCurrentItem(STARTPOSITION, true);
+        }
+
+    }
+
+    /**
+     * Shows confirm dialog, in which user decides if he's leaving the app or not.
+     */
+    private void showAppLeaveDialog() {
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setIcon(R.drawable.ic_error_accent)
                 .setTitle("Leaving FancyQuartett")
                 .setMessage("Are you sure you want to leave this fancy app?")
-                .setPositiveButton(getResources().getString(R.string.exit_caps), new DialogInterface.OnClickListener() {
+                .setPositiveButton(getResources().getString(R.string.yes_caps), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
                     }
                 })
-                .setNegativeButton(getResources().getString(R.string.cancel), null)
+                .setNegativeButton(getResources().getString(R.string.no_caps), null)
                 .create();
         // workaround for button color
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -229,16 +239,20 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
         dialog.show();
     }
 
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+        /**
+         *
+         * @param fm
+         */
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
-
 
         @Override
         public Fragment getItem(int position) {
@@ -272,8 +286,9 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
                 default:
                     throw new IllegalArgumentException("Wrong Fragment ID chosen");
             }
-
         }
+
+
     }
 
 }
