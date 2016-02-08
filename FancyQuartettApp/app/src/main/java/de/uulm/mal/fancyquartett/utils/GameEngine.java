@@ -97,6 +97,9 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
     private int gameTime = 0;
     private int timeout = 0;
     private KILevel kiLevel;
+
+
+
     private boolean isMultiplayer = false;
     private boolean hasPlayerTimeout = false;
     private boolean hasMaxRounds = false;
@@ -675,6 +678,10 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
 
     public void increaseMaxRounds() {
         maxRounds++;
+    }
+
+    public boolean isMultiplayer() {
+        return isMultiplayer;
     }
 
     public int getTimeout() {

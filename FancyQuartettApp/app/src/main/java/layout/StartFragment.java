@@ -57,9 +57,9 @@ public class StartFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments()!=null){
+        if (getArguments() != null) {
 
-            engine = (GameEngine)getArguments().getSerializable("savedEngine");
+            engine = (GameEngine) getArguments().getSerializable("savedEngine");
         }
 
     }
@@ -86,10 +86,13 @@ public class StartFragment extends Fragment {
             TextView lastGameDeckDescription = (TextView) v.findViewById(R.id.lastgame_deckdescription);
             lastGameDeckDescription.setText(engine.getGameDeck().getDescription());
             TextView lastPlayedTextView = (TextView) v.findViewById(R.id.lastgame_lastplayed);
-            lastPlayedTextView.setText(getString(R.string.last_played_on)+": " + new SimpleDateFormat("dd.MM.yyyy HH:mm").format(engine.getLastPlayed()));
+            lastPlayedTextView.setText(getString(R.string.last_played_on) + ": " + new SimpleDateFormat("dd.MM.yyyy HH:mm").format(engine.getLastPlayed()));
             TextView kiLevel = (TextView) v.findViewById(R.id.lastgame_ki_level);
-
-            kiLevel.setText(getString(R.string.ki_level)+": " + engine.getKiLevel().toString());
+            if (engine.isMultiplayer()) {
+                kiLevel.setText(getResources().getString(R.string.multiplayer));
+            } else {
+                kiLevel.setText(getString(R.string.ki_level) + ": " + engine.getKiLevel().toString());
+            }
         }
         Button newSinglePlayerButton = (Button) v.findViewById(R.id.newSingleplayerButton);
         newSinglePlayerButton.setOnClickListener(new View.OnClickListener() {

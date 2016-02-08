@@ -3,11 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="layout.StartFragment">
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -20,11 +15,12 @@
             android:id="@+id/resumeGameCard"
             android:layout_width="match_parent"
 
-            android:layout_height="200dp"
+            android:layout_height="0dp"
             android:layout_margin="3dp"
             android:scaleType="centerCrop"
             cardview:cardCornerRadius="8dp"
-            cardview:cardElevation="4dp">
+            cardview:cardElevation="4dp"
+            android:layout_weight="0.5">
 
 
             <FrameLayout
@@ -58,7 +54,7 @@
                             android:layout_gravity="center"
                             android:gravity="center"
                             android:padding="5dp"
-                            android:text="No Last Game Found"
+                            android:text="@string/nolastGame"
                             android:textColor="@color/primary_text"
                             android:textSize="32dp" />
 
@@ -98,21 +94,28 @@
                 </RelativeLayout>
             </FrameLayout>
         </android.support.v7.widget.CardView>
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_marginBottom="70dp"
+        android:layout_weight="0.5">
         <Button
             android:id="@+id/newSingleplayerButton"
             style="@style/AppTheme.PrimaryDarkButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/newSinglePlayer"/>
+            android:layout_height="match_parent"
+            android:text="@string/newSinglePlayer"
+            android:layout_weight="0.5" />
 
         <Button
             android:id="@+id/newMultiplayerButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/newMultiPlayer" />
+            android:layout_height="match_parent"
 
+            android:text="@string/newMultiPlayer"
+            android:layout_weight="0.5" />
+</LinearLayout>
 
     </LinearLayout>
-</ScrollView>
 </FrameLayout>

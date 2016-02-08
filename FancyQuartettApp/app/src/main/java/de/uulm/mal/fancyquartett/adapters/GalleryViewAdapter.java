@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.activities.CardGalleryActivity;
 import de.uulm.mal.fancyquartett.activities.GameActivity;
+import de.uulm.mal.fancyquartett.activities.NewGameSettingsActivity;
 import de.uulm.mal.fancyquartett.data.GalleryModel;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.data.OnlineDeck;
@@ -147,6 +148,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
                     new MenuInflater(context).inflate(R.menu.gallerylist_menu, menu);
                     menu.findItem(R.id.downloadDeckMenuItem).setVisible(true);
                     menu.findItem(R.id.downloadDeckMenuItem).setIntent(new Intent().putExtra("onlinedeck", onlineDeck));
+
                 }
             });
 
@@ -163,6 +165,10 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
                     new MenuInflater(context).inflate(R.menu.gallerylist_menu, menu);
                     menu.findItem(R.id.deleteDeckMenuItem).setVisible(true);
                     menu.findItem(R.id.deleteDeckMenuItem).setIntent(new Intent().putExtra("offlinedeck", offlineDeck));
+                    menu.findItem(R.id.startNewSinglePlayer).setVisible(true);
+                    menu.findItem(R.id.startNewSinglePlayer).setIntent(new Intent().putExtra("offlinedeck", offlineDeck));
+                    menu.findItem(R.id.startNewMultiPlayer).setVisible(true);
+                    menu.findItem(R.id.startNewMultiPlayer).setIntent(new Intent().putExtra("offlinedeck", offlineDeck));
                 }
             });
 
@@ -313,7 +319,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
      * @param listener
      */
     public void showDeleteSavedAlertDialog(final View v, final OfflineDeck offlineDeck, final OnlineDecksLoader.OnOnlineDecksLoaded listener) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext(),R.style.AppTheme_Dialog);
         builder.setMessage(R.string.deleteSavedAlert).setTitle(R.string.deleteWarningTitle);
 
         // Add the buttons
@@ -423,6 +429,19 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
         }else if(R.id.downloadDeckMenuItem==item.getItemId()){
             OnlineDeck onlineDeck = (OnlineDeck)item.getIntent().getExtras().get("onlinedeck");
             downloadOnlineDeck(onlineDeck,this,swipeRefreshLayout);
+        }else if(R.id.startNewSinglePlayer==item.getItemId()){
+            Intent intent = new Intent(getContext(), NewGameSettingsActivity.class);
+            intent.putExtras(item.getIntent().getExtras());
+            intent.putExtra("multiplayer", false);
+            context.startActivity(intent);
+
+        }else if(R.id.startNewMultiPlayer==item.getItemId()){
+            Intent intent = new Intent(getContext(), NewGameSettingsActivity.class);
+            intent.putExtras(item.getIntent().getExtras());
+            intent.putExtra("multiplayer", true);
+
+            context.startActivity(intent);
+
         }
             }
 

@@ -6,12 +6,25 @@
         android:id="@+id/downloadDeckMenuItem"
         android:orderInCategory="99"
         android:title="@string/download"
-        app:showAsAction="never"
-        android:visible="false"/>
-        <item
+        android:visible="false"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/deleteDeckMenuItem"
         android:orderInCategory="100"
         android:title="@string/delete_deck"
-        app:showAsAction="never"
-            android:visible="false"/>
+        android:visible="false"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/startNewSinglePlayer"
+        android:orderInCategory="98"
+        android:title="@string/newSinglePlayer"
+        android:visible="false"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/startNewMultiPlayer"
+        android:orderInCategory="98"
+        android:title="@string/newMultiPlayer"
+        android:visible="false"
+        app:showAsAction="never" />
+
 </menu>

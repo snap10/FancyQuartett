@@ -39,15 +39,17 @@
             <android.support.v4.view.ViewPager
                 android:id="@+id/viewPager_SlideShow"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@color/card_background" />
+                android:layout_height="0dp"
+                android:background="@color/card_background"
+                android:layout_weight="0.5" />
 
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_card_attributes"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/card_background"></android.support.v7.widget.RecyclerView>
+                android:layout_height="0dp"
+                android:background="@color/card_background"
+                android:layout_weight="0.5"></android.support.v7.widget.RecyclerView>
 
         </LinearLayout>
 

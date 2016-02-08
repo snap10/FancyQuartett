@@ -131,6 +131,7 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
         }
         if (getArguments()!=null){
             multiplayer =getArguments().getBoolean("multiplayer");
+            offlineDeck=(OfflineDeck)getArguments().getSerializable("offlinedeck");
         }
         setHasOptionsMenu(true);
         intitalizeListeners();
@@ -240,20 +241,24 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.multiplayerFragmentContainer,fragment).commit();
         }
 
-
-        RadioGroup aibuttongroup = (RadioGroup) v.findViewById(R.id.aibuttongroup);
-        switch (aibuttongroup.getCheckedRadioButtonId()) {
-            case R.id.radioButton:
-                kilevel = KILevel.Soft;
-                break;
-            case R.id.radioButton2:
-                kilevel = KILevel.Medium;
-                break;
-            case R.id.radioButton3:
-                kilevel = KILevel.Hard;
-                break;
+        if(!multiplayer){
+            RadioGroup aibuttongroup = (RadioGroup) v.findViewById(R.id.aibuttongroup);
+            switch (aibuttongroup.getCheckedRadioButtonId()) {
+                case R.id.radioButton:
+                    kilevel = KILevel.Soft;
+                    break;
+                case R.id.radioButton2:
+                    kilevel = KILevel.Medium;
+                    break;
+                case R.id.radioButton3:
+                    kilevel = KILevel.Hard;
+                    break;
+            }
+            aibuttongroup.setOnCheckedChangeListener(aiButtonListener);
+        }else{
+            RadioGroup aibuttongroup = (RadioGroup) v.findViewById(R.id.aibuttongroup);
+            aibuttongroup.setVisibility(RadioGroup.GONE);
         }
-        aibuttongroup.setOnCheckedChangeListener(aiButtonListener);
 
         timeoutSwitch = (SwitchCompat) v.findViewById(R.id.timeout_switch);
         timeoutSwitch.setOnCheckedChangeListener(timeoutSwitchListener);

@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
         tabLayout.setupWithViewPager(mViewPager);
 
 
+
     }
 
     public Menu getMenu() {

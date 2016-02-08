@@ -24,7 +24,7 @@
         android:layout_toRightOf="@id/deckicon"
         android:ellipsize="marquee"
         android:singleLine="true"
-        android:text="Touch to select a deck."
+        android:text="@string/touchtoselectadeck"
         android:textSize="10sp" />
 
     <TextView
@@ -37,7 +37,7 @@
         android:layout_alignWithParentIfMissing="false"
         android:layout_toRightOf="@id/deckicon"
         android:gravity="center_vertical"
-        android:text="No deck selected ..."
+        android:text="@string/nodeckselected"
         android:textSize="14sp" />
 
 

@@ -101,6 +101,7 @@ public class CardGalleryViewAdapter extends RecyclerView.Adapter<CardGalleryView
             deckGalleryViewHolder.deckName.setText(card.getName());
             deckGalleryViewHolder.deckDescription.setText(card.getDescription());
             deckGalleryViewHolder.deckIcon.setImageBitmap(card.getImages().get(0).getBitmap());
+            deckGalleryViewHolder.deckContextMenuButton.setVisibility(View.GONE);
             deckGalleryViewHolder.view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

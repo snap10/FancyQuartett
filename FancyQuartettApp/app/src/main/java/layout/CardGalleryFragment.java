@@ -219,5 +219,7 @@ public class CardGalleryFragment extends Fragment implements LocalDeckLoader.OnL
         menu.clear();
         this.menu=menu;
         inflater.inflate(R.menu.gallery_menu,menu);
+        MenuItem item=menu.findItem(R.id.gridLayoutButton);
+        item.setVisible(true);
     }
 }

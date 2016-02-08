@@ -4,45 +4,45 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="change_content_layout">Change Content Layout</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_settings">Einstellungen</string>
 
     <!-- Toolbar Actions -->
-    <string name="action_rules">Rules</string>
+    <string name="action_rules">Regeln</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Einstellungen</string>
 
     <!-- Tab Title -->
     <string name="gallery">Gallery</string>
-    <string name="statistic">Statistic</string>
+    <string name="statistic">Statistik</string>
     <string name="start">Start</string>
 
     <!-- Buttons -->
     <string name="start_caps">START</string>
     <string name="ok_caps">OK</string>
-    <string name="cancel_caps">CANCEL</string>
-    <string name="close_caps">CLOSE</string>
-    <string name="exit_caps">EXIT</string>
-    <string name="no_caps">NO</string>
-    <string name="yes_caps">YES</string>
+    <string name="cancel_caps">ABBRECHEN</string>
+    <string name="close_caps">SCHLIESSEN</string>
+    <string name="exit_caps">VERLASSEN</string>
+    <string name="no_caps">NEIN</string>
+    <string name="yes_caps">JA</string>
 
-    <string name="download">Download</string>
-    <string name="cancel">Cancel</string>
+    <string name="download">Herunterladen</string>
+    <string name="cancel">Abbrechen</string>
     <string name="startgame">Start</string>
 
     <!-- Dialogues -->
-    <string name="downloadalertdialogtitle">Please download first</string>
-    <string name="downloadbeforeuseonlinedeck">You have do Download the Deck before using it!</string>
-    <string name="downloadandsavedialogtext">Do you want to Download and save the Deck locally?</string>
-    <string name="downloaddialogtitle">Download Deck?</string>
+    <string name="downloadalertdialogtitle">Bitte zuerst herunterladen</string>
+    <string name="downloadbeforeuseonlinedeck">Sie müssen das Deck herunterladen, bevor Sie es benutzen können!</string>
+    <string name="downloadandsavedialogtext">Wollen Sie das Deck herunterladen und speichern?</string>
+    <string name="downloaddialogtitle">Deck herunterladen?</string>
 
     <!-- Toasts -->
-    <string name="noDeckSelectedForGame">You have to choose a Deck to start the Game!</string>
-    <string name="noLocalDecksFound">No Local decks were found on the phone!</string>
-    <string name="noOnlineDecksFound">No Online Decks were Found on the Server</string>
+    <string name="noDeckSelectedForGame">Sie müssen ein Deck wählen bevor Sie spielen können!</string>
+    <string name="noLocalDecksFound">Keine lokalen Decks auf dem Gerät gefunden!</string>
+    <string name="noOnlineDecksFound">Keine Onlinedecks gefunden!</string>
 
     <!-- List Items -->
-    <string name="delete">Delete Deck</string>
-    <string name="delete_deck">Delete Deck</string>
+    <string name="delete">Löschen</string>
+    <string name="delete_deck">Deck löschen</string>
 
     <!-- Bundle Keys -->
     <!-- TODO: create Bundle Key values -->
@@ -60,28 +60,28 @@
 
     <!-- New Game Settings -->
         <!-- Titles -->
-        <string name="newSinglePlayer">New Singleplayer</string>
-        <string name="newMultiPlayer">New Multiplayer</string>
+        <string name="newSinglePlayer">Neues Einzelspieler</string>
+        <string name="newMultiPlayer">Neues Mehrspieler</string>
         <!-- Game Modes -->
-        <string name="totheend">To the End</string>
-        <string name="time">Time</string>
-        <string name="points">Points</string>
-        <string name="hotseat">Hotseat</string>
+        <string name="totheend">Bis zum Ende</string>
+        <string name="time">Zeit</string>
+        <string name="points">Punkte</string>
+        <string name="hotseat">HotSeat</string>
         <!-- Fragment Titles -->
-        <string name="gamemode_chooser_title">Game Mode</string>
-        <string name="generalsettings_title">General Settings</string>
-        <string name="chosendeck">Chosen Deck</string>
+        <string name="gamemode_chooser_title">Spiel Modus</string>
+        <string name="generalsettings_title">Allgemeine Einstellungen</string>
+        <string name="chosendeck">Gewähltes Deck</string>
         <!-- Others -->
-        <string name="numberofroundstext">Rounds at maximum</string>
-        <string name="totheenddescription">You play until one player has won all cards</string>
-        <string name="timeinminuitesdescription">Minutes maximum for one Game</string>
-        <string name="pointdescription">Points for one Player to win</string>
-        <string name="gamesettings_timeoutforoneround_switch"> Seconds for Timeout of one Round</string>
-        <string name="hardai">hard AI level</string>
-        <string name="mediumai">medium AI level</string>
-        <string name="softai">soft AI level</string>
-        <string name="playername1">Player1</string>
-        <string name="playername2">Player2</string>
+        <string name="numberofroundstext">Runden maximal</string>
+        <string name="totheenddescription">Sie werden spielen bis ein Spieler alle Karten besitzt</string>
+        <string name="timeinminuitesdescription">Minuten maximal für ein Spiel</string>
+        <string name="pointdescription">Punkte für einen Spieler um zu gewinnen</string>
+        <string name="gamesettings_timeoutforoneround_switch"> Sekunden pro Spielzug</string>
+        <string name="hardai">schwere KI</string>
+        <string name="mediumai">mittlere KI</string>
+        <string name="softai">leichte KI</string>
+        <string name="playername1">Spieler1</string>
+        <string name="playername2">Spieler2</string>
 
 
 
@@ -148,40 +148,40 @@
     <string name="ki_level">AI Level</string>
 
     <!-- Toolbar Title -->
-    <string name="title_activity_deck_gallery">DeckGalleryActivity</string>
-    <string name="title_activity_card_detail_viewer">CardDetailViewerActivity</string>
+    <string name="title_activity_deck_gallery">Deck Gallery</string>
+    <string name="title_activity_card_detail_viewer">Kartenansicht</string>
 
     <string name="title_main">FancyQuartett</string>
-    <string name="title_new_game">New Game</string>
+    <string name="title_new_game">Neues Spiel</string>
     <string name="title_gallery">Gallery</string>
-    <string name="title_settings">Settings</string>
-    <string name="title_gallery_select">Select a deck</string>
+    <string name="title_settings">Einstellungen</string>
+    <string name="title_gallery_select">Deck wählen</string>
 
     <!-- GameActivity -->
     <string name="balance">Balance</string>
-    <string name="time_left">Time left:</string>
-    <string name="round">Round:</string>
+    <string name="time_left">Verbleibende Zeit:</string>
+    <string name="round">Runde:</string>
 
     <!-- GameEngine -->
-    <string name="p1_name_singleplayer">You</string>
+    <string name="p1_name_singleplayer">Du</string>
     <string name="p2_name_singleplayer">KI</string>
-    <string name="current_player">Current player:</string>
+    <string name="current_player">Aktueller Spieler:</string>
 
     <!-- GameEndDialog -->
-    <string name="winner_gameend">WINNER&#58;</string>
+    <string name="winner_gameend">Gewinner&#58;</string>
 
     <!-- RoundEndDialog -->
-    <string name="winner">WINNER</string>
-    <string name="loser">LOSER</string>
-    <string name="standoff">STANDOFF</string>
-    <string name="medianis">Median is:</string>
+    <string name="winner">GEWINNER</string>
+    <string name="loser">VERLIERER</string>
+    <string name="standoff">AUSGLEICH</string>
+    <string name="medianis">Median ist:</string>
 
     <!-- PlayerChangedDialog -->
-    <string name="player_changed">Player changed</string>
-    <string name="nolastGame">No last game found</string>
-    <string name="touchtoselectadeck">Touch to select a deck.</string>
-    <string name="nodeckselected">No deck selected ...</string>
-    <string name="multiplayer">Multiplayer</string>
+    <string name="player_changed">Spieler wechseln</string>
+    <string name="nolastGame">Kein vorhandenes Spiel gefunden</string>
+    <string name="touchtoselectadeck">Drücken um Deck zu wählen</string>
+    <string name="nodeckselected">Kein Deck gewählt...</string>
+    <string name="multiplayer">Mehrspieler</string>
 
 
 </resources>
