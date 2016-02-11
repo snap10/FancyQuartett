@@ -12,8 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -70,7 +68,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
     private transient FragmentManager fragmentManager;
 
     // tasks
-    private transient SoftKiTask softAiTask;
+    private transient SoftKiTask softKiTask;
     private transient MediumKiTask mediumKiTask;
     private transient HardKiTask hardKiTask;
     private transient PlayerTimeOutTask playerTimeOutTask;
@@ -97,9 +95,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
     private int gameTime = 0;
     private int timeout = 0;
     private KILevel kiLevel;
-
-
-
+    private boolean isMagicMode = false;
     private boolean isMultiplayer = false;
     private boolean hasPlayerTimeout = false;
     private boolean hasMaxRounds = false;
@@ -138,10 +134,12 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
             gameMode = (GameMode) args.get("gamemode");
             // ki level
             kiLevel = (KILevel) args.get("kilevel");
+            // is magicmode?
+            isMagicMode = args.getBoolean("magicmode");
             // is multiplayer?
             isMultiplayer = args.getBoolean("multiplayer");
             // players
-            if(isMultiplayer) {
+            if(isMultiplayer || isMagicMode) {
                 String p1Name = args.getString("playername1");
                 String p2Name = args.getString("playername2");
                 initialisePlayers(p1Name, p2Name);
@@ -264,14 +262,17 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         kiPlaysDialog.setCancelable(false);
         // last played timestamp
         updateLastPlayed();
+        // workaround for later dismiss() on this dialog
+        kiPlaysDialog.show(fragmentManager, "KiPlaysDialog");
+        kiPlaysDialog.dismiss();
         // start game
-        if (curPlayer != PLAYER1) {
-            // start KI
-            if(!isMultiplayer) startKiTask();
+        if(!isMagicMode) {
+            if (curPlayer != PLAYER1) {
+                // start KI
+                if(!isMultiplayer) startKiTask();
+            }
         } else {
-            // workaround for later dismiss() on this dialog
-            kiPlaysDialog.show(fragmentManager, "KiPlaysDialog");
-            kiPlaysDialog.dismiss();
+            startKiTask();
         }
         // start GameTimeTask if GameMode is Time
         if (gameMode == GameMode.Time) {
@@ -312,18 +313,15 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         stopAiTasks();
         stopPlayerTimeoutTask();
         stopGameTimeTask();
-        //TODO cancel others too...
     }
 
     /**
      * Stops all running ai-tasks.
      */
     private void stopAiTasks() {
-        if (softAiTask != null) softAiTask.cancel(true);
-        /*
-        if(mediumAiTask != null) mediumAiTask.cancel(true);
-        if(hardAiTask != null) mediumAiTask.cancel(true);
-        */
+        if (softKiTask != null) softKiTask.cancel(true);
+        if(mediumKiTask != null) mediumKiTask.cancel(true);
+        if(hardKiTask != null) mediumKiTask.cancel(true);
     }
 
     /**
@@ -345,17 +343,21 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
      */
     private void startKiTask() {
         if (kiLevel == KILevel.Soft) {
-            if(gameMode != GameMode.Points) softAiTask = new SoftKiTask(p2.getCurrentCard(), gameActivity, true);
-            else softAiTask = new SoftKiTask(p2.getCurrentCard(), gameActivity, false);
-            softAiTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
+            if(gameMode != GameMode.Points) softKiTask = new SoftKiTask(getPlayer(curPlayer).getCurrentCard(), gameActivity, true);
+            else softKiTask = new SoftKiTask(getPlayer(curPlayer).getCurrentCard(), gameActivity, false);
+            softKiTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
         }
         if (kiLevel == KILevel.Medium) {
-            if(gameMode != GameMode.Points) mediumKiTask = new MediumKiTask(p2.getCurrentCard(), gameActivity, true);
-            else mediumKiTask = new MediumKiTask(p2.getCurrentCard(), gameActivity, false);
+            if(gameMode != GameMode.Points) mediumKiTask = new MediumKiTask(getPlayer(curPlayer).getCurrentCard(), gameActivity, true);
+            else mediumKiTask = new MediumKiTask(getPlayer(curPlayer).getCurrentCard(), gameActivity, false);
             mediumKiTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
         }
         if (kiLevel == KILevel.Hard) {
-            hardKiTask = new HardKiTask(p2.getCurrentCard(), p1.getCurrentCard(), gameActivity, (gameMode != GameMode.Points));
+            Card curPlayerCard = getPlayer(curPlayer).getCurrentCard();
+            Card otherPlayerCard;
+            if(curPlayer == PLAYER1) otherPlayerCard = p2.getCurrentCard();
+            else otherPlayerCard = p1.getCurrentCard();
+            hardKiTask = new HardKiTask(curPlayerCard, otherPlayerCard, gameActivity, (gameMode != GameMode.Points));
             hardKiTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
         }
     }
@@ -402,17 +404,21 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
             // change current player if necessary
             if (curPlayer != playerWonRound && playerWonRound != STANDOFF) {
                 playerCtrl.changeCurrentPlayer();
-                // show player changed dialog if multiplayer
-                if(isMultiplayer) {
+                // show player changed dialog if multiplayer or magicmode
+                if(isMultiplayer || isMagicMode) {
                     showPlayerChangedDialog(getPlayer(curPlayer));
                 }
             }
             // show next card
             showCurrentPlayerCard();
             // start next round
-            if (curPlayer != PLAYER1) {
-                // start KI
-                if(!isMultiplayer) startKiTask();
+            if(!isMagicMode) {
+                if (curPlayer != PLAYER1) {
+                    // start KI
+                    if(!isMultiplayer) startKiTask();
+                }
+            } else {
+                startKiTask();
             }
             // show new Card-Balance
             handleBalance();
@@ -734,14 +740,6 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
 
     public KILevel getKiLevel() {
         return kiLevel;
-    }
-
-    public TextView getTvRoundsLeft() {
-        return tvRoundsLeft;
-    }
-
-    public TextView getTvTimeLeft() {
-        return tvTimeLeft;
     }
 
     public OfflineDeck getGameDeck() {
