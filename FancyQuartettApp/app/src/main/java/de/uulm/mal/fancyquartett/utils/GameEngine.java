@@ -48,8 +48,6 @@ import layout.CardFragment;
  */
 public class GameEngine implements Serializable, OnDialogButtonClickListener, OnGameTimeUpdateListener {
 
-    // TODO: coloring (point-mode)
-
     public static final int STANDOFF = 0;
     public static final int PLAYER1 = 1;
     public static final int PLAYER2 = 2;
@@ -137,7 +135,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
             // is magicmode?
             isMagicMode = args.getBoolean("magicmode");
             // is multiplayer?
-            isMultiplayer = args.getBoolean("multiplayer");
+            //isMultiplayer = args.getBoolean("multiplayer");
             // players
             if(isMultiplayer || isMagicMode) {
                 String p1Name = args.getString("playername1");
@@ -262,16 +260,20 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         kiPlaysDialog.setCancelable(false);
         // last played timestamp
         updateLastPlayed();
-        // workaround for later dismiss() on this dialog
-        kiPlaysDialog.show(fragmentManager, "KiPlaysDialog");
-        kiPlaysDialog.dismiss();
         // start game
         if(!isMagicMode) {
             if (curPlayer != PLAYER1) {
                 // start KI
                 if(!isMultiplayer) startKiTask();
+            } else {
+                // workaround for later dismiss() on this dialog
+                kiPlaysDialog.show(fragmentManager, "KiPlaysDialog");
+                kiPlaysDialog.dismiss();
             }
         } else {
+            // workaround for later dismiss() on this dialog
+            kiPlaysDialog.show(fragmentManager, "KiPlaysDialog");
+            kiPlaysDialog.dismiss();
             startKiTask();
         }
         // start GameTimeTask if GameMode is Time
@@ -310,7 +312,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
      * Stops all running tasks.
      */
     private void stopAllTasks() {
-        stopAiTasks();
+        stopKiTasks();
         stopPlayerTimeoutTask();
         stopGameTimeTask();
     }
@@ -318,7 +320,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
     /**
      * Stops all running ai-tasks.
      */
-    private void stopAiTasks() {
+    public void stopKiTasks() {
         if (softKiTask != null) softKiTask.cancel(true);
         if(mediumKiTask != null) mediumKiTask.cancel(true);
         if(hardKiTask != null) mediumKiTask.cancel(true);
@@ -341,7 +343,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
     /**
      * Starts a new Ki-Task.
      */
-    private void startKiTask() {
+    public void startKiTask() {
         if (kiLevel == KILevel.Soft) {
             if(gameMode != GameMode.Points) softKiTask = new SoftKiTask(getPlayer(curPlayer).getCurrentCard(), gameActivity, true);
             else softKiTask = new SoftKiTask(getPlayer(curPlayer).getCurrentCard(), gameActivity, false);
@@ -750,6 +752,9 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         return gameover;
     }
 
+    public GameActivity getGameActivity() {
+        return gameActivity;
+    }
 
     /*
     SETTER

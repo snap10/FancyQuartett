@@ -119,8 +119,8 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
     public void onBackPressed() {
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setIcon(R.drawable.ic_error_accent)
-                .setTitle("Leaving current Game")
-                .setMessage("Are you sure you want to cancel the game? This game will be saved automatically.")
+                .setTitle(getString(R.string.pausecurrentgamedialogtitle))
+                .setMessage(getString(R.string.pausecurrentgamedialogtext))
                 .setPositiveButton(getResources().getString(R.string.yes_caps), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -135,7 +135,12 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
                         finish(); // calls onStop too
                     }
                 })
-                .setNegativeButton(getResources().getString(R.string.no_caps), null)
+                .setNegativeButton(getResources().getString(R.string.no_caps), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        engine.startGame();
+                    }
+                })
                 .create();
         // workaround for button color
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -160,7 +165,6 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
         }
         super.onStop();
     }
-
 
     @Override
     protected void onPostResume() {

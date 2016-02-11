@@ -1,11 +1,16 @@
 package de.uulm.mal.fancyquartett.dialog;
 
-import android.app.AlertDialog;
+
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.activities.GameActivity;
@@ -55,12 +60,35 @@ public class KiPlaysDialog extends DialogFragment {
         // inflate and set the layout for the dialog
         // pass null as the parent view because its going in the dialog layout
         View view = inflater.inflate(R.layout.dialog_ki_plays, null);
-        builder.setView(view);
+        TextView tvPlayerName = (TextView) view.findViewById(R.id.textView_PlayerName);
+        tvPlayerName.setText(engine.getPlayer(engine.getCurPlayer()).getName());
+
+        builder.setView(view)
+            .setPositiveButton(getString(R.string.pause_game_caps), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    engine.stop();
+                    engine.getGameActivity().onBackPressed();
+                }
+            });
 
         // build dialog
         Dialog dialog = builder.create();
         dialog.setCancelable(false);
+        // color buttons
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                // workaround for fancy NullPointerException
+                AlertDialog alertDialog = ((AlertDialog) getDialog());
+                if(alertDialog != null) {
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.accent));
+                }
+            }
+        });
 
         return dialog;
     }
+
+
 }

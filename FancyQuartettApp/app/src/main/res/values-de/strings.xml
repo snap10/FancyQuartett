@@ -24,6 +24,7 @@
     <string name="exit_caps">VERLASSEN</string>
     <string name="no_caps">NEIN</string>
     <string name="yes_caps">JA</string>
+    <string name="pause_game_caps">SPIEL PAUSIEREN</string>
 
     <string name="download">Herunterladen</string>
     <string name="cancel">Abbrechen</string>
@@ -34,6 +35,10 @@
     <string name="downloadbeforeuseonlinedeck">Sie müssen das Deck herunterladen, bevor Sie es benutzen können!</string>
     <string name="downloadandsavedialogtext">Wollen Sie das Deck herunterladen und speichern?</string>
     <string name="downloaddialogtitle">Deck herunterladen?</string>
+    <string name="kiplaysdialogtitle">... spielt!</string>
+    <string name="kiplaysdialogtext">Bitte warten...</string>
+    <string name="pausecurrentgamedialogtitle">Spiel pausieren</string>
+    <string name="pausecurrentgamedialogtext">Bist du sicher dass du das Spiel pausieren möchtest? Das Spiel wird automatisch gespeichert.</string>
 
     <!-- Toasts -->
     <string name="noDeckSelectedForGame">Sie müssen ein Deck wählen bevor Sie spielen können!</string>
@@ -153,7 +158,7 @@
 
     <string name="title_main">FancyQuartett</string>
     <string name="title_new_game">Neues Spiel</string>
-    <string name="title_gallery">Gallery</string>
+    <string name="title_gallery">Gallerie</string>
     <string name="title_settings">Einstellungen</string>
     <string name="title_gallery_select">Deck wählen</string>
 
