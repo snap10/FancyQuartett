@@ -108,6 +108,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
 
     /**
      * PLEASE DONT USE THIS CONSTRUCTOR !!! IT WILL BE REMOVED SOME TIME :D
+     *
      * @param context
      * @param gameDeck
      */
@@ -117,7 +118,6 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
     }
 
     /**
-     *
      * @param context
      * @param args
      */
@@ -126,38 +126,38 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         this.context = context;
         this.rootView = rootView;
         // start read bundle data
-            // game deck
-            gameDeck = (OfflineDeck) args.getSerializable("offlinedeck");
-            // game mode
-            gameMode = (GameMode) args.get("gamemode");
-            // ki level
-            kiLevel = (KILevel) args.get("kilevel");
-            // is magicmode?
-            isMagicMode = args.getBoolean("magicmode");
-            // is multiplayer?
-            //isMultiplayer = args.getBoolean("multiplayer");
-            // players
-            if(isMultiplayer || isMagicMode) {
-                String p1Name = args.getString("playername1");
-                String p2Name = args.getString("playername2");
-                initialisePlayers(p1Name, p2Name);
-            } else {
-                initialisePlayers(null, null);
-            }
-            // round timeout
-            // *1000 for millis
-            timeout = args.getInt("roundtimeout") * 1000;
-            // max rounds
-            maxRounds = args.getInt("maxrounds");
-            // game time
-            if(gameMode == GameMode.Time) {
-                // *1000*60 for millis
-                gameTime = args.getInt("gametime") * 1000 * 60;
-            }
-            // max points
-            if(gameMode == GameMode.Points) {
-                maxPoints = args.getInt("gamepoints");
-            }
+        // game deck
+        gameDeck = (OfflineDeck) args.getSerializable("offlinedeck");
+        // game mode
+        gameMode = (GameMode) args.get("gamemode");
+        // ki level
+        kiLevel = (KILevel) args.get("kilevel");
+        // is magicmode?
+        isMagicMode = args.getBoolean("magicmode");
+        // is multiplayer?
+        isMultiplayer = args.getBoolean("multiplayer");
+        // players
+        if (isMultiplayer || isMagicMode) {
+            String p1Name = args.getString("playername1");
+            String p2Name = args.getString("playername2");
+            initialisePlayers(p1Name, p2Name);
+        } else {
+            initialisePlayers(null, null);
+        }
+        // round timeout
+        // *1000 for millis
+        timeout = args.getInt("roundtimeout") * 1000;
+        // max rounds
+        maxRounds = args.getInt("maxrounds");
+        // game time
+        if (gameMode == GameMode.Time) {
+            // *1000*60 for millis
+            gameTime = args.getInt("gametime") * 1000 * 60;
+        }
+        // max points
+        if (gameMode == GameMode.Points) {
+            maxPoints = args.getInt("gamepoints");
+        }
         // end read bundle data
         // initialise Game
         initialiseGame();
@@ -203,16 +203,17 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         // spread cards
         cardCtrl.spreadCards(cards, p1, p2);
         // identify player for first move
-        if (Math.random() < 0.5)  curPlayer = PLAYER1;
+        if (Math.random() < 0.5) curPlayer = PLAYER1;
         else curPlayer = PLAYER2;
     }
 
     /**
      * Initialise all necessary view components.
      * This function should be used before game start!
+     *
      * @param v
      */
-    private void initialiseUi(View v){
+    private void initialiseUi(View v) {
         linLayoutRound = (LinearLayout) v.findViewById(R.id.linLayout_Rounds);
         linLayoutPoints = (LinearLayout) v.findViewById(R.id.linLayout_Points);
         linLayoutTime = (LinearLayout) v.findViewById(R.id.linLayout_Time);
@@ -261,10 +262,10 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         // last played timestamp
         updateLastPlayed();
         // start game
-        if(!isMagicMode) {
+        if (!isMagicMode) {
             if (curPlayer != PLAYER1) {
                 // start KI
-                if(!isMultiplayer) startKiTask();
+                if (!isMultiplayer) startKiTask();
             } else {
                 // workaround for later dismiss() on this dialog
                 kiPlaysDialog.show(fragmentManager, "KiPlaysDialog");
@@ -290,6 +291,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
 
     /**
      * Initialise end of game, writes statistic and shows GameEndDialog.
+     *
      * @param playerWonGame
      */
     private void finishGame(int playerWonGame) {
@@ -322,22 +324,23 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
      */
     public void stopKiTasks() {
         if (softKiTask != null) softKiTask.cancel(true);
-        if(mediumKiTask != null) mediumKiTask.cancel(true);
-        if(hardKiTask != null) mediumKiTask.cancel(true);
+        if (mediumKiTask != null) mediumKiTask.cancel(true);
+        if (hardKiTask != null) mediumKiTask.cancel(true);
     }
 
     /**
      * Stops PlayerTimeoutTask if running.
      */
     private void stopPlayerTimeoutTask() {
-        if (playerTimeOutTask!=null&&!playerTimeOutTask.isCancelled()) playerTimeOutTask.cancel(true);
+        if (playerTimeOutTask != null && !playerTimeOutTask.isCancelled())
+            playerTimeOutTask.cancel(true);
     }
 
     /**
      * Stops GameTimeTask if running.
      */
     private void stopGameTimeTask() {
-        if (gameTimeTask!=null&&!gameTimeTask.isCancelled()) gameTimeTask.cancel(true);
+        if (gameTimeTask != null && !gameTimeTask.isCancelled()) gameTimeTask.cancel(true);
     }
 
     /**
@@ -345,19 +348,23 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
      */
     public void startKiTask() {
         if (kiLevel == KILevel.Soft) {
-            if(gameMode != GameMode.Points) softKiTask = new SoftKiTask(getPlayer(curPlayer).getCurrentCard(), gameActivity, true);
-            else softKiTask = new SoftKiTask(getPlayer(curPlayer).getCurrentCard(), gameActivity, false);
+            if (gameMode != GameMode.Points)
+                softKiTask = new SoftKiTask(getPlayer(curPlayer).getCurrentCard(), gameActivity, true);
+            else
+                softKiTask = new SoftKiTask(getPlayer(curPlayer).getCurrentCard(), gameActivity, false);
             softKiTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
         }
         if (kiLevel == KILevel.Medium) {
-            if(gameMode != GameMode.Points) mediumKiTask = new MediumKiTask(getPlayer(curPlayer).getCurrentCard(), gameActivity, true);
-            else mediumKiTask = new MediumKiTask(getPlayer(curPlayer).getCurrentCard(), gameActivity, false);
+            if (gameMode != GameMode.Points)
+                mediumKiTask = new MediumKiTask(getPlayer(curPlayer).getCurrentCard(), gameActivity, true);
+            else
+                mediumKiTask = new MediumKiTask(getPlayer(curPlayer).getCurrentCard(), gameActivity, false);
             mediumKiTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
         }
         if (kiLevel == KILevel.Hard) {
             Card curPlayerCard = getPlayer(curPlayer).getCurrentCard();
             Card otherPlayerCard;
-            if(curPlayer == PLAYER1) otherPlayerCard = p2.getCurrentCard();
+            if (curPlayer == PLAYER1) otherPlayerCard = p2.getCurrentCard();
             else otherPlayerCard = p1.getCurrentCard();
             hardKiTask = new HardKiTask(curPlayerCard, otherPlayerCard, gameActivity, (gameMode != GameMode.Points));
             hardKiTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
@@ -367,6 +374,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
     /**
      * This function identify which player is winner of current round and shows RoundEndDialog.
      * Call this function after a player selected any card attribute.
+     *
      * @param cardAttribute
      */
     public void handleCardAttrSelect(CardAttribute cardAttribute) {
@@ -377,13 +385,13 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         // increase rounds played
         curRound++;
         // add points to winner
-        if(gameMode == GameMode.Points) {
+        if (gameMode == GameMode.Points) {
             Player p = getPlayer(playerWonRound);
             int points = p.getCurrentCard().getPoints(cardAttribute);
             p.addPoints(points);
         }
         // dismiss KiPlaysDialog
-        if(!isMultiplayer) {
+        if (!isMultiplayer) {
             if (!kiPlaysDialog.isHidden()) kiPlaysDialog.dismiss();
         }
         // show RoundEndDialog
@@ -407,17 +415,17 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
             if (curPlayer != playerWonRound && playerWonRound != STANDOFF) {
                 playerCtrl.changeCurrentPlayer();
                 // show player changed dialog if multiplayer or magicmode
-                if(isMultiplayer || isMagicMode) {
+                if (isMultiplayer) {
                     showPlayerChangedDialog(getPlayer(curPlayer));
                 }
             }
             // show next card
             showCurrentPlayerCard();
             // start next round
-            if(!isMagicMode) {
+            if (!isMagicMode) {
                 if (curPlayer != PLAYER1) {
                     // start KI
-                    if(!isMultiplayer) startKiTask();
+                    if (!isMultiplayer) startKiTask();
                 }
             } else {
                 startKiTask();
@@ -437,7 +445,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
      */
     public void showCurrentPlayerCard() {
         cardFragment = null;
-        if(gameMode == GameMode.Points) {
+        if (gameMode == GameMode.Points) {
             // show card with possible gained points
             cardFragment = CardFragment.newInstance(getPlayer(curPlayer).getCurrentCard(), true, true);
         } else {
@@ -478,12 +486,17 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         tvTimeoutLeft.setVisibility(View.GONE);
         // check if timeout is necessary
         if (curPlayer == PLAYER1) {
-            if (hasPlayerTimeout) {
-                initialisePlayerTimeout();
+            //if MagicMode show KIPlaysDialog for Player1 , too.
+            if (isMagicMode) {
+                kiPlaysDialog.show(fragmentManager, "KiPlaysDialog");
             } else {
-                // 'disable' progressbar
-                pbTimeout.setMax(0);
-                pbTimeout.setProgress(0);
+                if (hasPlayerTimeout) {
+                    initialisePlayerTimeout();
+                } else {
+                    // 'disable' progressbar
+                    pbTimeout.setMax(0);
+                    pbTimeout.setProgress(0);
+                }
             }
         } else {
             if (isMultiplayer) {
@@ -545,7 +558,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
             tvTimeLeft.setText(time);
         }
         // check if point info is necessary
-        if(gameMode != GameMode.Points) {
+        if (gameMode != GameMode.Points) {
             linLayoutPoints.setVisibility(View.GONE);
         } else {
             int curPoints = getPlayer(curPlayer).getPoints();
@@ -577,6 +590,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
     /**
      * Creates and shows a dialog, in which the game winner will be displayed. Game terminates
      * after callback from this dialog.
+     *
      * @param playerWon
      */
     public void showGameEndDialog(int playerWon) {
@@ -602,7 +616,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         if (dialog instanceof GameEndDialog) {
             stopAllTasks();
             SharedPreferences prefs = gameActivity.getSharedPreferences("savedGame", context.MODE_PRIVATE);
-            prefs.edit().remove("savedEngine").putBoolean("savedAvailable",false);
+            prefs.edit().remove("savedEngine").putBoolean("savedAvailable", false);
             // close game and go back to main_activity
             Intent intent = new Intent(gameActivity, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -648,12 +662,12 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         pbTimeout.setProgress((int) time);
         pbTimeout.invalidate();
         // display time left
-        if(time % 1000 == 0) {
+        if (time % 1000 == 0) {
             int minutes = (int) TimeUnit.MILLISECONDS.toMinutes(time);
-            time = time- (minutes * 60000);
+            time = time - (minutes * 60000);
             int secons = (int) TimeUnit.MILLISECONDS.toSeconds(time);
             String timeStr = "";
-            if(minutes > 0) {
+            if (minutes > 0) {
                 timeStr = minutes + "m " + secons + "s";
             } else {
                 timeStr = secons + "s";
@@ -686,6 +700,10 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
 
     public void increaseMaxRounds() {
         maxRounds++;
+    }
+
+    public boolean isMagicMode() {
+        return isMagicMode;
     }
 
     public boolean isMultiplayer() {
@@ -756,10 +774,10 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         return gameActivity;
     }
 
+
     /*
     SETTER
      */
-
 
     public void updateLastPlayed() {
         Date date = new Date();
@@ -778,7 +796,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         this.context = context;
     }
 
-    public void setFragmentManager(FragmentManager fragmentManager){
+    public void setFragmentManager(FragmentManager fragmentManager) {
         this.fragmentManager = fragmentManager;
     }
 

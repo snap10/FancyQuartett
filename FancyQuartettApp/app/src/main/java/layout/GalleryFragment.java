@@ -2,6 +2,7 @@ package layout;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.view.ViewGroup;
 
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.adapters.GalleryViewAdapter;
+import de.uulm.mal.fancyquartett.adapters.SavedGameForDeckDeleteListener;
 import de.uulm.mal.fancyquartett.data.GalleryModel;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.data.OnlineDeck;
@@ -34,7 +36,7 @@ import de.uulm.mal.fancyquartett.utils.OnlineDecksLoader;
  * Use the {@link GalleryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GalleryFragment extends Fragment {
+public class GalleryFragment extends Fragment implements SavedGameForDeckDeleteListener {
 
     GalleryViewAdapter galleryViewAdapter;
     RecyclerView recList;
@@ -49,6 +51,7 @@ public class GalleryFragment extends Fragment {
 
     public GalleryFragment() {
         // Required empty public constructor
+
     }
 
 
@@ -71,13 +74,12 @@ public class GalleryFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         //Initialize Data
-        galleryViewAdapter = new GalleryViewAdapter(getContext());
+        galleryViewAdapter = new GalleryViewAdapter(getContext(),this);
         loader = new LocalDecksLoader(getContext().getFilesDir() + Settings.localFolder, galleryViewAdapter);
         loader.execute();
 
         onlineLoader = new OnlineDecksLoader(Settings.serverAdress, Settings.serverRootPath, getContext().getCacheDir().getAbsolutePath(), galleryViewAdapter);
         onlineLoader.execute();
-
 
 
     }
@@ -127,7 +129,7 @@ public class GalleryFragment extends Fragment {
                 new LocalDecksLoader(getContext().getFilesDir() + Settings.localFolder, galleryViewAdapter).execute();
             }
         });
-        recList=null;
+        recList = null;
         glm = new GridLayoutManager(getContext(), 2);
         llm = new LinearLayoutManager(this.getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -209,7 +211,7 @@ public class GalleryFragment extends Fragment {
 
         if (item.getItemId() == R.id.listLayoutButton) {
             recList.setLayoutManager(llm);
-            galleryViewAdapter = new GalleryViewAdapter(getContext(), galleryViewAdapter.getGalleryModel(), GalleryViewAdapter.LISTLAYOUT);
+            galleryViewAdapter = new GalleryViewAdapter(getContext(),this, galleryViewAdapter.getGalleryModel(), GalleryViewAdapter.LISTLAYOUT);
             recList.setAdapter(galleryViewAdapter);
             galleryViewAdapter.setRefreshLayout(swipeRefreshLayout);
             item.setVisible(false);
@@ -217,7 +219,7 @@ public class GalleryFragment extends Fragment {
             item2.setVisible(true);
         } else if (item.getItemId() == R.id.gridLayoutButton) {
             recList.setLayoutManager(glm);
-            galleryViewAdapter = new GalleryViewAdapter(getContext(), galleryViewAdapter.getGalleryModel(), GalleryViewAdapter.GRIDLAYOUT);
+            galleryViewAdapter = new GalleryViewAdapter(getContext(),this, galleryViewAdapter.getGalleryModel(), GalleryViewAdapter.GRIDLAYOUT);
             recList.setAdapter(galleryViewAdapter);
             galleryViewAdapter.setRefreshLayout(swipeRefreshLayout);
             item.setVisible(false);
@@ -225,6 +227,13 @@ public class GalleryFragment extends Fragment {
             item2.setVisible(true);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void deckOfSavedGameDeleted() {
+        getActivity().finish();
+        Intent intent = getActivity().getIntent().putExtra("fragmentnumber", 1);
+        startActivity(intent);
     }
 
     /**

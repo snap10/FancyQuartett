@@ -187,6 +187,10 @@
     <string name="touchtoselectadeck">Touch to select a deck.</string>
     <string name="nodeckselected">No deck selected ...</string>
     <string name="multiplayer">Multiplayer</string>
+    <string name="newMagicMode">View  AI-Players</string>
+    <string name="deleteSavedGameQuestion">Do you really want to delete your saved Game?</string>
+    <string name="savedGameDeleted">Saved Game has been deleted</string>
+    <string name="deleteTitle">Delete?</string>
 
 
 </resources>

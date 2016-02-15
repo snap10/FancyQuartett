@@ -115,6 +115,15 @@
 
             android:text="@string/newMultiPlayer"
             android:layout_weight="0.5" />
+
+
+        <Button
+            android:id="@+id/newMagicButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:text="@string/newMagicMode"
+            android:layout_weight="0.5" />
 </LinearLayout>
 
     </LinearLayout>

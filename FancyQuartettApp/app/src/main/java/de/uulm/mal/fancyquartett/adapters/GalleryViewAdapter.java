@@ -42,10 +42,11 @@ import de.uulm.mal.fancyquartett.utils.OnlineDecksLoader;
 /**
  * Created by Snap10 on 04/01/16.
  */
-public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.GalleryViewHolder> implements  OnlineDecksLoader.OnOnlineDecksLoaded, LocalDecksLoader.OnLocalDecksLoadedListener, DeckDownloader.OnDeckDownloadedListener {
+public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.GalleryViewHolder> implements OnlineDecksLoader.OnOnlineDecksLoaded, LocalDecksLoader.OnLocalDecksLoadedListener, DeckDownloader.OnDeckDownloadedListener {
 
     public static final int LISTLAYOUT = 0;
     public static final int GRIDLAYOUT = 1;
+    private SavedGameForDeckDeleteListener savedGameForDeckDeleteListener;
 
     GalleryModel galleryModel;
     Context context;
@@ -54,11 +55,23 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
     private ProgressDialog mProgressDialog;
     protected SwipeRefreshLayout swipeRefreshLayout;
 
+
+
     /**
      * @param context
      */
     public GalleryViewAdapter(Context context) {
         this.context = context;
+        galleryModel = new GalleryModel();
+        layout = 0;
+    }
+
+    /**
+     * @param context
+     */
+    public GalleryViewAdapter(Context context, SavedGameForDeckDeleteListener savedGameForDeckDeleteListener) {
+        this.context = context;
+        this.savedGameForDeckDeleteListener = savedGameForDeckDeleteListener;
         galleryModel = new GalleryModel();
         layout = 0;
     }
@@ -82,6 +95,18 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
      */
     public GalleryViewAdapter(Context context, GalleryModel galleryModel, int layout) {
         this.context = context.getApplicationContext();
+        this.galleryModel = galleryModel;
+        this.layout = layout;
+    }
+
+    /**
+     * @param context
+     * @param galleryModel
+     * @param layout
+     */
+    public GalleryViewAdapter(Context context,SavedGameForDeckDeleteListener savedGameForDeckDeleteListener, GalleryModel galleryModel, int layout) {
+        this.context = context.getApplicationContext();
+        this.savedGameForDeckDeleteListener=savedGameForDeckDeleteListener;
         this.galleryModel = galleryModel;
         this.layout = layout;
     }
@@ -141,7 +166,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
             galleryViewHolder.deckIcon.setImageBitmap(onlineDeck.getDeckimage().getBitmap());
             galleryViewHolder.view.setOnClickListener(getItemClickListener(onlineDeck, this));
             galleryViewHolder.downloadButton.setVisibility(View.VISIBLE);
-            galleryViewHolder.downloadButton.setOnClickListener(getDownloadClicklistener(onlineDeck,this));
+            galleryViewHolder.downloadButton.setOnClickListener(getDownloadClicklistener(onlineDeck, this));
             galleryViewHolder.view.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
                 @Override
                 public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -180,7 +205,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
         View.OnClickListener clickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadOnlineDeck(onlineDeck,listener,swipeRefreshLayout);
+                downloadOnlineDeck(onlineDeck, listener, swipeRefreshLayout);
             }
         };
         return clickListener;
@@ -220,7 +245,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
      */
     @Override
     public void onLocalDecksLoaded(ArrayList<OfflineDeck> offlineDecks) {
-        if (swipeRefreshLayout!=null){
+        if (swipeRefreshLayout != null) {
             swipeRefreshLayout.setRefreshing(false);
         }
         if (offlineDecks != null) {
@@ -241,7 +266,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
      */
     @Override
     public void onDownloadFinished(Exception possibleException, ArrayList<OnlineDeck> onlineDecks) {
-        if (swipeRefreshLayout!=null){
+        if (swipeRefreshLayout != null) {
             swipeRefreshLayout.setRefreshing(false);
         }
         if (possibleException == null) {
@@ -319,7 +344,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
      * @param listener
      */
     public void showDeleteSavedAlertDialog(final View v, final OfflineDeck offlineDeck, final OnlineDecksLoader.OnOnlineDecksLoaded listener) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext(),R.style.AppTheme_Dialog);
+        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext(), R.style.AppTheme_Dialog);
         builder.setMessage(R.string.deleteSavedAlert).setTitle(R.string.deleteWarningTitle);
 
         // Add the buttons
@@ -328,10 +353,13 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
                 offlineDeck.removeFromFileSystem(getContext());
                 galleryModel.remove(offlineDeck);
                 Toast.makeText(context, R.string.deckdeleted, Toast.LENGTH_SHORT).show();
-                SharedPreferences prefs = context.getSharedPreferences("savedGame",context.MODE_PRIVATE);
-                prefs.edit().remove("savedGame").putBoolean("savedAvailable",false).commit();
+                SharedPreferences prefs = context.getSharedPreferences("savedGame", context.MODE_PRIVATE);
+                prefs.edit().remove("savedGame").putBoolean("savedAvailable", false).commit();
                 swipeRefreshLayout.setRefreshing(true);
-                new OnlineDecksLoader(Settings.serverAdress, Settings.serverRootPath,getContext().getCacheDir().getAbsolutePath(), listener).execute();
+                new OnlineDecksLoader(Settings.serverAdress, Settings.serverRootPath, getContext().getCacheDir().getAbsolutePath(), listener).execute();
+                if (savedGameForDeckDeleteListener != null) {
+                    savedGameForDeckDeleteListener.deckOfSavedGameDeleted();
+                }
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -351,7 +379,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
             mProgressDialog = new ProgressDialog(v.getContext());
             mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             mProgressDialog.setMessage(context.getString(R.string.downloadProgressText));
-            final DeckDownloader downloader = new DeckDownloader(Settings.serverAdress, getContext().getFilesDir() + Settings.localFolder, Settings.serverRootPath,onlinedeck.getId(), listener,mProgressDialog);
+            final DeckDownloader downloader = new DeckDownloader(Settings.serverAdress, getContext().getFilesDir() + Settings.localFolder, Settings.serverRootPath, onlinedeck.getId(), listener, mProgressDialog);
             downloader.execute();
             // instantiate it within the onCreate method
             mProgressDialog.setCancelable(true);
@@ -401,41 +429,40 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
     }
 
     public void setRefreshLayout(SwipeRefreshLayout swipeRefreshLayout) {
-        this.swipeRefreshLayout=swipeRefreshLayout;
+        this.swipeRefreshLayout = swipeRefreshLayout;
     }
 
 
-
     public void onContextItemSelected(MenuItem item) {
-        if (R.id.deleteDeckMenuItem==item.getItemId()){
-            OfflineDeck offlineDeck = (OfflineDeck)item.getIntent().getExtras().get("offlinedeck");
-            SharedPreferences prefs = context.getSharedPreferences("savedGame",context.MODE_PRIVATE);
-            GameEngine engine =null;
+        if (R.id.deleteDeckMenuItem == item.getItemId()) {
+            OfflineDeck offlineDeck = (OfflineDeck) item.getIntent().getExtras().get("offlinedeck");
+            SharedPreferences prefs = context.getSharedPreferences("savedGame", context.MODE_PRIVATE);
+            GameEngine engine = null;
             if (prefs.getBoolean("savedAvailable", false)) {
                 Gson gson = new Gson();
                 String json = prefs.getString("savedEngine", null);
                 engine = gson.fromJson(json, GameEngine.class);
             }
-            if (engine!=null&&engine.getGameDeck().getId()==offlineDeck.getId()){
-                    showDeleteSavedAlertDialog(swipeRefreshLayout,offlineDeck,this);
-            }else{
+            if (engine != null && engine.getGameDeck().getId() == offlineDeck.getId()) {
+                showDeleteSavedAlertDialog(swipeRefreshLayout, offlineDeck, this);
+            } else {
                 offlineDeck.removeFromFileSystem(this.getContext());
                 galleryModel.remove(offlineDeck);
                 Toast.makeText(context, R.string.deckdeleted, Toast.LENGTH_SHORT).show();
                 swipeRefreshLayout.setRefreshing(true);
-                new OnlineDecksLoader(Settings.serverAdress, Settings.serverRootPath,getContext().getCacheDir().getAbsolutePath(), this).execute();
+                new OnlineDecksLoader(Settings.serverAdress, Settings.serverRootPath, getContext().getCacheDir().getAbsolutePath(), this).execute();
             }
 
-        }else if(R.id.downloadDeckMenuItem==item.getItemId()){
-            OnlineDeck onlineDeck = (OnlineDeck)item.getIntent().getExtras().get("onlinedeck");
-            downloadOnlineDeck(onlineDeck,this,swipeRefreshLayout);
-        }else if(R.id.startNewSinglePlayer==item.getItemId()){
+        } else if (R.id.downloadDeckMenuItem == item.getItemId()) {
+            OnlineDeck onlineDeck = (OnlineDeck) item.getIntent().getExtras().get("onlinedeck");
+            downloadOnlineDeck(onlineDeck, this, swipeRefreshLayout);
+        } else if (R.id.startNewSinglePlayer == item.getItemId()) {
             Intent intent = new Intent(getContext(), NewGameSettingsActivity.class);
             intent.putExtras(item.getIntent().getExtras());
             intent.putExtra("multiplayer", false);
             context.startActivity(intent);
 
-        }else if(R.id.startNewMultiPlayer==item.getItemId()){
+        } else if (R.id.startNewMultiPlayer == item.getItemId()) {
             Intent intent = new Intent(getContext(), NewGameSettingsActivity.class);
             intent.putExtras(item.getIntent().getExtras());
             intent.putExtra("multiplayer", true);
@@ -443,7 +470,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
             context.startActivity(intent);
 
         }
-            }
+    }
 
     /**
      * InnerClass TimerViewHolder extends RecyclerView.ViewHolder
@@ -487,10 +514,6 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
                     v.showContextMenu();
                 }
             });
-
-
-
-
 
 
         }

@@ -187,6 +187,10 @@
     <string name="touchtoselectadeck">Drücken um Deck zu wählen</string>
     <string name="nodeckselected">Kein Deck gewählt...</string>
     <string name="multiplayer">Mehrspieler</string>
+    <string name="newMagicMode">Der KI zusehen</string>
+    <string name="deleteSavedGameQuestion">Wollen sie wirklich ihr gespeichertes Spiel löschen?</string>
+    <string name="savedGameDeleted">Spiel wurde gelöscht!</string>
+    <string name="deleteTitle">Löschen?</string>
 
 
 </resources>

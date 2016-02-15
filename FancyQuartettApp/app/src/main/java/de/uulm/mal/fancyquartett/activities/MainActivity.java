@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
     private Menu menu;
     private GameEngine engine;
     private Bundle engineBundle;
+    private int fragmentnumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,13 +97,18 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
+        if(getIntent().hasExtra("fragmentnumber")){
+            fragmentnumber = getIntent().getExtras().getInt("fragmentnumber");
+        }else{
+            fragmentnumber=0;
+        }
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setCurrentItem(fragmentnumber);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

@@ -1,6 +1,8 @@
 package layout;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -21,7 +24,9 @@ import java.text.SimpleDateFormat;
 import de.uulm.mal.fancyquartett.R;
 import de.uulm.mal.fancyquartett.activities.GameActivity;
 import de.uulm.mal.fancyquartett.activities.NewGameSettingsActivity;
+import de.uulm.mal.fancyquartett.data.Settings;
 import de.uulm.mal.fancyquartett.utils.GameEngine;
+import de.uulm.mal.fancyquartett.utils.OnlineDecksLoader;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -79,6 +84,35 @@ public class StartFragment extends Fragment {
                     startActivity(intent);
                 }
             });
+            resumeGameCard.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(final View v) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext(), R.style.AppTheme_Dialog);
+                    builder.setMessage(R.string.deleteSavedGameQuestion).setTitle(R.string.deleteTitle);
+
+                    // Add the buttons
+                    builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            Toast.makeText(getContext(), R.string.savedGameDeleted, Toast.LENGTH_SHORT).show();
+                            SharedPreferences prefs = getActivity().getSharedPreferences("savedGame", getContext().MODE_PRIVATE);
+                            prefs.edit().remove("savedGame").putBoolean("savedAvailable", false).commit();
+                            getActivity().finish();
+                            startActivity(getActivity().getIntent());
+                        }
+                    });
+                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //DO nothing
+
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
+                    return false;
+                }
+            });
             ImageView lastGameDeckIcon = (ImageView) v.findViewById(R.id.lastgame_deckicon);
             lastGameDeckIcon.setImageBitmap(engine.getGameDeck().getDeckimage().getBitmap());
             TextView lastGameDeckName = (TextView) v.findViewById(R.id.lastgame_deckname);
@@ -90,9 +124,16 @@ public class StartFragment extends Fragment {
             TextView kiLevel = (TextView) v.findViewById(R.id.lastgame_ki_level);
             if (engine.isMultiplayer()) {
                 kiLevel.setText(getResources().getString(R.string.multiplayer));
+            } else if (engine.isMagicMode()) {
+                kiLevel.setText(getResources().getString(R.string.newMagicMode));
+
             } else {
                 kiLevel.setText(getString(R.string.ki_level) + ": " + engine.getKiLevel().toString());
+
             }
+        } else {
+            CardView resumeGameCard = (CardView) v.findViewById(R.id.resumeGameCard);
+            resumeGameCard.setVisibility(View.GONE);
         }
         Button newSinglePlayerButton = (Button) v.findViewById(R.id.newSingleplayerButton);
         newSinglePlayerButton.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +150,15 @@ public class StartFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), NewGameSettingsActivity.class);
                 intent.putExtra("multiplayer", true);
+                startActivity(intent);
+            }
+        });
+        Button newMagicButton = (Button) v.findViewById(R.id.newMagicButton);
+        newMagicButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), NewGameSettingsActivity.class);
+                intent.putExtra("magicmode", true);
                 startActivity(intent);
             }
         });

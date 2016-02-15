@@ -22,6 +22,7 @@
 
     <style name="AppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:windowAnimationStyle">@style/AppTheme.Dialog.Animation</item>
+        <item name="android:color">@color/accent</item>
     </style>
 
     <style name="AppTheme.Dialog.Animation" parent="@android:style/Animation.Dialog">

@@ -73,6 +73,7 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
     private CompoundButton.OnCheckedChangeListener numberOfRoundsSwitchListener;
     private int maxrounds =0;
     private boolean multiplayer;
+    private boolean magicmode;
 
 
     public NewGameSettingsFragment() {
@@ -131,6 +132,7 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
         }
         if (getArguments()!=null){
             multiplayer =getArguments().getBoolean("multiplayer");
+            magicmode = getArguments().getBoolean ("magicmode");
             offlineDeck=(OfflineDeck)getArguments().getSerializable("offlinedeck");
         }
         setHasOptionsMenu(true);
@@ -419,7 +421,12 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
                 intent.putExtra("gamemode", gameMode);
                 intent.putExtra("kilevel", kilevel);
                 intent.putExtra("multiplayer", multiplayer);
-                if (multiplayer){
+                intent.putExtra("magicmode",magicmode);
+                if (magicmode){
+                    intent.putExtra("playername1","AI 1");
+                    intent.putExtra("playername2","AI 2");
+                }
+                if(multiplayer){
                     EditText player1 = (EditText)v.findViewById(R.id.playername1);
                     EditText player2 = (EditText)v.findViewById(R.id.playername2);
                     intent.putExtra("playername1",player1.getText().toString());
