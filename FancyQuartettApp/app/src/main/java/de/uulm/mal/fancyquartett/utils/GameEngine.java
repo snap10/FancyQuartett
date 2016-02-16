@@ -272,9 +272,6 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
                 kiPlaysDialog.dismiss();
             }
         } else {
-            // workaround for later dismiss() on this dialog
-            kiPlaysDialog.show(fragmentManager, "KiPlaysDialog");
-            kiPlaysDialog.dismiss();
             startKiTask();
         }
         // start GameTimeTask if GameMode is Time
