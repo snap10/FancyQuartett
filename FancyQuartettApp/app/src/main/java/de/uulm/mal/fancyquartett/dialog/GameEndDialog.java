@@ -86,10 +86,6 @@ public class GameEndDialog extends DialogFragment {
         // set playerWon gui elements
         tvPName.setText(playerWon.getName());
 
-        // read statistic gui elements
-        TextView tvStatistic = (TextView) view.findViewById(R.id.textView_statistics);
-        // TODO: set statistic gui elements
-
         return dialog;
     }
 
