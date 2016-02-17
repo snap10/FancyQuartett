@@ -335,6 +335,16 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
             }
         });
         AlertDialog dialog = builder.create();
+        // workaround for button color
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                ((AlertDialog) dialog).getButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE).setTextColor(context.getResources().getColor(R.color.accent));
+                ((AlertDialog) dialog).getButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(R.color.secondary_text));
+            }
+        });
+        dialog.getWindow().setWindowAnimations(R.style.AppTheme_Dialog_Animation);
+
         dialog.show();
 
     }
@@ -369,6 +379,16 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
             }
         });
         AlertDialog dialog = builder.create();
+        // workaround for button color
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                ((AlertDialog) dialog).getButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE).setTextColor(context.getResources().getColor(R.color.accent));
+                ((AlertDialog) dialog).getButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(R.color.secondary_text));
+            }
+        });
+        dialog.getWindow().setWindowAnimations(R.style.AppTheme_Dialog_Animation);
+
         dialog.show();
 
     }
@@ -396,6 +416,7 @@ public class GalleryViewAdapter extends RecyclerView.Adapter<GalleryViewAdapter.
                     downloader.cancel(true);
                 }
             });
+            mProgressDialog.getWindow().setWindowAnimations(R.style.AppTheme_Dialog_Animation);
             mProgressDialog.show();
 
         } catch (Exception e) {

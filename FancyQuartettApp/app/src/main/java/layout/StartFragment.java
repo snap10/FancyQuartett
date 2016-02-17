@@ -108,8 +108,17 @@ public class StartFragment extends Fragment {
                         }
                     });
                     AlertDialog dialog = builder.create();
-                    dialog.show();
+                    // workaround for button color
+                    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialog) {
+                            ((AlertDialog) dialog).getButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.accent));
+                            ((AlertDialog) dialog).getButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.secondary_text));
+                        }
+                    });
+                    dialog.getWindow().setWindowAnimations(R.style.AppTheme_Dialog_Animation);
 
+                    dialog.show();
                     return false;
                 }
             });
