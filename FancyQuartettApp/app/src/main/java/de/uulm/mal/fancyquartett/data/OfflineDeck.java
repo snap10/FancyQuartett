@@ -18,7 +18,6 @@ import java.util.ArrayList;
 public class OfflineDeck extends Deck implements Serializable {
 
     private ArrayList<Card> cards;
-    private ArrayList<Property> properties;
 
     /**
      * @param name
@@ -29,7 +28,7 @@ public class OfflineDeck extends Deck implements Serializable {
     public OfflineDeck(String name, String description, ArrayList<Card> cards, ArrayList<Property> properties) {
         super(name, description);
         this.cards = cards;
-        this.properties = properties;
+
     }
 
     /**
@@ -42,7 +41,7 @@ public class OfflineDeck extends Deck implements Serializable {
     public OfflineDeck(String folder, String filename,boolean isLocal) throws Exception {
         super();
         this.cards = new ArrayList<Card>();
-        this.properties = new ArrayList<Property>();
+
         File jsonFile = new File(folder, filename + ".json");
         BufferedReader br = null;
         StringBuffer buffer = new StringBuffer();
@@ -62,7 +61,7 @@ public class OfflineDeck extends Deck implements Serializable {
         this.misc = deckjson.getString("misc");
         this.misc_version = deckjson.getString("misc_version");
         this.cards = new ArrayList<Card>();
-        this.properties = new ArrayList<Property>();
+
         JSONArray cardsJson = deckjson.getJSONArray("cards");
         for (int i = 0; i < cardsJson.length(); i++) {
             JSONObject card = cardsJson.getJSONObject(i);
@@ -81,7 +80,7 @@ public class OfflineDeck extends Deck implements Serializable {
     public OfflineDeck(JSONObject deckjson, boolean isLocal) throws JSONException {
         super(deckjson.getInt("id"), deckjson.getString("name"), deckjson.getString("description"), new Image(deckjson.getString("image"), true), deckjson.getString("misc"), deckjson.getString("misc_version"));
         this.cards = new ArrayList<Card>();
-        this.properties = new ArrayList<Property>();
+        
         JSONArray cardsJson = deckjson.getJSONArray("cards");
         for (int i = 0; i < cardsJson.length(); i++) {
             JSONObject card = cardsJson.getJSONObject(i);
@@ -98,13 +97,6 @@ public class OfflineDeck extends Deck implements Serializable {
         this.cards = cards;
     }
 
-    public ArrayList<Property> getProperties() {
-        return properties;
-    }
-
-    public void setProperties(ArrayList<Property> properties) {
-        this.properties = properties;
-    }
 
     /**
      * Should delete all offlineFiles of deck including JSON and Picture data
