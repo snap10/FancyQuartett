@@ -616,7 +616,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         if (dialog instanceof GameEndDialog) {
             stopAllTasks();
             SharedPreferences prefs = gameActivity.getSharedPreferences("savedGame", context.MODE_PRIVATE);
-            prefs.edit().remove("savedEngine").putBoolean("savedAvailable", false);
+            prefs.edit().remove("savedGame").remove("savedEngine").putBoolean("savedAvailable", false).commit();
             // close game and go back to main_activity
             Intent intent = new Intent(gameActivity, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
