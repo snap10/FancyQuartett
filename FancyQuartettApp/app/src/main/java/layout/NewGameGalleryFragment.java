@@ -34,7 +34,7 @@ import de.uulm.mal.fancyquartett.utils.ShakeDetector;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class NewGameGalleryFragment extends Fragment implements OnShakeListener {
+public class NewGameGalleryFragment extends Fragment  {
 
     private NewGameGalleryViewAdapter newGameGalleryViewAdapter;
     RecyclerView recList;
@@ -44,9 +44,7 @@ public class NewGameGalleryFragment extends Fragment implements OnShakeListener 
     private OnlineDecksLoader onlineLoader;
     private LocalDecksLoader loader;
 
-    private SensorManager mSensorManager;
-    private Sensor mAccelerometer;
-    private ShakeDetector mShakeDetector;
+
 
 
     public NewGameGalleryFragment() {
@@ -81,11 +79,7 @@ public class NewGameGalleryFragment extends Fragment implements OnShakeListener 
         llm = new LinearLayoutManager(this.getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
 
-        // initialise ShakeDetector
-        mSensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
-        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mShakeDetector = new ShakeDetector();
-        mShakeDetector.setOnShakeListener(this);
+
     }
 
     @Override
@@ -148,20 +142,7 @@ public class NewGameGalleryFragment extends Fragment implements OnShakeListener 
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        // Register Listener
-        mSensorManager.registerListener(mShakeDetector, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
-    }
 
-
-    @Override
-    public void onPause() {
-        // Unregister Listener
-        mSensorManager.unregisterListener(mShakeDetector);
-        super.onPause();
-    }
 
     /**
      * This hook is called whenever an item in your options menu is selected.
@@ -200,10 +181,7 @@ public class NewGameGalleryFragment extends Fragment implements OnShakeListener 
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onShake(int count) {
 
-    }
 
     /**
      * This interface must be implemented by activities that contain this
