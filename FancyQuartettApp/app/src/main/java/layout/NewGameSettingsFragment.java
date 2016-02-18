@@ -306,7 +306,7 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
             TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tabs);
             tabLayout.setupWithViewPager(mViewPager);
 
-        if (multiplayer){
+        if (multiplayer||magicmode){
             GameModeHotSeatFragment fragment = GameModeHotSeatFragment.newInstance();
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.multiplayerFragmentContainer,fragment).commit();
         }
@@ -506,11 +506,7 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
                 intent.putExtra("kilevel", kilevel);
                 intent.putExtra("multiplayer", multiplayer);
                 intent.putExtra("magicmode",magicmode);
-                if (magicmode){
-                    intent.putExtra("playername1","AI 1");
-                    intent.putExtra("playername2","AI 2");
-                }
-                if(multiplayer){
+                if(multiplayer||magicmode){
                     EditText player1 = (EditText)v.findViewById(R.id.playername1);
                     EditText player2 = (EditText)v.findViewById(R.id.playername2);
                     intent.putExtra("playername1",player1.getText().toString());
