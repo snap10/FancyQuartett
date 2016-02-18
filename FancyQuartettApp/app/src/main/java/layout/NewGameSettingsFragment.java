@@ -2,16 +2,19 @@ package layout;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,6 +39,7 @@ import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.data.Settings;
 import de.uulm.mal.fancyquartett.enums.GameMode;
 import de.uulm.mal.fancyquartett.enums.KILevel;
+import de.uulm.mal.fancyquartett.interfaces.OnDialogButtonClickListener;
 import de.uulm.mal.fancyquartett.interfaces.OnShakeListener;
 import de.uulm.mal.fancyquartett.utils.LocalDeckLoader;
 import de.uulm.mal.fancyquartett.utils.LocalDecksLoader;
@@ -51,6 +55,7 @@ import de.uulm.mal.fancyquartett.utils.ShakeDetector;
  * create an instance of this fragment.
  */
 public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader.OnLocalDeckLoadedListener, LocalDecksLoader.OnLocalDecksLoadedListener , OnShakeListener {
+
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -83,9 +88,12 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
     private int maxrounds =0;
     private boolean multiplayer;
     private boolean magicmode;
+
+    private AlertDialog randomSettingsDialog;
     private SensorManager mSensorManager;
     private ShakeDetector mShakeDetector;
     private Sensor mAccelerometer;
+    private boolean isShakeEnabled;
 
 
     public NewGameSettingsFragment() {
@@ -105,6 +113,7 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
         mSensorManager.unregisterListener(mShakeDetector);
         super.onPause();
     }
+
     /**
      * Called to ask the fragment to save its current dynamic state, so it
      * can later be reconstructed in a new instance of its process is
@@ -163,11 +172,39 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
         setHasOptionsMenu(true);
         intitalizeListeners();
 
+        // build dialog
+        isShakeEnabled = true;
+        randomSettingsDialog = new AlertDialog.Builder(this.getContext())
+                .setIcon(R.drawable.ic_error_accent)
+                .setCancelable(false)
+                .setTitle(getString(R.string.randomsettingsdialogtitle))
+                .setMessage(getString(R.string.randomsettingsdialogtext))
+                .setPositiveButton(getResources().getString(R.string.ok_caps), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // activate random select by shaking device
+                        isShakeEnabled = true;
+                    }
+                })
+                .create();
+        // workaround for button color
+        randomSettingsDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                ((AlertDialog) dialog).getButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.accent));
+                ((AlertDialog) dialog).getButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.secondary_text));
+            }
+        });
+        randomSettingsDialog.getWindow().setWindowAnimations(R.style.AppTheme_Dialog_Animation);
+
         // initialise ShakeDetector
         mSensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mShakeDetector = new ShakeDetector();
         mShakeDetector.setOnShakeListener(this);
+
+        // show tipp
+        Toast.makeText(getContext(),R.string.randomsettingstoast,Toast.LENGTH_SHORT).show();
     }
 
     private void intitalizeListeners() {
@@ -382,7 +419,7 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
      */
     @Override
     public void onDeckLoaded(OfflineDeck offlineDeck) {
-
+        System.out.println("SELECTED: " + offlineDeck.getName());
         this.offlineDeck = offlineDeck;
         ImageView imageview = (ImageView) getActivity().findViewById(R.id.deckicon);
         imageview.setImageBitmap(offlineDeck.getCards().get(0).getImages().get(0).getBitmap());
@@ -392,76 +429,18 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
         deckdescription.setText(offlineDeck.getName());
     }
 
-    @Override
-    public void onShake(int count) {
-        new LocalDecksLoader(Settings.localFolder, this).execute();
-        Random rand = new Random();
-        timeoutSwitch.setChecked(rand.nextBoolean());
-        if (timeoutSwitch.isChecked()) {
-            EditText editText = (EditText) v.findViewById(R.id.timoutsecondedittext);
-            editText.setEnabled(true);
-            int next = rand.nextInt(25) + 5;
-            editText.setText(next);
-        }else{
-            EditText editText = (EditText) v.findViewById(R.id.timoutsecondedittext);
-            editText.setEnabled(false);
-        }
-        numberOfRoundsSwitch.setChecked(rand.nextBoolean());
-        if (numberOfRoundsSwitch.isChecked()) {
-            EditText numberofmaximumrounds = (EditText) v.findViewById(R.id.maximumroundsedittext);
-            numberofmaximumrounds.setEnabled(true);
-            int next = rand.nextInt(85) + 15;
-            numberofmaximumrounds.setText(next);
-        }else{
-            EditText numberofmaximumrounds = (EditText) v.findViewById(R.id.maximumroundsedittext);
-            numberofmaximumrounds.setEnabled(false);
-        }
-
-        switch (rand.nextInt(3)) {
-            case 0:
-                gameMode = GameMode.ToTheEnd;
-                break;
-            case 1:
-                gameMode = GameMode.Time;
-                EditText timeText = (EditText) v.findViewById(R.id.gametimeedittext);
-                timeText.setText(rand.nextInt(25) + 5);
-                break;
-            case 2:
-                gameMode = GameMode.Points;
-                EditText pointsText = (EditText) v.findViewById(R.id.winpointsedittext);
-                pointsText.setText(rand.nextInt(85) + 15);
-                break;
-        }
-        if (!multiplayer) {
-            RadioGroup aibuttongroup = (RadioGroup) v.findViewById(R.id.aibuttongroup);
-            switch (rand.nextInt(3)) {
-                case 0:
-                    kilevel = KILevel.Soft;
-                    aibuttongroup.check(R.id.radioButton);
-                    break;
-                case 1:
-                    kilevel = KILevel.Medium;
-                    aibuttongroup.check(R.id.radioButton2);
-                    break;
-                case 2:
-                    kilevel = KILevel.Hard;
-                    aibuttongroup.check(R.id.radioButton3);
-                    break;
-            }
-        }
-
-
-    }
-
     /**
      * @param offlineDecks
      */
     @Override
     public void onLocalDecksLoaded(ArrayList<OfflineDeck> offlineDecks) {
-        if (offlineDecks!=null){
-            Random rand = new Random();
-            offlineDeck = offlineDecks.get(rand.nextInt(offlineDecks.size()));
-            onDeckLoaded(offlineDeck);
+        if (offlineDecks != null){
+            System.out.println("DECKANZAHL: " + offlineDecks.size());
+            if(offlineDecks.size() > 0) {
+                Random rand = new Random();
+                offlineDeck = offlineDecks.get(rand.nextInt(offlineDecks.size()));
+                onDeckLoaded(offlineDeck);
+            }
         }
     }
 
@@ -627,6 +606,81 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
                     throw new IllegalArgumentException("Wrong Fragment ID chosen");
             }
 
+        }
+    }
+
+    @Override
+    public void onShake(int count) {
+        // do random stuff after  > 2 shakes
+        if(count > 1 && isShakeEnabled) {
+            // disable random select by shaking device
+            isShakeEnabled = false;
+
+            new LocalDecksLoader(Settings.localFolder, this).execute();
+
+            Random rand = new Random();
+
+            timeoutSwitch.setChecked(rand.nextBoolean());
+            if (timeoutSwitch.isChecked()) {
+                EditText editText = (EditText) v.findViewById(R.id.timoutsecondedittext);
+                editText.setEnabled(true);
+                int next = rand.nextInt(25) + 5;
+                editText.setText("" + next);
+            }else{
+                EditText editText = (EditText) v.findViewById(R.id.timoutsecondedittext);
+                editText.setEnabled(false);
+            }
+
+            numberOfRoundsSwitch.setChecked(rand.nextBoolean());
+            if (numberOfRoundsSwitch.isChecked()) {
+                EditText numberofmaximumrounds = (EditText) v.findViewById(R.id.maximumroundsedittext);
+                numberofmaximumrounds.setEnabled(true);
+                int next = rand.nextInt(85) + 15;
+                numberofmaximumrounds.setText("" + next);
+            }else{
+                EditText numberofmaximumrounds = (EditText) v.findViewById(R.id.maximumroundsedittext);
+                numberofmaximumrounds.setEnabled(false);
+            }
+
+            switch (rand.nextInt(3)) {
+                case 0:
+                    gameMode = GameMode.ToTheEnd;
+                    mViewPager.setCurrentItem(0);
+                    break;
+                case 1:
+                    gameMode = GameMode.Time;
+                    mViewPager.setCurrentItem(1);
+                    EditText timeText = (EditText) v.findViewById(R.id.gametimeedittext);
+                    timeText.setText("" + (rand.nextInt(25) + 5));
+                    break;
+                case 2:
+                    gameMode = GameMode.Points;
+                    mViewPager.setCurrentItem(2);
+                    EditText pointsText = (EditText) v.findViewById(R.id.winpointsedittext);
+                    pointsText.setText("" + (rand.nextInt(85) + 15));
+                    break;
+            }
+
+            if (!multiplayer) {
+                RadioGroup aibuttongroup = (RadioGroup) v.findViewById(R.id.aibuttongroup);
+                switch (rand.nextInt(3)) {
+                    case 0:
+                        kilevel = KILevel.Soft;
+                        aibuttongroup.check(R.id.radioButton);
+                        break;
+                    case 1:
+                        kilevel = KILevel.Medium;
+                        aibuttongroup.check(R.id.radioButton2);
+                        break;
+                    case 2:
+                        kilevel = KILevel.Hard;
+                        aibuttongroup.check(R.id.radioButton3);
+                        break;
+                }
+            }
+
+            // show dialog
+            randomSettingsDialog.show();
         }
     }
 }

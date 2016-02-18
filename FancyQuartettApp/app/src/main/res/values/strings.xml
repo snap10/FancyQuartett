@@ -39,11 +39,14 @@
     <string name="kiplaysdialogtext">Please wait...</string>
     <string name="pausecurrentgamedialogtitle">Pause game</string>
     <string name="pausecurrentgamedialogtext">Are you sure you want to pause the game? This game will be saved automatically.</string>
+    <string name="randomsettingsdialogtitle">Random setting</string>
+    <string name="randomsettingsdialogtext">You shaked your device. All game-settings were randomly overwritte.</string>
 
     <!-- Toasts -->
     <string name="noDeckSelectedForGame">You have to choose a Deck to start the Game!</string>
     <string name="noLocalDecksFound">No Local decks were found on the phone!</string>
     <string name="noOnlineDecksFound">No Online Decks were Found on the Server</string>
+    <string name="randomsettingstoast">Shake your device to select random settings.</string>
 
     <!-- List Items -->
     <string name="delete">Delete Deck</string>
