@@ -86,9 +86,9 @@ public class CardAttrViewAdapter extends RecyclerView.Adapter<CardAttrViewAdapte
                 holder.cardAttrIcon.setEnabled(false);
             }
             if(property.biggerWins()) {
-                holder.cardAttrArrow.setImageResource(R.drawable.ic_arrow_drop_up_black);
+                holder.cardAttrArrow.setImageResource(R.drawable.ic_arrow_drop_up_white);
             } else {
-                holder.cardAttrArrow.setImageResource(R.drawable.ic_arrow_drop_down_black);
+                holder.cardAttrArrow.setImageResource(R.drawable.ic_arrow_drop_down_white);
             }
             if (isClickable){
                 if(showPoints) holder.cardAttrExtraInfo.setText("+"+card.getPoints(cardAttr)+" points");

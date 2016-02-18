@@ -5,12 +5,12 @@
     <color name="colorAccent">@color/accent</color>
 
     <!-- #2196F3 -->
-    <color name="primary">#607D8B</color>
+    <color name="primary">#4caf50</color>
     <!-- #1976D2 -->
-    <color name="primary_dark">#455A64</color>
-    <color name="primary_light">#CFD8DC</color>
+    <color name="primary_dark">#388e3c</color>
+    <color name="primary_light">#a5d6a7</color>
     <!-- #AA1976D2 -->
-    <color name="primary_dark_AAopacity">#AA455A64</color>
+    <color name="primary_dark_AAopacity">#AA388e3c</color>
     <!-- #FF9800 -->
     <color name="accent">#FF9800</color>
     <!-- #FFE0B2 -->

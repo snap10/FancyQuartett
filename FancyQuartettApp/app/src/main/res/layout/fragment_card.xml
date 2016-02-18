@@ -10,10 +10,9 @@
         android:layout_height="fill_parent"
         android:layout_margin="5dp"
         android:padding="6dp"
-        cardview:cardBackgroundColor="@color/colorPrimaryDark"
+        cardview:cardBackgroundColor="@android:color/transparent"
         cardview:cardCornerRadius="2dp"
-        cardview:cardElevation="2dp"
-        android:background="@color/card_background">
+        cardview:cardElevation="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,7 +32,7 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title.Inverse"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:background="@color/card_title_background"
+                android:background="@color/accent"
                 android:elevation="4dp"/>
 
             <android.support.v4.view.ViewPager
@@ -48,7 +47,7 @@
                 android:id="@+id/recycler_card_attributes"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:background="@color/card_background"
+                android:background="@android:color/transparent"
                 android:layout_weight="0.5"></android.support.v7.widget.RecyclerView>
 
         </LinearLayout>

@@ -4,457 +4,455 @@
     android:layout_height="match_parent"
     tools:context="layout.StatisticFragment">
 
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <LinearLayout
-        android:orientation="vertical"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-
-        <android.support.v7.widget.CardView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:cardview="http://schemas.android.com/apk/res-auto"
-            android:padding="6dp"
-            android:layout_margin="8dp"
-            cardview:cardCornerRadius="2dp"
-            cardview:cardElevation="2dp"
-            android:background="#ffffff">
-        >
-
-            <LinearLayout
-            android:orientation="vertical"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp">
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
+            <android.support.v7.widget.CardView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:cardview="http://schemas.android.com/apk/res-auto"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Singleplayer"
-                android:id="@+id/textView25"
-                android:layout_column="1"
-                android:textSize="32dp"
-                android:textAllCaps="false"
-                android:layout_marginBottom="10dp" />
+                android:layout_margin="8dp"
+                android:background="#ffffff"
+                android:padding="6dp"
+                cardview:cardCornerRadius="2dp"
+                cardview:cardElevation="2dp">
 
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:transitionGroup="false" >
-
-                <TableRow
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:orientation="vertical">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/textView25"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="0"
-                        android:id="@+id/num_singleplayer_games"
-                        android:textSize="24dp"
-                        android:textStyle="bold"
-                        android:layout_column="0"
-                        android:layout_marginRight="5dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="games played"
-                        android:id="@+id/textView29"
-                        android:layout_marginRight="10dp"
-                        android:textSize="16dp"
-                        android:layout_column="1" />
-
-                    <TableLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp" >
-
-                        <TableRow
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" >
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="0"
-                                android:id="@+id/num_singleplayer_games_won"
-                                android:layout_marginRight="5dp"
-                                android:layout_column="2" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="won"
-                                android:id="@+id/textView31"
-                                android:layout_column="3" />
-                        </TableRow>
-
-                        <TableRow
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" >
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="0"
-                                android:id="@+id/num_singleplayer_games_lost"
-                                android:layout_marginRight="5dp"
-                                android:layout_column="2" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="lost"
-                                android:id="@+id/textView33"
-                                android:layout_column="3" />
-                        </TableRow>
-
-                        <TableRow
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" >
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="0"
-                                android:id="@+id/percentage_singleplayer_games_won"
-                                android:layout_column="2"
-                                android:layout_marginRight="5dp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="rate"
-                                android:id="@+id/textView35"
-                                android:layout_column="3"
-                                android:layout_marginRight="5dp" />
-                        </TableRow>
-                    </TableLayout>
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:id="@+id/num_singleplayer_duels"
-                        android:layout_column="0"
-                        android:layout_marginRight="5dp"
-                        android:textSize="24dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="duels made"
-                        android:id="@+id/textView37"
                         android:layout_column="1"
-                        android:textSize="16dp" />
+                        android:layout_marginBottom="10dp"
+                        android:text="Singleplayer"
+                        android:textAllCaps="false"
+                        android:textSize="32dp" />
 
                     <TableLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp" >
+                        android:transitionGroup="false">
 
                         <TableRow
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent" >
+                            android:layout_height="match_parent">
 
                             <TextView
+                                android:id="@+id/num_singleplayer_games"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0"
-                                android:id="@+id/num_singleplayer_duels_won"
+                                android:layout_column="0"
                                 android:layout_marginRight="5dp"
-                                android:layout_column="2" />
+                                android:text="0"
+                                android:textSize="24dp"
+                                android:textStyle="bold" />
 
                             <TextView
+                                android:id="@+id/textView29"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="won"
-                                android:id="@+id/textView39"
-                                android:layout_column="3" />
+                                android:layout_column="1"
+                                android:layout_marginRight="10dp"
+                                android:text="games played"
+                                android:textSize="16dp" />
+
+                            <TableLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp">
+
+                                <TableRow
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
+
+                                    <TextView
+                                        android:id="@+id/num_singleplayer_games_won"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_column="2"
+                                        android:layout_marginRight="5dp"
+                                        android:text="0" />
+
+                                    <TextView
+                                        android:id="@+id/textView31"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_column="3"
+                                        android:text="won" />
+                                </TableRow>
+
+                                <TableRow
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
+
+                                    <TextView
+                                        android:id="@+id/num_singleplayer_games_lost"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_column="2"
+                                        android:layout_marginRight="5dp"
+                                        android:text="0" />
+
+                                    <TextView
+                                        android:id="@+id/textView33"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_column="3"
+                                        android:text="lost" />
+                                </TableRow>
+
+                                <TableRow
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
+
+                                    <TextView
+                                        android:id="@+id/percentage_singleplayer_games_won"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_column="2"
+                                        android:layout_marginRight="5dp"
+                                        android:text="0" />
+
+                                    <TextView
+                                        android:id="@+id/textView35"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_column="3"
+                                        android:layout_marginRight="5dp"
+                                        android:text="rate" />
+                                </TableRow>
+                            </TableLayout>
                         </TableRow>
 
                         <TableRow
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent" >
+                            android:layout_height="match_parent">
 
                             <TextView
+                                android:id="@+id/num_singleplayer_duels"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0"
-                                android:id="@+id/num_singleplayer_duels_lost"
+                                android:layout_column="0"
                                 android:layout_marginRight="5dp"
-                                android:layout_column="2" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="lost"
-                                android:id="@+id/textView41"
-                                android:layout_column="3" />
-                        </TableRow>
-
-                        <TableRow
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" >
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
                                 android:text="0"
-                                android:id="@+id/percentage_singleplayer_duels_won"
-                                android:layout_column="2"
-                                android:layout_marginRight="5dp" />
+                                android:textSize="24dp"
+                                android:textStyle="bold" />
 
                             <TextView
+                                android:id="@+id/textView37"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="rate"
-                                android:id="@+id/textView43"
-                                android:layout_column="3"
-                                android:layout_marginRight="5dp" />
+                                android:layout_column="1"
+                                android:text="duels made"
+                                android:textSize="16dp" />
+
+                            <TableLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp">
+
+                                <TableRow
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
+
+                                    <TextView
+                                        android:id="@+id/num_singleplayer_duels_won"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_column="2"
+                                        android:layout_marginRight="5dp"
+                                        android:text="0" />
+
+                                    <TextView
+                                        android:id="@+id/textView39"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_column="3"
+                                        android:text="won" />
+                                </TableRow>
+
+                                <TableRow
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
+
+                                    <TextView
+                                        android:id="@+id/num_singleplayer_duels_lost"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_column="2"
+                                        android:layout_marginRight="5dp"
+                                        android:text="0" />
+
+                                    <TextView
+                                        android:id="@+id/textView41"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_column="3"
+                                        android:text="lost" />
+                                </TableRow>
+
+                                <TableRow
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
+
+                                    <TextView
+                                        android:id="@+id/percentage_singleplayer_duels_won"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_column="2"
+                                        android:layout_marginRight="5dp"
+                                        android:text="0" />
+
+                                    <TextView
+                                        android:id="@+id/textView43"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_column="3"
+                                        android:layout_marginRight="5dp"
+                                        android:text="rate" />
+
+                                </TableRow>
+                            </TableLayout>
                         </TableRow>
                     </TableLayout>
-                </TableRow>
-            </TableLayout>
-        </LinearLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
 
-        </android.support.v7.widget.CardView>
 
-        <android.support.v7.widget.CardView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:cardview="http://schemas.android.com/apk/res-auto"
-            android:padding="6dp"
-            android:layout_margin="8dp"
-            cardview:cardCornerRadius="2dp"
-            cardview:cardElevation="2dp"
-            android:background="#ffffff">
-        >
-
-            <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:contextClickable="false">
-
-            <TextView
-                android:layout_width="match_parent"
+            <android.support.v7.widget.CardView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:cardview="http://schemas.android.com/apk/res-auto"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Multiplayer"
-                android:id="@+id/textView"
-                android:layout_column="1"
-                android:textSize="32dp"
-                android:textAllCaps="false"
-                android:layout_marginBottom="10dp" />
+                android:layout_margin="8dp"
+                android:background="#ffffff"
+                android:padding="6dp"
+                cardview:cardCornerRadius="2dp"
+                cardview:cardElevation="2dp">
 
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:transitionGroup="false">
-
-                <TableRow
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:contextClickable="false"
+                    android:orientation="vertical">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/textView"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="0"
-                        android:id="@+id/num_multiplayer_games"
-                        android:textSize="24dp"
-                        android:textStyle="bold"
-                        android:layout_column="0"
-                        android:layout_marginRight="5dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="games played"
-                        android:id="@+id/textView2"
-                        android:layout_marginRight="10dp"
-                        android:textSize="16dp"
-                        android:layout_column="1" />
-
-                    <TableLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp">
-
-                        <TableRow
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="0"
-                                android:id="@+id/num_multiplayer_games_won"
-                                android:layout_marginRight="5dp"
-                                android:layout_column="2" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="won"
-                                android:id="@+id/textView6"
-                                android:layout_column="3" />
-
-                        </TableRow>
-
-                        <TableRow
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="0"
-                                android:id="@+id/num_multiplayer_games_lost"
-                                android:layout_marginRight="5dp"
-                                android:layout_column="2" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="lost"
-                                android:id="@+id/textView7"
-                                android:layout_column="3" />
-                        </TableRow>
-
-                        <TableRow
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="0"
-                                android:id="@+id/percentage_multiplayer_games_won"
-                                android:layout_column="2"
-                                android:layout_marginRight="5dp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="rate"
-                                android:id="@+id/textView4"
-                                android:layout_column="3"
-                                android:layout_marginRight="5dp" />
-
-                        </TableRow>
-                    </TableLayout>
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:id="@+id/num_multiplayer_duels"
-                        android:layout_column="0"
-                        android:layout_marginRight="5dp"
-                        android:textSize="24dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="duels made"
-                        android:id="@+id/textView3"
                         android:layout_column="1"
-                        android:textSize="16dp" />
+                        android:layout_marginBottom="10dp"
+                        android:text="Multiplayer"
+                        android:textAllCaps="false"
+                        android:textSize="32dp" />
 
                     <TableLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp" >
+                        android:transitionGroup="false">
 
                         <TableRow
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent" >
+                            android:layout_height="match_parent">
 
                             <TextView
+                                android:id="@+id/num_multiplayer_games"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0"
-                                android:id="@+id/num_multiplayer_duels_won"
+                                android:layout_column="0"
                                 android:layout_marginRight="5dp"
-                                android:layout_column="2" />
+                                android:text="0"
+                                android:textSize="24dp"
+                                android:textStyle="bold" />
 
                             <TextView
+                                android:id="@+id/textView2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="won"
-                                android:id="@+id/textView9"
-                                android:layout_column="3" />
+                                android:layout_column="1"
+                                android:layout_marginRight="10dp"
+                                android:text="games played"
+                                android:textSize="16dp" />
+
+                            <TableLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp">
+
+                                <TableRow
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
+
+                                    <TextView
+                                        android:id="@+id/num_multiplayer_games_won"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_column="2"
+                                        android:layout_marginRight="5dp"
+                                        android:text="0" />
+
+                                    <TextView
+                                        android:id="@+id/textView6"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_column="3"
+                                        android:text="won" />
+
+                                </TableRow>
+
+                                <TableRow
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
+
+                                    <TextView
+                                        android:id="@+id/num_multiplayer_games_lost"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_column="2"
+                                        android:layout_marginRight="5dp"
+                                        android:text="0" />
+
+                                    <TextView
+                                        android:id="@+id/textView7"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_column="3"
+                                        android:text="lost" />
+                                </TableRow>
+
+                                <TableRow
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
+
+                                    <TextView
+                                        android:id="@+id/percentage_multiplayer_games_won"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_column="2"
+                                        android:layout_marginRight="5dp"
+                                        android:text="0" />
+
+                                    <TextView
+                                        android:id="@+id/textView4"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_column="3"
+                                        android:layout_marginRight="5dp"
+                                        android:text="rate" />
+
+                                </TableRow>
+                            </TableLayout>
                         </TableRow>
 
                         <TableRow
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent" >
+                            android:layout_height="match_parent">
 
                             <TextView
+                                android:id="@+id/num_multiplayer_duels"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0"
-                                android:id="@+id/num_multiplayer_duels_lost"
+                                android:layout_column="0"
                                 android:layout_marginRight="5dp"
-                                android:layout_column="2" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="lost"
-                                android:id="@+id/textView11"
-                                android:layout_column="3" />
-                        </TableRow>
-
-                        <TableRow
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" >
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
                                 android:text="0"
-                                android:id="@+id/percentage_multiplayer_duels_won"
-                                android:layout_column="2"
-                                android:layout_marginRight="5dp" />
+                                android:textSize="24dp"
+                                android:textStyle="bold" />
 
                             <TextView
+                                android:id="@+id/textView3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="rate"
-                                android:id="@+id/textView13"
-                                android:layout_column="3"
-                                android:layout_marginRight="5dp" />
+                                android:layout_column="1"
+                                android:text="duels made"
+                                android:textSize="16dp" />
+
+                            <TableLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp">
+
+                                <TableRow
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
+
+                                    <TextView
+                                        android:id="@+id/num_multiplayer_duels_won"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_column="2"
+                                        android:layout_marginRight="5dp"
+                                        android:text="0" />
+
+                                    <TextView
+                                        android:id="@+id/textView9"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_column="3"
+                                        android:text="won" />
+                                </TableRow>
+
+                                <TableRow
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
+
+                                    <TextView
+                                        android:id="@+id/num_multiplayer_duels_lost"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_column="2"
+                                        android:layout_marginRight="5dp"
+                                        android:text="0" />
+
+                                    <TextView
+                                        android:id="@+id/textView11"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_column="3"
+                                        android:text="lost" />
+                                </TableRow>
+
+                                <TableRow
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
+
+                                    <TextView
+                                        android:id="@+id/percentage_multiplayer_duels_won"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_column="2"
+                                        android:layout_marginRight="5dp"
+                                        android:text="0" />
+
+                                    <TextView
+                                        android:id="@+id/textView13"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_column="3"
+                                        android:layout_marginRight="5dp"
+                                        android:text="rate" />
+                                </TableRow>
+                            </TableLayout>
                         </TableRow>
+
                     </TableLayout>
-                </TableRow>
+                </LinearLayout>
 
-            </TableLayout>
+            </android.support.v7.widget.CardView>
+
         </LinearLayout>
-
-        </android.support.v7.widget.CardView>
-
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
 
 </FrameLayout>
