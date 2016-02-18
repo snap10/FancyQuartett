@@ -117,6 +117,7 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
 
     @Override
     public void onBackPressed() {
+        engine.stop();
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setIcon(R.drawable.ic_error_accent)
                 .setTitle(getString(R.string.pausecurrentgamedialogtitle))
@@ -124,7 +125,6 @@ public class GameActivity extends AppCompatActivity implements CardFragment.OnFr
                 .setPositiveButton(getResources().getString(R.string.yes_caps), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        engine.stop();
                         SharedPreferences prefs = getSharedPreferences("savedGame", Context.MODE_PRIVATE);
                         Gson gson = new Gson();
                         String json = gson.toJson(engine);

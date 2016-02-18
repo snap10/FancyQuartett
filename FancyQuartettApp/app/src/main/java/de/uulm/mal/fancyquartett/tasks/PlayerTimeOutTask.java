@@ -28,7 +28,7 @@ public class PlayerTimeOutTask extends AsyncTask<Void, Integer, Void> {
 
     @Override
     protected Void doInBackground(Void... params) {
-        int progressStatus = engine.getTimeout();
+        int progressStatus = engine.getCurTimeout();
         while(progressStatus > 0) {
             if(isCancelled()) break;
             progressStatus = progressStatus - 500;

@@ -92,6 +92,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
     private int maxPoints = 0;
     private int gameTime = 0;
     private int timeout = 0;
+    private int curTimeout = 0;
     private KILevel kiLevel;
     private boolean isMagicMode = false;
     private boolean isMultiplayer = false;
@@ -147,6 +148,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         // round timeout
         // *1000 for millis
         timeout = args.getInt("roundtimeout") * 1000;
+        curTimeout = timeout;
         // max rounds
         maxRounds = args.getInt("maxrounds");
         // game time
@@ -518,10 +520,11 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
      * Initialise player timeout. This method is related to handlePlayerTimeout().
      */
     private void initialisePlayerTimeout() {
+        if(curTimeout == 0) curTimeout = timeout;
         pbTimeout.setMax(timeout);
-        pbTimeout.setProgress(timeout);
+        pbTimeout.setProgress(curTimeout);
         // show timeout left
-        onTimeoutUpdate(timeout);
+        onTimeoutUpdate(curTimeout);
         tvTimeoutLeft.setVisibility(View.VISIBLE);
         // start task
         playerTimeOutTask.cancel(false);
@@ -656,6 +659,8 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
 
     @Override
     public void onTimeoutUpdate(long time) {
+        curTimeout = (int) time;
+        System.out.println(curTimeout);
         // display progress
         pbTimeout.setProgress((int) time);
         pbTimeout.invalidate();
@@ -772,6 +777,9 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         return gameActivity;
     }
 
+    public int getCurTimeout() {
+        return this.curTimeout;
+    }
 
     /*
     SETTER
