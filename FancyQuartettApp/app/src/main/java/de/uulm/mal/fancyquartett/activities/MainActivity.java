@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
                 engineBundle.putSerializable("savedEngine",engine);
             }
         }
-        //TODO implement AssetsInstaller for new Json Modell and set !secondRun
+        //TODO AssetsInstaller yet not used with new GameModell...
         if (false) {
 
             AssetsInstaller installer = null;
@@ -194,7 +194,6 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
         if (possibleException == null) {
             SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
             pref.edit().putBoolean("filesInstalled", true).commit();
-            //TODO test
             boolean test = pref.getBoolean("filesInstalled", false);
             Toast toast = Toast.makeText(this, "Files installed correctly", Toast.LENGTH_LONG);
             toast.show();

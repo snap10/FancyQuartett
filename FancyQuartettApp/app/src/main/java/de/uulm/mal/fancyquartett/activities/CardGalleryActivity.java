@@ -21,7 +21,6 @@ public class CardGalleryActivity extends AppCompatActivity implements CardGaller
             offlineDeck = (OfflineDeck) getIntent().getSerializableExtra("offlinedeck");
             deckname = offlineDeck.getName();
         } else {
-            //TODO decide what to do...
             finish();
         }
         CardGalleryFragment fragment = CardGalleryFragment.newInstance(getIntent().getExtras());
@@ -40,7 +39,6 @@ public class CardGalleryActivity extends AppCompatActivity implements CardGaller
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-        //TODO
     }
 
 
