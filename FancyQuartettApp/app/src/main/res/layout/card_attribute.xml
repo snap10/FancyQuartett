@@ -22,9 +22,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:src="@android:drawable/ic_menu_report_image"
-            android:layout_alignTop="@+id/textView_attrName"
-            android:layout_alignLeft="@+id/medianTextView"
-            android:layout_alignStart="@+id/medianTextView" />
+            android:layout_alignTop="@+id/textView_attrName" />
 
         <TextView
             android:id="@+id/textView_attrName"

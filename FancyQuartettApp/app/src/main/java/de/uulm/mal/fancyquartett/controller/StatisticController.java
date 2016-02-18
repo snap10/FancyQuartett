@@ -61,49 +61,80 @@ public class StatisticController implements Serializable {
 
     //== WRITER METHODS ==
 
-    /**
-     * Call after singleplayer game was completed.
-     */
-    public void gamesPlayedPlusOne(boolean won) {
-        plusOne(R.string.statisticNumSingleplayerGamesPlayedKey);
-        if(won) plusOne(R.string.statisticNumSingleplayerGamesWonKey);
-        else plusOne(R.string.statisticNumSingleplayerGamesLostKey);
+    public void gamesPlayedPlusOne(boolean won, boolean isMultiplayer, boolean isSpectatorMode) {
+        if(isSpectatorMode) return;
+        if(isMultiplayer) {
+            plusOne(R.string.statisticNumMultiplayerGamesPlayedKey);
+            if(won) plusOne(R.string.statisticNumMultiplayerGamesWonKey);
+            else plusOne(R.string.statisticNumMultiplayerGamesLostKey);
+        } else {
+            plusOne(R.string.statisticNumSingleplayerGamesPlayedKey);
+            if(won) plusOne(R.string.statisticNumSingleplayerGamesWonKey);
+            else plusOne(R.string.statisticNumSingleplayerGamesLostKey);
+        }
     }
 
-    public void duelsMadePlusOne(boolean won) {
-        plusOne(R.string.statisticNumSingleplayerDuelsMadeKey);
-        if(won) plusOne(R.string.statisticNumSingleplayerDuelsWonKey);
-        else plusOne(R.string.statisticNumSingleplayerDuelsLostKey);
-    }
-
-    public void multiplayerGamesPlayedPlusOne() {
-
+    public void duelsMadePlusOne(boolean won, boolean isMultiplayer, boolean isSpectatorMode) {
+        if(isSpectatorMode) return;
+        if(isMultiplayer) {
+            plusOne(R.string.statisticNumMultiplayerDuelsMadeKey);
+            if(won) plusOne(R.string.statisticNumMultiplayerDuelsWonKey);
+            else plusOne(R.string.statisticNumMultiplayerDuelsLostKey);
+        } else {
+            plusOne(R.string.statisticNumSingleplayerDuelsMadeKey);
+            if(won) plusOne(R.string.statisticNumSingleplayerDuelsWonKey);
+            else plusOne(R.string.statisticNumSingleplayerDuelsLostKey);
+        }
     }
 
 
     //== READER METHODS ==
 
-    public int gamesPlayed() {
-        return read(R.string.statisticNumSingleplayerGamesPlayedKey);
+    public int gamesPlayed(boolean isMultiplayer) {
+        if(isMultiplayer) {
+            return read(R.string.statisticNumMultiplayerGamesPlayedKey);
+        } else {
+            return read(R.string.statisticNumSingleplayerGamesPlayedKey);
+        }
     }
 
-    public int gamesWon() {
-        return read(R.string.statisticNumSingleplayerGamesWonKey);
+    public int gamesWon(boolean isMultiplayer) {
+        if(isMultiplayer) {
+            return read(R.string.statisticNumMultiplayerGamesWonKey);
+        } else {
+            return read(R.string.statisticNumSingleplayerGamesWonKey);
+        }
     }
 
-    public int gamesLost() {
-        return read(R.string.statisticNumSingleplayerGamesLostKey);
+    public int gamesLost(boolean isMultiplayer) {
+        if(isMultiplayer) {
+            return read(R.string.statisticNumMultiplayerGamesLostKey);
+        } else {
+            return read(R.string.statisticNumSingleplayerGamesLostKey);
+        }
     }
 
-    public int duelsMade() {
-        return read(R.string.statisticNumSingleplayerDuelsMadeKey);
+    public int duelsMade(boolean isMultiplayer) {
+        if(isMultiplayer) {
+            return read(R.string.statisticNumMultiplayerDuelsMadeKey);
+        } else {
+            return read(R.string.statisticNumSingleplayerDuelsMadeKey);
+        }
     }
 
-    public int duelsWon() {
-        return read(R.string.statisticNumSingleplayerDuelsWonKey);
+    public int duelsWon(boolean isMultiplayer) {
+        if(isMultiplayer) {
+            return read(R.string.statisticNumMultiplayerDuelsWonKey);
+        } else {
+            return read(R.string.statisticNumSingleplayerDuelsWonKey);
+        }
     }
 
-    public int duelsLost() {
-        return read(R.string.statisticNumSingleplayerDuelsLostKey);
+    public int duelsLost(boolean isMultiplayer) {
+        if(isMultiplayer) {
+            return read(R.string.statisticNumMultiplayerDuelsLostKey);
+        } else {
+            return read(R.string.statisticNumSingleplayerDuelsLostKey);
+        }
     }
 }

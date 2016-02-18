@@ -125,7 +125,6 @@
                 android:text="@string/current_player"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:layout_toStartOf="@+id/textView25"
                 android:layout_marginRight="15dp"
                 android:id="@+id/textView26"
                 android:textColor="@android:color/white" />

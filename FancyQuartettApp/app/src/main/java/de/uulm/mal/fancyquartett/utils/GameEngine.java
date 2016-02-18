@@ -293,7 +293,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
      */
     private void finishGame(int playerWonGame) {
         // write statistic
-        statisticCtrl.gamesPlayedPlusOne(playerWonGame == PLAYER1);
+        statisticCtrl.gamesPlayedPlusOne(playerWonGame == PLAYER1, isMultiplayer(), isMagicMode());
         gameover = true;
         // show dialog
         showGameEndDialog(playerWonGame);
@@ -394,7 +394,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         // show RoundEndDialog
         showRoundEndDialog(cardAttribute, playerWonRound);
         // statistic
-        statisticCtrl.duelsMadePlusOne(playerWonRound == PLAYER1);
+        statisticCtrl.duelsMadePlusOne(playerWonRound == PLAYER1, isMultiplayer(), isMagicMode());
     }
 
     /**
