@@ -47,14 +47,14 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
+    public static final int STARTPOSITION = 0;
+    public static final int GALLERYPOSITION = 1;
+    public static final int STATISTICSPOSITION = 2;
+
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    private static final int STARTPOSITION = 0;
-    private static final int GALLERYPOSITION = 1;
-    private static final int STATISTICSPOSITION = 2;
-    private int currentTab;
     private Menu menu;
     private GameEngine engine;
     private Bundle engineBundle;
@@ -63,6 +63,13 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // check if savegame is available
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean secondRun = pref.getBoolean("filesInstalled", false);
         SharedPreferences prefs = getSharedPreferences("savedGame", Context.MODE_PRIVATE);
@@ -76,9 +83,10 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
                 engineBundle.putSerializable("savedEngine",engine);
             }
         }
-        //TODO AssetsInstaller yet not used with new GameModell...
-        if (false) {
 
+        //TODO AssetsInstaller yet not used with new GameModell...
+
+        if (false) {
             AssetsInstaller installer = null;
             try {
                 installer = new AssetsInstaller(Settings.localAssets, getApplicationContext(), this);
@@ -89,19 +97,15 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
                 Toast toast = Toast.makeText(this, "Error installing Files " + e.getMessage(), Toast.LENGTH_LONG);
                 toast.show();
             }
-
-
         }
-        setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
+        // check if activity should start in a special tab
         if(getIntent().hasExtra("fragmentnumber")){
             fragmentnumber = getIntent().getExtras().getInt("fragmentnumber");
         }else{
-            fragmentnumber=0;
+            fragmentnumber = STARTPOSITION;
         }
+
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         // Create the adapter that will return a fragment for each of the three
@@ -117,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
 
             @Override
             public void onPageSelected(int position) {
-                currentTab = position;
+                fragmentnumber = position;
             }
 
             @Override
@@ -128,9 +132,6 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
-
-
     }
 
     public Menu getMenu() {
@@ -207,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements AssetsInstaller.O
     @Override
     public void onBackPressed() {
         // check if current tab is start-tab
-        if(currentTab == STARTPOSITION) {
+        if(fragmentnumber == STARTPOSITION) {
             // show dialog
             showAppLeaveDialog();
         } else {

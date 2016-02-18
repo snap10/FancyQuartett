@@ -617,6 +617,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
             // close game and go back to main_activity
             Intent intent = new Intent(gameActivity, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("fragmentnumber", MainActivity.STATISTICSPOSITION);
             gameActivity.finish();
             gameActivity.startActivity(intent);
         } else {
