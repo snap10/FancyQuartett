@@ -322,7 +322,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
     public void stopKiTasks() {
         if (softKiTask != null) softKiTask.cancel(true);
         if (mediumKiTask != null) mediumKiTask.cancel(true);
-        if (hardKiTask != null) mediumKiTask.cancel(true);
+        if (hardKiTask != null) hardKiTask.cancel(true);
     }
 
     /**
