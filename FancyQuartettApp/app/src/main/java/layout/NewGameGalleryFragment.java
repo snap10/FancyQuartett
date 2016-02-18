@@ -1,6 +1,9 @@
 package layout;
 
 import android.app.Activity;
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
@@ -23,13 +26,15 @@ import de.uulm.mal.fancyquartett.data.GalleryModel;
 import de.uulm.mal.fancyquartett.data.OfflineDeck;
 import de.uulm.mal.fancyquartett.data.OnlineDeck;
 import de.uulm.mal.fancyquartett.data.Settings;
+import de.uulm.mal.fancyquartett.interfaces.OnShakeListener;
 import de.uulm.mal.fancyquartett.utils.LocalDecksLoader;
 import de.uulm.mal.fancyquartett.utils.OnlineDecksLoader;
+import de.uulm.mal.fancyquartett.utils.ShakeDetector;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class NewGameGalleryFragment extends Fragment {
+public class NewGameGalleryFragment extends Fragment implements OnShakeListener {
 
     private NewGameGalleryViewAdapter newGameGalleryViewAdapter;
     RecyclerView recList;
@@ -38,6 +43,10 @@ public class NewGameGalleryFragment extends Fragment {
     private Menu menu;
     private OnlineDecksLoader onlineLoader;
     private LocalDecksLoader loader;
+
+    private SensorManager mSensorManager;
+    private Sensor mAccelerometer;
+    private ShakeDetector mShakeDetector;
 
 
     public NewGameGalleryFragment() {
@@ -71,6 +80,12 @@ public class NewGameGalleryFragment extends Fragment {
         glm = new GridLayoutManager(getContext(), 2);
         llm = new LinearLayoutManager(this.getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
+
+        // initialise ShakeDetector
+        mSensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mShakeDetector = new ShakeDetector();
+        mShakeDetector.setOnShakeListener(this);
     }
 
     @Override
@@ -133,6 +148,21 @@ public class NewGameGalleryFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Register Listener
+        mSensorManager.registerListener(mShakeDetector, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
+    }
+
+
+    @Override
+    public void onPause() {
+        // Unregister Listener
+        mSensorManager.unregisterListener(mShakeDetector);
+        super.onPause();
+    }
+
     /**
      * This hook is called whenever an item in your options menu is selected.
      * The default implementation simply returns false to have the normal
@@ -168,6 +198,11 @@ public class NewGameGalleryFragment extends Fragment {
             item2.setVisible(true);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onShake(int count) {
+
     }
 
     /**
