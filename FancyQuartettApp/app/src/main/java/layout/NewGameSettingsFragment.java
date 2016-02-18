@@ -616,7 +616,7 @@ public class NewGameSettingsFragment extends Fragment implements LocalDeckLoader
             // disable random select by shaking device
             isShakeEnabled = false;
 
-            new LocalDecksLoader(Settings.localFolder, this).execute();
+            new LocalDecksLoader(getContext().getFilesDir()+Settings.localFolder, this).execute();
 
             Random rand = new Random();
 
