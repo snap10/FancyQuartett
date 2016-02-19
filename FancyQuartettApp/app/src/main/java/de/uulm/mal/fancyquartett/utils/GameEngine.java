@@ -484,6 +484,7 @@ public class GameEngine implements Serializable, OnDialogButtonClickListener, On
         // hide timeout left
         tvTimeoutLeft.setVisibility(View.GONE);
         // check if timeout is necessary
+        curTimeout = timeout;
         if (curPlayer == PLAYER1) {
             //if MagicMode show KIPlaysDialog for Player1 , too.
             if (isMagicMode) {
