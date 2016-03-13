@@ -1,0 +1,67 @@
+\documentclass[numbers=noenddot]{thesis}
+
+% hier namen etc. einsetzen
+\fullname{Lukas Stöferle, Ferdinand Birk, Marius Kircher}
+\email{lukas.stoeferle@uni-ulm.de, ferdinand.birk@uni-ulm.de, marius.kircher@uni-ulm.de}
+\headline{Mobile Application Lab - FancyQuartett\\Dokumentation}
+\titel{}
+\jahr{WS 2015/16}
+\matnr{}
+\gutachterA{Prof. Dr. Manfred Reichert}
+\gutachterB{Marc Schickler}
+\betreuer{Marc Schickler}
+\typ{Dokumentation}
+\fakultaet{Ingenieurwissenschaften, Informatik und \\Psychologie}
+\institut{Institut für Datenbanken und Informationssysteme}
+
+% Falls keine Lizenz gewünscht wird bitte den folgenden Text entfernen.
+% Die Lizenz erlaubt es zu nichtkommerziellen Zwecken die Arbeit zu
+% vervielfältigen und Kopien zu machen. Dabei muss aber immer der Autor
+% angegeben werden. Eine kommerzielle Verwertung ist für den Autor
+% weiter möglich.
+\license{
+
+}
+
+\hypersetup{%
+	pdftitle=\pdfescapestring{\thetitel},
+	pdfauthor={\thefullname},
+ 	pdfsubject={\thetyp},
+}
+
+
+% trennungsregeln
+\hyphenation{Sil-ben-trenn-ung}
+
+\begin{document}
+\frontmatter
+\maketitle
+% impressum
+\clearpage
+\impressum
+
+\cleardoublepage
+% ab hier zeilenabstand 1,4 fach 10pt/14pt
+\setstretch{1.4}
+
+
+% inhaltsverzeichnis einfügen
+\tableofcontents
+
+\mainmatter
+% hier kommen die kapitel der arbeit
+\input{chapter/einleitung}
+\input{chapter/anforderungen}
+\input{chapter/architektur}
+\input{chapter/implementierung}
+\input{chapter/anforderungsvergleich}
+\input{chapter/fazit}
+
+
+\backmatter			% abtrennung für verzeichnisse
+
+% hier die verzeichnisse
+\listoffigures
+\listoftables
+
+\end{document}
