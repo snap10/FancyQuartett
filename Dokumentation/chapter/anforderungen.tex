@@ -1,14 +1,65 @@
 \chapter{Anforderungen}
 \label{cha:anforderungen}
 
-% TODO
+In diesem Teil der Dokumentation werden die Anforderungen, welchen die App entsprechen soll, aufgeführt und erläutert. Dabei werden sowohl die Anforderungen unseres Betreuers als auch die eigenen optionalen Anforderungen zusammengefasst.
 
-\section{funktionale Anforderungen}
+\section{Funktionale Anforderungen}
 \label{sec:funtionaleanforderungen}
 
-% TODO
+\subsection{Spieltyp}
+Die Anwendung soll ein reines Single-Player-Spiel sein, d.h. es gibt keine Möglichkeit per Bluetooth- bzw. Internetverbindung mit anderen Geräten zu kommunizieren. Der Benutzer spielt also immer gegen den Computergegner. Es soll lediglich die Möglichkeit geben zu zweit am selben Gerät ein Multiplayer-Spiel (Hotseat) zu spielen, somit können zwei Personen gegeneinander spielen.
 
-\section{nicht-funktionale Anforderungen}
+\subsection{Spielmodi}
+Dem Spieler soll eine Auswahl von drei verschiedenen Spielmodi angeboten werden, welche im Folgenden erläutert werden:
+\paragraph{To-The-End}
+Der Spieler, der zum Schluss alle Karten besitzt, hat das Spiel gewonnen. Ein Spieler hat das Spiel verloren, wenn er keine Karten mehr besitzt.
+\paragraph{Time}
+Ein Spiel ist durch ein Zeitlimit begrenzt. Wird dieses Limit erreicht, gewinnt der Spieler der die meisten Karten besitzt. Falls beide Spieler gleich viele Karten besitzen sollten wird eine extra Runde gespielt, in welcher dann der Sieger bzw. Verlieren gekürt wird. Hat ein Spieler vor Erreichen des Zeitlimits keine Karten mehr, hat er verloren.
+\paragraph{Points}
+Jeder Spieler besitzt ein Punktekonto, welches sich durch gewonnene Duelle erhöht. Erreicht ein Spieler die maximale Punktzahl hat er das Spiel gewonnen. Besitzt ein Spieler keine Karten mehr, bevor die maximale Punktzahl erreicht wird, gewinnt der Spieler der die meisten Punkte besitzt. Die Punkte ergeben sich aus der Qualität der gewählten Attributwerte der aktuellen Karte. Sehr gute Attribute geben nur 1 Punkt, Attributewerte die eine $\pm$5\% Differenz zum Median des Wertes im Kartendeck besitzen geben 2 Punkte, die schlechteren Attributwerte ergeben 5 Punkte. Gewinnt der Gegenspieler ein Duell, so bekommt er die Punkte die er für seinen Attriutwert bekommen hat gutgeschrieben. Dieser Spielmodus soll vor allem den Spieler dazu verleiten, schlechte Attributwerte zu wählen.
+
+\subsection{Einstellungsmöglichkeiten}
+Zusätzlich zu den drei Spielmodi sollen weitere Einstellungen möglich sein, welche das Spielerlebnis abwechslungsreicher machen sollen. Diese sind optional und können je nach belieben aktiviert bzw. deaktiviert werden.
+\paragraph{Maximale Rundenanzahl}
+Ein Spiel kann durch eine maximale Rundenanzahl begrenzt werden. Wird das Rundenlimit erreicht, wird ein Gewinner bzw. Verlierer ermittelt. Wenn es keinen Gewinner gibt wird eine zusätzliche Runde gespielt, in welcher dieser dann ermittelt wird.
+\paragraph{Zeitlimit für ein Spielzug}
+Der Spielzug eines Spielers kann durch ein Zeitlimit begrenzt werden. Wählt ein Spieler nach Ablauf der Zeit keinen Attributwert aus, so wird zufällig ein Attributwert der aktuellen Karte ausgewählt.
+
+\subsection{Gespeichertes Spiel}
+
+Während eines Spiels soll immer die Möglichkeit bestehen, das Spiel zu pausieren. Hierbei soll das aktuelle Spiel gespeichert werden, welches dann im Hauptmenü später fortgesetzt werden kann. Das pausierte Spiel soll persistent gespeichert werden, damit es nach einer Schließung der App weiterhin existert.
+
+\subsection{Statistiken}
+
+Es soll die Möglichkeit bestehen, eine kleine Statistik über die vergangenen Spiele einsehen zu können. In dieser sollen die Anzahl der gespielten Spiele und die Anzahl der bisherigen Duelle aufgelistet werden, welche jeweils die Anzahl der Siege bzw. Niederlagen beinhalten.
+
+\subsection{Galerie}
+
+In der Anwendung soll es eine Galerie geben, in welcher die offline und online verfügbaren Kartendecks aufgelistet werden. Zusätzlich soll hier die Möglichkeit bestehen, dass weitere Kartendecks heruntergeladen werden können. Die Ansicht der Kartendecks und der Karten kann zwischen einer Listen- und einer Grid-Ansicht gewechselt werden. Außerdem soll es eine Detailansicht für einzelne Karten geben in welcher diese dann genauer betrachtet werden können. In der Detailansicht soll dann mit Wischgesten nach links bzw. recht die vorherige bzw. nächste Karte angezeigt werden.
+
+\subsection{Kartendecks}
+
+Die App soll in der Lage sein mehrere Kartendecks zu verwalten, mit welchen der Spieler dann spielen kann. Ein Kartendeck besteht aus mindestens 8 und höchstens 72 Karten. Die Karten setzen sich aus einem Titel, mindestens einem Bild und beliebig vielen Attributen zusammen. Ein Attribut besteht aus einem Namen, Wert und der zugehörigen Einheit. Zusätzlich können Attribute optional ein Icon beinhalten. Um unterscheiden zu können ob der höhere oder niedrigere Attributwert gewinnt wird anhand einer \glqq WhatWins-Variable\grqq\ bestimmt.
+
+\subsection{Serverkommunikation}
+
+Der Benutzer kann in der Galerie weitere Kartendecks online beziehen. Hierbei sollen in der Galerie vorerst minimale Vorschaudecks vom REST-Server heruntergeladen und angezeigt werden. Damit kann Datenvolumen gespart werden, was beim mobilen Netzwerk von großer Bedeutung sein kann. Der Benutzer kann dann ein Kartendeck wählen, welches vom Server heruntergeladen und auf dem Gerät offline gespeichert wird.
+
+\section{Nicht-funktionale Anforderungen}
 \label{sec:nichtfunktionaleanforderungen}
 
-% TODO
+\subsection{Material Design}
+
+Die Anwendung soll sich nach an die Vorgaben zum \textit{Material Design} von \textit{Google Inc.} halten. Die grafische Elemente sollen dadurch einen hohen Wiedererkennungswert haben was wiederum die Usability der Anwendung zu verbessert.
+
+\subsection{Gestensteuerung}
+
+Die Anwendung soll verschiedene gestenbasierte Eingaben unterstützen. Speziell sollen die Gesten \glqq Wischen\grqq\ und \glqq Schütteln\grqq\ verwendet werden. Gestensteuerung ist eine Besonderheit von mobilen Geräten, daher bietet es sich an derartige Funktionen mit einzubinden.
+
+\subsection{Animationen}
+
+Animationen sollen dazu verwendet werden, um das \glqq Look \& Feel\grqq\ der Anwendung zu verbessern. Außerdem sollen sie gezielt die Aufmerksamkeit des Benutzers auf bestimmte Ereignisse lenken.
+
+\subsection{Offline-Szenario}
+
+Ist keine Verbindung zum Internet möglich, sollen trotzdem alle Funktionen die nicht zwingend eine Internetverbindung benötigen zur Verfügung stehen.
