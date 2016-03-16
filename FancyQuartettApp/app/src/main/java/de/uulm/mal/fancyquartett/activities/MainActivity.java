@@ -35,7 +35,11 @@ import layout.GalleryFragment;
 import layout.StartFragment;
 import layout.StatisticFragment;
 
-public class MainActivity extends AppCompatActivity implements AssetsInstaller.OnAssetsInstallerCompletedListener, StartFragment.OnFragmentInteractionListener, GalleryFragment.OnFragmentInteractionListener, StatisticFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements
+        AssetsInstaller.OnAssetsInstallerCompletedListener,
+        StartFragment.OnFragmentInteractionListener,
+        GalleryFragment.OnFragmentInteractionListener,
+        StatisticFragment.OnFragmentInteractionListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide

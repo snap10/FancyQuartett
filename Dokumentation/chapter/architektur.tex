@@ -1,4 +1,30 @@
 \chapter{Architektur}
 \label{cha:architektur}
 
-% TODO
+Die Software-Architektur unserer App musste sich erster Linie den Besonderheiten des Android-Systems anpassen. Dazu wurden neben den Java APIs auch stark die spezifischen Android APIs benutzt. Deren Grundlagen werden wir unten erläutern.
+
+Um die funktionalen Anforderungen zu erfüllen, wurde ein Datenmodell zur Speicherung während der Laufzeit sowie zur persistenten Speicherung benötigt. Die wichtigsten Datenobjekte bei dem Quartett-Spiel sind \emph{Deck} sowie \emph{Card}, wobei ein Deck aus mehreren Karten und eine Karte aus mehreren Bildern sowie Attributwerden besteht. Auf unsere Realisierung des Datenmodells wird unten näher eingegangen.
+
+Eine zentrale funktionale Anforderung ist die Anbindung an einen REST-Server, von dem neue Kartendecks geladen werden können. Die Architektur benötigt also ein Modul, das HTTP-Anfragen senden, textbasierte Daten empfangen und diese in das interne Datenformat umwandeln kann. Unsere Umsetzung davon werden wir unten erklären.
+
+\section{Besonderheiten in Android}
+\label{sec:besonderheiten_android}
+
+Eine Android-App setzt sich aus einer oder mehreren \emph{Activities} zusammen. Außerdem ist der App eine \emph{AndroidManifest.xml} Datei zugeordnet, die die enthaltenen Activities deklariert und in eine hierarchische Beziehung zueinander stellt. Activities werden als Java-Klassen implementiert, die von der Klasse \emph{Activity} aus den Android APIs ableiten. Den Einstiegspunkt in die App bildet die \emph{MainActivity}.
+
+\subsection{Activity Lifecycle}
+
+Das Speichermanagement wird vom Android-System im Hintergrund geleistet. Aus Speicherplatz- und Energieeffizienzgründen auf mobilen Geräten haben Activities einen sogenannten Lifecycle. Zu entsprechenden Zeitpunkten werden vom System die Methoden \emph{onCreate()}, \emph{onPause()} usw. aufgerufen. In diese Methoden wird vom App-Programmierer Code eingefügt.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{../img/ActivityLifecycle.png}
+\caption{\emph{Activity Lifecycle}}
+\label{fig:activitylifecycle}
+\end{figure}
+
+\section{Datenmodell}
+\label{sec:datenmodell}
+
+\section{Netzwerkfunktionen}
+\label{sec:netzwerkfunktionen}
