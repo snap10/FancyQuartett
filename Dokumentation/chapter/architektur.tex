@@ -14,14 +14,14 @@ Eine Android-App setzt sich aus einer oder mehreren \emph{Activities} zusammen. 
 
 \subsection{Activity Lifecycle}
 
-Das Speichermanagement wird vom Android-System im Hintergrund geleistet. Aus Speicherplatz- und Energieeffizienzgründen auf mobilen Geräten haben Activities einen sogenannten Lifecycle. Zu entsprechenden Zeitpunkten werden vom System die Methoden \emph{onCreate()}, \emph{onPause()} usw. aufgerufen (siehe Abbildung \ref{fig:activitylifecycle}). In diese Methoden wird vom Anwendungsprogrammierer Code eingefügt.
-
 \begin{figure}[ht]
 \centering
 \includegraphics[width=\textwidth]{../img/ActivityLifecycle.png}
 \caption{\emph{Activity Lifecycle}}
 \label{fig:activitylifecycle}
 \end{figure}
+
+Das Speichermanagement wird vom Android-System im Hintergrund geleistet. Aus Speicherplatz- und Energieeffizienzgründen auf mobilen Geräten haben Activities einen sogenannten Lifecycle. Zu entsprechenden Zeitpunkten werden vom System die Methoden \emph{onCreate()}, \emph{onPause()} usw. aufgerufen (siehe Abbildung \ref{fig:activitylifecycle}). In diese Methoden wird vom Anwendungsprogrammierer Code eingefügt.
 
 \subsection{Layouts und Views}
 
@@ -33,12 +33,24 @@ Das API \emph{findViewById()} liefert eine Referenz auf die entsprechende View-I
 
 Zu einem Zeitpunkt ist i.d.R. nur eine Activity aktiv. Beim Wechsel von einer Activity zu einer anderen müssen jedoch Informationen übergeben werden können. Der Wechsel erfolgt zentral durch das API \emph{startActivity()}. Die Methode erhält ein sogenanntes \emph{Intent}-Objekt. Dieses erhält die Informationen in serialisierter Form. Übergibt man ein Java-Objekt, muss dieses also das \emph{Serializable}-Interface implementieren.
 
+\subsection{Activities in FancyQuartett}
+
 \begin{figure}[ht]
-\centering
-\includegraphics[width=\textwidth]{../img/Activities.pdf}
-\caption{\emph{Activities in FancyQuartett}}
-\label{fig:activities}
+    \centering
+    \includegraphics[width=\textwidth]{../img/Activities.pdf}
+    \caption{Die Activities in FancyQuartett}
+    \label{fig:activities_in_fancyquartett}
 \end{figure}
+
+In unserer App haben verwenden wir 8 Activities, deren Struktur Abbildung \ref{fig:activities_in_fancyquartett} zeigt. Diese soll hier kurz erläutert werden.
+
+Unsere \emph{MainActivity} besteht aus 3 Fragmenten. Fragmente sind \emph{Sub-Activities}, die in eine Activity eingebettet sind und haben ihren jeweils eigenen Lifecycle. Sie können beispielsweise in einem sogenannten \emph{ViewPager} als Tabs verwendet werden.
+
+Das erste Fragment dient als GUI zum starten eines Spiels. Startet der Benutzer ein neues Spiel, wird zur \emph{NewGameSettingsActivity} gewechselt. Diese dient zum wählen eines Decks und der Spieleinstellungen. Zum wählen eines Decks wird die \emph{NewGameGalleryActivity} gestartet, die alle verfügbaren Decks (sowohl offline als auch online) anzeigt. Nach dem Klick auf Start wird zur \emph{GameActivity} gewechselt. Diese stellt die aktuelle Karte dar und instanziiert die Klasse \emph{GameEngine}, welche die Ausführung der Spiellogik übernimmt.
+
+Das zweite Fragment stellt die Deck-Gallerie dar. Bei der Auswahl eines Decks wird die \emph{CardActivity} gestartet, die alle Karten des Decks in einer \emph{ListView} anzeigt. Wird eine Karte ausgewählt wird die \emph{CardViewerActivity} gestartet, die die Karte mit ihren Bildern und Attributwerten in einem \emph{ViewPager} anzeigt. Durch \emph{Swipen} nach links bzw. nach rechts kann zur vorherigen bzw. nächsten Karte des Decks navigiert werden.
+
+Das dritte Fragment zeigt eine Statistik an und bietet keine Interaktionsmöglichkeiten.
 
 \section{Datenmodell}
 \label{sec:datenmodell}
