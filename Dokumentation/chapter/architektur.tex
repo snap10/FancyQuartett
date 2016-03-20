@@ -42,7 +42,7 @@ Zu einem Zeitpunkt ist i.d.R. nur eine Activity aktiv. Beim Wechsel von einer Ac
     \label{fig:activities_in_fancyquartett}
 \end{figure}
 
-In unserer App haben verwenden wir 8 Activities, deren Struktur Abbildung \ref{fig:activities_in_fancyquartett} zeigt. Diese soll hier kurz erläutert werden.
+In unserer App verwenden wir 8 Activities, deren Struktur Abbildung \ref{fig:activities_in_fancyquartett} zeigt. Diese soll hier kurz erläutert werden.
 
 Unsere \emph{MainActivity} besteht aus 3 Fragmenten. Fragmente sind \emph{Sub-Activities}, die in eine Activity eingebettet sind und haben ihren jeweils eigenen Lifecycle. Sie können beispielsweise in einem sogenannten \emph{ViewPager} als Tabs verwendet werden.
 
@@ -62,5 +62,24 @@ Das dritte Fragment zeigt eine Statistik an und bietet keine Interaktionsmöglic
     \label{fig:datenmodell}
 \end{figure}
 
+Das UML-Klassendiagramm in Abbildung \ref{fig:datenmodell} zeigt unsere Realisierung der Datenbasis von FancyQuartett. In dieser Form werden die Daten zur Laufzeit gehalten.
+
+Die persistente Speicherung erfolgt auf dem Dateisystem. Android weist jeder App einen Bereich im Dateisystem zu. Dort legen wir mittels der Klasse \emph{AssetsInstaller} für jedes heruntergeladene Deck einen Ordner an, in dem wir eine JSON Datei und die zu den Karten gehörenden Bilder speichern. AssetsInstaller erbt von dem Android API \emph{AsyncTask}. Das ermöglicht es, die Ein-/Ausgabe-Operationen in einem seperaten Thread auszuführen, um das GUI nicht zu blockieren.
+
 \section{Netzwerkfunktionen}
 \label{sec:netzwerkfunktionen}
+
+Für das Laden von Decks über das Netzwerk wurde uns ein Server mit einer REST-API zur Verfügung gestellt, der Daten im JSON-Format sendet. Von diesem konnten folgende Ressourcen abgefragt werden:
+\begin{itemize}
+    \item \textbf{/decks} liefert ein Array aus Objects. Die Anzahl der Objects entpricht den verfügbaren Decks. Die Objects enthalten jeweils die für ein Deck relevanten Informationen, die den Attributen im obigen Klassendiagramm in Abbildung \ref{fig:datenmodell} entsprechen.
+    \item \textbf{/decks/<ID>} liefert das Deck-Object mit der entprechenden ID.
+    \item \textbf{/decks/<ID>/cards} liefert ein Array aus Objects, die jeweils die ID und den Namen einer Karte enthalten.
+    \item \textbf{/decks/<ID>/cards/<ID>} liefert das Card-Object mit der entsprechenden ID. Die Attribute in diesem Object nicht enthalten.
+    \item \textbf{/decks/<ID>/cards/<ID>/attributes} liefert ein Array aus Objects, die jeweils die für ein Attribut und dessen Wert relevanten Informationen enthalten.
+\end{itemize}
+
+Das Senden der HTTP-Requests wurde durch das Java-API \emph{HttpURLConnection} unterstützt. Durch den Aufruf von \emph{openConnection()} wird ein korrekt geformter HTTP-Request automatisch gesendet und die empfangenen Daten in einen \emph{InputStream} geschrieben. Aus diesem kann zu einem beliebigen späteren Zeitpunkt gelesen werden. Die Instanz von HttpURLConnection muss aber noch zugreifbar sein.
+
+Die APIs im Package \emph{org.json} machen das Handling der empfangenen JSON-Daten einfach. Ein \emph{JSONObject} bzw. \emph{JSONArray} kann direkt aus einem ASCII-String erstellt werden. Die Konvertierung in das interne Datenformat (siehe Abbildung \ref{fig:datenmodell}) erfolgt 1:1 durch Lesen des entsprechenden Wertes aus dem JSONObject und Schreiben in ein gleich aufgebautes Java-Objekt.
+
+Der Download eines gesamten Decks erfolgt sequentiell Karte für Karte. Für jede Karte werden ebenfalls sequentiell, die zugehörigen Bilder heruntergeladen und im Dateisystem gespeichert. Bilder werden zwischen Beendigung des Downloads und Schreiben ins Dateisystem als \emph{Bitmap} gehalten. Ein InputStream kann von der Android-API \emph{BitmapFactory} über die Methode \emph{decodeStream()} in ein Bitmap umgewandelt werden. Für den Download von Decks sorgt die Klasse \emph{DeckDownloader}, die von \emph{AsyncTask} erbt und den Downloadvorgang nebenläufig zum GUI-Thread ausführt.
