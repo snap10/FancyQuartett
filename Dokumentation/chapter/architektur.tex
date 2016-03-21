@@ -1,11 +1,13 @@
 \chapter{Architektur}
 \label{cha:architektur}
 
-Die Software-Architektur unserer App musste sich erster Linie den Besonderheiten des Android-Systems anpassen. Dazu wurden neben den Java APIs auch stark die spezifischen Android APIs benutzt. Deren Grundlagen werden wir unten erläutern.
+Die Software-Architektur unserer App musste sich in erster Linie den Besonderheiten des Android-Systems anpassen. Dazu wurden neben den Java APIs hauptsächlich die spezifischen Android APIs benutzt.
 
-Um die funktionalen Anforderungen zu erfüllen, wurde ein Datenmodell zur Speicherung während der Laufzeit sowie zur persistenten Speicherung benötigt. Die wichtigsten Datenobjekte bei dem Quartett-Spiel sind \emph{Deck} sowie \emph{Card}, wobei ein Deck aus mehreren Karten und eine Karte aus mehreren Bildern sowie Attributwerden besteht. Auf unsere Realisierung des Datenmodells wird unten näher eingegangen.
+Um die funktionalen Anforderungen zu erfüllen, wurde ein Datenmodell zur Speicherung während der Laufzeit sowie zur persistenten Speicherung benötigt. Die wichtigsten Datenobjekte bei dem Quartett-Spiel sind \emph{Deck} sowie \emph{Card}, wobei ein Deck aus mehreren Karten und eine Karte aus mehreren Bildern sowie Attributwerten besteht.
 
-Eine zentrale funktionale Anforderung ist die Anbindung an einen REST-Server, von dem neue Kartendecks geladen werden können. Die Architektur benötigt also ein Modul, das HTTP-Anfragen senden, textbasierte Daten empfangen und diese in das interne Datenformat umwandeln kann. Unsere Umsetzung davon werden wir unten erklären.
+Eine zentrale funktionale Anforderung ist die Anbindung an einen REST-Server, von dem neue Kartendecks geladen werden können. Die Architektur benötigt also ein Modul, das HTTP-Anfragen senden, textbasierte Daten empfangen und diese in das interne Datenformat umwandeln kann.
+
+Die eben genannten Aspekte werden im Folgenden näher erläutert.
 
 \section{Besonderheiten in Android}
 \label{sec:besonderheiten_android}
@@ -25,13 +27,13 @@ Das Speichermanagement wird vom Android-System im Hintergrund geleistet. Aus Spe
 
 \subsection{Layouts und Views}
 
-Um eine GUI anzuzeigen benötigt die Activity ein Layout. Das Layout wird i.d.R. in \emph{onCreate()} mit dem API \emph{setContentView()} gesetzt. Layouts werden in XML Resourcen spezifiziert. Ein Layout enthält hierarchisch angeordnete \emph{Views} (dazu gehören Buttons, TextViews, Checkboxes, ProgressBars, ImageViews usw.). Views erhalten Attribute, die ihre Größe und Position im Layout und ihr Erscheinungsbild festlegen. Außerdem erhalten sie ein ID-Attribut, mit dem in der Activity auf sie zugegriffen werden kann.
+Um eine GUI anzuzeigen benötigt die Activity ein Layout. Das Layout wird i.d.R. in \emph{onCreate()} mit dem API \emph{setContentView()} gesetzt. Layouts werden in XML Resourcen spezifiziert. Ein Layout enthält hierarchisch angeordnete \emph{Views} (dazu gehören Buttons, TextViews, Checkboxes, ProgressBars, ImageViews usw.). Views erhalten Attribute, die ihre Größe und Position im Layout und ihr Erscheinungsbild festlegen. Außerdem können sie ID-Attribut enthalten, mit dem in der Activity auf sie zugegriffen werden kann.
 
 Das API \emph{findViewById()} liefert eine Referenz auf die entsprechende View-Instanz. Diese kann nun programmatisch verändert werden. Views implementieren das Observer-Pattern und ermöglichen damit ereignis-orientierte Programmierung. Die Klasse \emph{View} (bzw. davon abgeleitete Klassen) enthalten die APIs \emph{set[Ereignis]Listener()}. Diesen Methoden werden spezielle Listener-Objekte übergeben, die Methoden enthalten, die bei dem entsprechenden Ereignis aufgerufen werden.
 
 \subsection{Kommunikation zwischen Activities}
 
-Zu einem Zeitpunkt ist i.d.R. nur eine Activity aktiv. Beim Wechsel von einer Activity zu einer anderen müssen jedoch Informationen übergeben werden können. Der Wechsel erfolgt zentral durch das API \emph{startActivity()}. Die Methode erhält ein sogenanntes \emph{Intent}-Objekt. Dieses erhält die Informationen in serialisierter Form. Übergibt man ein Java-Objekt, muss dieses also das \emph{Serializable}-Interface implementieren.
+Zu einem Zeitpunkt ist i.d.R. nur eine Activity aktiv. Beim Wechsel von einer Activity zu einer anderen müssen jedoch Informationen übergeben werden können. Der Wechsel erfolgt zentral durch das API \emph{startActivity()}. Die Methode erhält ein sogenanntes \emph{Intent}-Objekt, welches die Informationen in serialisierter Form enthält. Übergibt man ein Java-Objekt, muss dieses also das \emph{Serializable}-Interface implementieren.
 
 \subsection{Activities in FancyQuartett}
 
@@ -42,9 +44,9 @@ Zu einem Zeitpunkt ist i.d.R. nur eine Activity aktiv. Beim Wechsel von einer Ac
     \label{fig:activities_in_fancyquartett}
 \end{figure}
 
-In unserer App verwenden wir 8 Activities, deren Struktur Abbildung \ref{fig:activities_in_fancyquartett} zeigt. Diese soll hier kurz erläutert werden.
+Insgesamt werden 8 Activities verwendet, deren Struktur Abbildung \ref{fig:activities_in_fancyquartett} zeigt, welche hier kurz erläutert werden.
 
-Unsere \emph{MainActivity} besteht aus 3 Fragmenten. Fragmente sind \emph{Sub-Activities}, die in eine Activity eingebettet sind und haben ihren jeweils eigenen Lifecycle. Sie können beispielsweise in einem sogenannten \emph{ViewPager} als Tabs verwendet werden.
+Die \emph{MainActivity} besteht aus 3 Fragmenten. Fragmente sind \emph{Sub-Activities}, die in eine Activity eingebettet sind und haben ihren jeweils eigenen Lifecycle. Sie können beispielsweise in einem sogenannten \emph{ViewPager} als Tabs verwendet werden.
 
 Das erste Fragment dient als GUI zum starten eines Spiels. Startet der Benutzer ein neues Spiel, wird zur \emph{NewGameSettingsActivity} gewechselt. Diese dient zum wählen eines Decks und der Spieleinstellungen. Zum wählen eines Decks wird die \emph{NewGameGalleryActivity} gestartet, die alle verfügbaren Decks (sowohl offline als auch online) anzeigt. Nach dem Klick auf Start wird zur \emph{GameActivity} gewechselt. Diese stellt die aktuelle Karte dar und instanziiert die Klasse \emph{GameEngine}, welche die Ausführung der Spiellogik übernimmt.
 
@@ -62,14 +64,14 @@ Das dritte Fragment zeigt eine Statistik an und bietet keine Interaktionsmöglic
     \label{fig:datenmodell}
 \end{figure}
 
-Das UML-Klassendiagramm in Abbildung \ref{fig:datenmodell} zeigt unsere Realisierung der Datenbasis von FancyQuartett. In dieser Form werden die Daten zur Laufzeit gehalten.
+Abbildung \ref{fig:datenmodell} zeigt die Realisierung der Datenbasis von FancyQuartett. In dieser Form werden die Daten zur Laufzeit gehalten.
 
-Die persistente Speicherung erfolgt auf dem Dateisystem. Android weist jeder App einen Bereich im Dateisystem zu. Dort legen wir mittels der Klasse \emph{AssetsInstaller} für jedes heruntergeladene Deck einen Ordner an, in dem wir eine JSON Datei und die zu den Karten gehörenden Bilder speichern. AssetsInstaller erbt von dem Android API \emph{AsyncTask}. Das ermöglicht es, die Ein-/Ausgabe-Operationen in einem seperaten Thread auszuführen, um das GUI nicht zu blockieren.
+Die persistente Speicherung erfolgt auf dem Dateisystem. Android weist jeder App einen Bereich im Dateisystem zu. Dort wird mittels der Klasse \emph{AssetsInstaller} für jedes heruntergeladene Deck einen Ordner angelegt, in dem eine JSON Datei und die zu den Karten gehörenden Bilder gespeichert werden. \emph{AssetsInstaller} erbt von dem Android API \emph{AsyncTask}. Das ermöglicht es, die Ein-/Ausgabe-Operationen in einem separaten Thread (asynchron) auszuführen, um die GUI nicht zu blockieren.
 
 \section{Netzwerkfunktionen}
 \label{sec:netzwerkfunktionen}
 
-Für das Laden von Decks über das Netzwerk wurde uns ein Server mit einer REST-API zur Verfügung gestellt, der Daten im JSON-Format sendet. Von diesem konnten folgende Ressourcen abgefragt werden:
+Für das Laden von Decks über das Netzwerk wurde ein Server mit einer REST-API zur Verfügung gestellt, der Daten im JSON-Format sendet. Von diesem konnten folgende Ressourcen abgefragt werden:
 \begin{itemize}
     \item \textbf{/decks} liefert ein Array aus Objects. Die Anzahl der Objects entpricht den verfügbaren Decks. Die Objects enthalten jeweils die für ein Deck relevanten Informationen, die den Attributen im obigen Klassendiagramm in Abbildung \ref{fig:datenmodell} entsprechen.
     \item \textbf{/decks/<ID>} liefert das Deck-Object mit der entprechenden ID.
@@ -78,7 +80,7 @@ Für das Laden von Decks über das Netzwerk wurde uns ein Server mit einer REST-
     \item \textbf{/decks/<ID>/cards/<ID>/attributes} liefert ein Array aus Objects, die jeweils die für ein Attribut und dessen Wert relevanten Informationen enthalten.
 \end{itemize}
 
-Das Senden der HTTP-Requests wurde durch das Java-API \emph{HttpURLConnection} unterstützt. Durch den Aufruf von \emph{openConnection()} wird ein korrekt geformter HTTP-Request automatisch gesendet und die empfangenen Daten in einen \emph{InputStream} geschrieben. Aus diesem kann zu einem beliebigen späteren Zeitpunkt gelesen werden. Die Instanz von HttpURLConnection muss aber noch zugreifbar sein.
+Das Senden der HTTP-Requests wurde durch das Java-API \emph{HttpURLConnection} unterstützt. Durch den Aufruf von \emph{openConnection()} wird automatisch ein korrekt geformter HTTP-Request gesendet und die empfangenen Daten in einen \emph{InputStream} geschrieben. Aus diesem kann zu einem beliebigen späteren Zeitpunkt gelesen werden. Die Instanz von HttpURLConnection muss aber noch zugreifbar sein.
 
 Die APIs im Package \emph{org.json} machen das Handling der empfangenen JSON-Daten einfach. Ein \emph{JSONObject} bzw. \emph{JSONArray} kann direkt aus einem ASCII-String erstellt werden. Die Konvertierung in das interne Datenformat (siehe Abbildung \ref{fig:datenmodell}) erfolgt 1:1 durch Lesen des entsprechenden Wertes aus dem JSONObject und Schreiben in ein gleich aufgebautes Java-Objekt.
 
