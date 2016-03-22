@@ -1,7 +1,7 @@
 \chapter{Architektur}
 \label{cha:architektur}
 
-Die Software-Architektur unserer App musste sich in erster Linie den Besonderheiten des Android-Systems anpassen. Dazu wurden neben den Java APIs hauptsächlich die spezifischen Android APIs benutzt.
+Die Software-Architektur unserer App musste sich in erster Linie den Besonderheiten des Android-Systems anpassen. Dazu wurden neben den Java Paketen hauptsächlich die spezifischen Android Bibliotheken benutzt.
 
 Um die funktionalen Anforderungen zu erfüllen, wurde ein Datenmodell zur Speicherung während der Laufzeit sowie zur persistenten Speicherung benötigt. Die wichtigsten Datenobjekte bei dem Quartett-Spiel sind \emph{Deck} sowie \emph{Card}, wobei ein Deck aus mehreren Karten und eine Karte aus mehreren Bildern sowie Attributwerten besteht.
 
@@ -12,7 +12,7 @@ Die eben genannten Aspekte werden im Folgenden näher erläutert.
 \section{Besonderheiten in Android}
 \label{sec:besonderheiten_android}
 
-Eine Android-App setzt sich aus einer oder mehreren \emph{Activities} zusammen. Außerdem ist der App eine \emph{AndroidManifest.xml} Datei zugeordnet, die die enthaltenen Activities deklariert und in eine hierarchische Beziehung zueinander stellt. Activities werden als Java-Klassen implementiert, die von der Klasse \emph{Activity} aus den Android APIs ableiten. Den Einstiegspunkt in die App bildet die \emph{MainActivity}.
+Eine Android-App setzt sich aus einer oder mehreren \emph{Activities} zusammen. Außerdem ist der App eine \emph{AndroidManifest.xml} Datei zugeordnet, die die enthaltenen Activities deklariert und in eine hierarchische Beziehung zueinander stellt. Activities werden als Java-Klassen implementiert, die von der Klasse \emph{Activity} aus der Android Bibliothek ableitet. Den Einstiegspunkt in die App bildet die \emph{MainActivity}.
 
 \subsection{Activity Lifecycle}
 
@@ -23,20 +23,20 @@ Eine Android-App setzt sich aus einer oder mehreren \emph{Activities} zusammen. 
 \label{fig:activitylifecycle}
 \end{figure}
 
-Das Speichermanagement wird vom Android-System im Hintergrund geleistet. Aus Speicherplatz- und Energieeffizienzgründen auf mobilen Geräten haben Activities einen sogenannten Lifecycle. Zu entsprechenden Zeitpunkten werden vom System die Methoden \emph{onCreate()}, \emph{onPause()} usw. aufgerufen (siehe Abbildung \ref{fig:activitylifecycle}). In diese Methoden wird vom Anwendungsprogrammierer Code eingefügt.
+Das Speichermanagement wird vom Android-System im Hintergrund geleistet. Aus Speicherplatz- und Energieeffizienzgründen auf mobilen Geräten haben Activities einen sogenannten Lifecycle. Zu entsprechenden Zeitpunkten werden vom System die Methoden \emph{onCreate()}, \emph{onPause()}, \emph{onStop()} usw. aufgerufen (siehe Abbildung \ref{fig:activitylifecycle}). In diese Methoden wird vom Anwendungsprogrammierer Code eingefügt, hierdurch kann er bei auftreten der entsprechenden Zustandsübergänge gewünschtes Verhalten implementieren und so z.B. aktuelle Daten vor dem Schließen der Anwendung persistieren.
 
 \subsection{Layouts und Views}
 
 Um eine GUI anzuzeigen benötigt die Activity ein Layout. Das Layout wird i.d.R. in \emph{onCreate()} mit dem API \emph{setContentView()} gesetzt. Layouts werden in XML Resourcen spezifiziert. Ein Layout enthält hierarchisch angeordnete \emph{Views} (dazu gehören Buttons, TextViews, Checkboxes, ProgressBars, ImageViews usw.). Views erhalten Attribute, die ihre Größe und Position im Layout und ihr Erscheinungsbild festlegen. Außerdem können sie ID-Attribut enthalten, mit dem in der Activity auf sie zugegriffen werden kann.
 
-Das API \emph{findViewById()} liefert eine Referenz auf die entsprechende View-Instanz. Diese kann nun programmatisch verändert werden. Views implementieren das Observer-Pattern und ermöglichen damit ereignis-orientierte Programmierung. Die Klasse \emph{View} (bzw. davon abgeleitete Klassen) enthalten die APIs \emph{set[Ereignis]Listener()}. Diesen Methoden werden spezielle Listener-Objekte übergeben, die Methoden enthalten, die bei dem entsprechenden Ereignis aufgerufen werden.
+Die Methode \emph{findViewById()} liefert eine Referenz auf die entsprechende View-Instanz. Diese kann nun programmatisch verändert werden. Views implementieren das Observer-Pattern und ermöglichen damit ereignis-orientierte Programmierung. Die Klasse \emph{View} (bzw. davon abgeleitete Klassen) nehmen  Listener-Objekte entgegen, welche Methoden enthalten, die bei dem entsprechenden Ereignis aufgerufen werden.
 
 \subsection{Kommunikation zwischen Activities}
 
-Zu einem Zeitpunkt ist i.d.R. nur eine Activity aktiv. Beim Wechsel von einer Activity zu einer anderen müssen jedoch Informationen übergeben werden können. Der Wechsel erfolgt zentral durch das API \emph{startActivity()}. Die Methode erhält ein sogenanntes \emph{Intent}-Objekt, welches die Informationen in serialisierter Form enthält. Übergibt man ein Java-Objekt, muss dieses also das \emph{Serializable}-Interface implementieren.
+Zu einem Zeitpunkt ist i.d.R. nur eine Activity aktiv. Beim Wechsel von einer Activity zu einer anderen müssen jedoch Informationen übergeben werden können. Der Wechsel erfolgt zentral durch die Methode\emph{startActivity()}. Sie erhält ein \emph{Intent}-Objekt, welches die Informationen in serialisierter Form enthält. Zu übergebende Objekte müssen hierzu das \emph{Serializable}- oder \emph{Parcelable}-Interface implementieren.
 
 \subsection{Activities in FancyQuartett}
-
+\label{sec:activities_in_fancyquartett}
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{../img/Activities.pdf}
@@ -66,7 +66,7 @@ Das dritte Fragment zeigt eine Statistik an und bietet keine Interaktionsmöglic
 
 Abbildung \ref{fig:datenmodell} zeigt die Realisierung der Datenbasis von FancyQuartett. In dieser Form werden die Daten zur Laufzeit gehalten.
 
-Die persistente Speicherung erfolgt auf dem Dateisystem. Android weist jeder App einen Bereich im Dateisystem zu. Dort wird mittels der Klasse \emph{AssetsInstaller} für jedes heruntergeladene Deck einen Ordner angelegt, in dem eine JSON Datei und die zu den Karten gehörenden Bilder gespeichert werden. \emph{AssetsInstaller} erbt von dem Android API \emph{AsyncTask}. Das ermöglicht es, die Ein-/Ausgabe-Operationen in einem separaten Thread (asynchron) auszuführen, um die GUI nicht zu blockieren.
+Die persistente Speicherung erfolgt auf dem Dateisystem. Android weist jeder App einen Bereich im Dateisystem zu. Dort wird mittels der Klasse \emph{DeckDownloader} für jedes heruntergeladene Deck einen Ordner angelegt, in dem eine JSON Datei und die zu den Karten gehörenden Bilder gespeichert werden. \emph{DeckDownloader} erbt von der Klasse \emph{AsyncTask}. Das ermöglicht es, die Ein-/Ausgabe-Operationen in einem separaten Thread (asynchron) auszuführen, um die GUI nicht zu blockieren.
 
 \section{Netzwerkfunktionen}
 \label{sec:netzwerkfunktionen}
@@ -80,8 +80,6 @@ Für das Laden von Decks über das Netzwerk wurde ein Server mit einer REST-API 
     \item \textbf{/decks/<ID>/cards/<ID>/attributes} liefert ein Array aus Objects, die jeweils die für ein Attribut und dessen Wert relevanten Informationen enthalten.
 \end{itemize}
 
-Das Senden der HTTP-Requests wurde durch das Java-API \emph{HttpURLConnection} unterstützt. Durch den Aufruf von \emph{openConnection()} wird automatisch ein korrekt geformter HTTP-Request gesendet und die empfangenen Daten in einen \emph{InputStream} geschrieben. Aus diesem kann zu einem beliebigen späteren Zeitpunkt gelesen werden. Die Instanz von HttpURLConnection muss aber noch zugreifbar sein.
+Durch den Aufruf von \emph{openConnection()} auf den entsprechenden URLs wird ein \emph{HttpURLConnection}-Objekt zurückgegeben, auf welchem noch der erforderliche Authorization Header gesetzt werden muss um Zugang zur API zu erhalten. Die empfangenen Daten können bei einer erfolgreichen Anfrage aus einem \emph{InputStream} gelesen werden. 
 
-Die APIs im Package \emph{org.json} machen das Handling der empfangenen JSON-Daten einfach. Ein \emph{JSONObject} bzw. \emph{JSONArray} kann direkt aus einem ASCII-String erstellt werden. Die Konvertierung in das interne Datenformat (siehe Abbildung \ref{fig:datenmodell}) erfolgt 1:1 durch Lesen des entsprechenden Wertes aus dem JSONObject und Schreiben in ein gleich aufgebautes Java-Objekt.
-
-Der Download eines gesamten Decks erfolgt sequentiell Karte für Karte. Für jede Karte werden ebenfalls sequentiell, die zugehörigen Bilder heruntergeladen und im Dateisystem gespeichert. Bilder werden zwischen Beendigung des Downloads und Schreiben ins Dateisystem als \emph{Bitmap} gehalten. Ein InputStream kann von der Android-API \emph{BitmapFactory} über die Methode \emph{decodeStream()} in ein Bitmap umgewandelt werden. Für den Download von Decks sorgt die Klasse \emph{DeckDownloader}, die von \emph{AsyncTask} erbt und den Downloadvorgang nebenläufig zum GUI-Thread ausführt.
+Das Package \emph{org.json} macht das Handling der empfangenen JSON-Daten einfach. Es bringt für JSON spezifizierte Klassen und entsprechende Operationen mit. Ein \emph{JSONObject} bzw. \emph{JSONArray} kann direkt aus einem ASCII-String erstellt werden. Die Konvertierung in das interne Datenformat (siehe Abbildung \ref{fig:datenmodell}) erfolgt durch Aufrufe auf den Klassenkonstruktoren, wobei die Werte aus den JSON-Objekten übergeben werden.

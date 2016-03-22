@@ -63,10 +63,14 @@ public class OnlineDecksLoader extends AsyncTask<Void, Void, Exception> {
                 JSONObject deckjsonTmp = decklist.getJSONObject(i);
                 int deckid = deckjsonTmp.getInt("id");
                 JSONObject deckjson = new JSONObject(retrieveDataFromServer(host, rootpath + "/" + deckid,"application/json"));
+
                 //Download DeckImage
-                //TODO add caching functionallity
+
                 File outDir = new File(cachePath +"/"+ deckid+"/images");
+                File file = new File(outDir, deckjson.getString("image").substring(deckjson.getString("image").lastIndexOf("/") + 1, deckjson.getString("image").lastIndexOf("."))+".jpg");
+
                 outDir.mkdirs();
+                //Caching happens in downloadFromTo...
                 String localPath = Image.downloadFromTo(deckjson.getString("image"), outDir);
                 if(localPath!=null){
                     deckjson.put("image",localPath);

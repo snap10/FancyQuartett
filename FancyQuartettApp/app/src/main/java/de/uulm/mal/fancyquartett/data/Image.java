@@ -174,19 +174,23 @@ public class Image implements Serializable {
 
             String extension = sourcePath.substring(sourcePath.lastIndexOf('.') + 1);
             Bitmap img;
-            URL u = new URL(sourcePath);
-            System.out.println(u.toString());
-            HttpURLConnection c = (HttpURLConnection) u.openConnection();
-            c.setRequestProperty("Authorization", Settings.serverAuthorization);
-            c.setRequestProperty("Content-Type", "image/"+extension);
-            img = BitmapFactory.decodeStream(c.getInputStream());
+
             File file = new File(outDir, sourcePath.substring(sourcePath.lastIndexOf("/") + 1, sourcePath.lastIndexOf("."))+".jpg");
-            outDir.mkdirs();
-            file.createNewFile();
-            FileOutputStream out = new FileOutputStream(file);
-            img.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            out.flush();
-            out.close();
+            if(!file.exists()){
+                URL u = new URL(sourcePath);
+                System.out.println(u.toString());
+                HttpURLConnection c = (HttpURLConnection) u.openConnection();
+                c.setRequestProperty("Authorization", Settings.serverAuthorization);
+                c.setRequestProperty("Content-Type", "image/"+extension);
+                img = BitmapFactory.decodeStream(c.getInputStream());
+                //Only Download if File is not already Downloaded
+                outDir.mkdirs();
+                file.createNewFile();
+                FileOutputStream out = new FileOutputStream(file);
+                img.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                out.flush();
+                out.close();
+            }
             return file.getAbsolutePath();
         }catch (Exception e){
             e.printStackTrace();
