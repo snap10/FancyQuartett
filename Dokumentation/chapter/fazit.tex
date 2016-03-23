@@ -1,4 +1,22 @@
 \chapter{Zusammenfassung \& Fazit}
+\section{Was war schwer?}
+
+Bei der Implementation von Android Anwendungen muss man sich daran gewöhnen, dass man das OOP-Konzept wie man es von Java kennt nur eingeschränkt anwenden kann. Oft ist es nicht ohne weiteres möglich oder sollte konzeptionell vermieden werden Objektreferenzen direkt über Konstruktoren oder Mehtoden zu übergeben. Android hat das in Abschnitt \ref{sec:activity_lifecycle} gezeigte Konzept der Lifecycles entworfen um ein intelligentes Speichermanagemant zu erreichen. Das Betriebssystem ist dabei in der Lage die definierten Methoden selbständig aufzurufen und bei Bedarf pausierte Activities im Hintergrund zu schließen. Dabei könnte es bei hart referenzierten Objekten passieren, dass Referenzen automatisch verschwinden wenn Activities im Hintergrund zerstört werden. Deshalb gibt es in Android die Möglichkeit Werte und \emph{serialisierte} Objekte über Intents zwischen den Activities  zu übergeben. Das war zu Beginn etwas gewöhnungsbedürftig, da man ständig aufpassen muss, dass alle Klassen die man irgendwo einmal übergeben möchte serialisierbar sind.
+
+Aus ähnlichem Grund und weil Fragments in beliebige Activities eingebettet werden können sollte eine direkte Kommunikation von Fragments zur Parent-Activity über Referenzierung vermieden werden, da die Referenzen dynamisch wechseln können und somit eine Referenz auf eine Parent-Activity auf \epmh{null} zeigen könnte. Android nutzt hier und an anderen stellen sehr stark das Listener-Konzept, wobei die Listener bei jedem \emph{onAttach()} Aufruf des Fragments neu gesetzt werden. 
+Auch daran musste man sich im Vergleich zu normalen Java-Programmen wo dies nicht so stark vertreten ist erst einmal gewöhnen. 
+
+Durch die vielen Background-Task für Datei- und Netzwerkoperationen oder KI-Tasks wurde sehr viel Komplexität in den Programmablauf integriert, was an einigen Stellen einen sehr hohen Debugging-Aufwand zur Folge hatte. 
+
+\section{Was war leicht?}
+
+Bei aller Komplexität ist Android trotzdem relativ angenehm zu implementieren, da die mit Android Studio auf IntelliJ basierende IDE sehr gut mit den Eigenarten von Android umgehen kann und an vielen Stellen grobe Fehler in der Konzeption abfängt. Gerade was Listener angeht macht Android Studio mit  Template-activites sehr deutliche Vorschläge wie eine gute Konzeption aussehen könnte. 
+
+Sehr effizient ist auch die integrierte Verknüfung der in XML geschriebenen Layout und Views mit dem Java-Code. Durch eine durchgängige Autovervollständigung über die verschiedenen Dateiformate hinweg lässt sich sehr effizient implementieren ohne ständig nach korrekten Bezeichnernamen suchen zu müssen.
+
+Für grobes Konzeptionieren der Layouts eignet sich auch der integrierte Drag-and-Drop Layouteditor sehr gut. Man bekommt in sehr kurzer Zeit ohne überhaupt XML schreiben zu müssen ein ordentliches Layout zusammengeklickt, bei dem nur noch kleinere Anpassungen in XML nötig sind um ein optimiertes Layout zu erhalten.
+
+\section{Fazit}
 \label{cha:fazit}
 
 Bei der Entwicklung einer App müssen viele Besonderheiten der jeweiligen Zielplattformen und der dazu gehörigen Geräte beachtet werden. Um all diese Besonderheiten gut abdecken zu können bedarf es einer guten Planung, durch die viele Fehler vorab beseitigt werden.
