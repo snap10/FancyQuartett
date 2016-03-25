@@ -66,7 +66,7 @@ Das dritte Fragment zeigt eine Statistik an und bietet keine Interaktionsmöglic
 
 Abbildung \ref{fig:datenmodell} zeigt die Realisierung der Datenbasis von FancyQuartett. In dieser Form werden die Daten zur Laufzeit gehalten.
 
-Die persistente Speicherung erfolgt auf dem Dateisystem. Android weist jeder App einen Bereich im Dateisystem zu. Dort wird mittels der Klasse \emph{DeckDownloader} für jedes heruntergeladene Deck einen Ordner angelegt, in dem eine JSON Datei und die zu den Karten gehörenden Bilder gespeichert werden. \emph{DeckDownloader} erbt von der Klasse \emph{AsyncTask}. Das ermöglicht es, die Ein-/Ausgabe-Operationen in einem separaten Thread (asynchron) auszuführen, um die GUI nicht zu blockieren.
+Die persistente Speicherung erfolgt auf dem Dateisystem. Android weist jeder App einen Bereich im Dateisystem zu. Dort wird mittels der Klasse \emph{DeckDownloader} für jedes heruntergeladene Deck ein Ordner angelegt, in dem eine JSON Datei und die zu den Karten gehörenden Bilder gespeichert werden. \emph{DeckDownloader} erbt von der Klasse \emph{AsyncTask}. Das ermöglicht es, die Ein-/Ausgabe-Operationen in einem separaten Thread (asynchron) auszuführen, um die GUI nicht zu blockieren.
 
 \section{Netzwerkfunktionen}
 \label{sec:netzwerkfunktionen}
@@ -82,4 +82,4 @@ Für das Laden von Decks über das Netzwerk wurde ein Server mit einer REST-API 
 
 Durch den Aufruf von \emph{openConnection()} auf den entsprechenden URLs wird ein \emph{HttpURLConnection}-Objekt zurückgegeben, auf welchem noch der erforderliche Authorization Header gesetzt werden muss um Zugang zur API zu erhalten. Die empfangenen Daten können bei einer erfolgreichen Anfrage aus einem \emph{InputStream} gelesen werden. 
 
-Das Package \emph{org.json} macht das Handling der empfangenen JSON-Daten einfach. Es bringt für JSON spezifizierte Klassen und entsprechende Operationen mit. Ein \emph{JSONObject} bzw. \emph{JSONArray} kann direkt aus einem ASCII-String erstellt werden. Die Konvertierung in das interne Datenformat (siehe Abbildung \ref{fig:datenmodell}) erfolgt durch Aufrufe auf den Klassenkonstruktoren, wobei die Werte aus den JSON-Objekten übergeben werden.
+Das Package \emph{org.json} macht das Handling der empfangenen JSON-Daten einfach. Es bringt für JSON spezifizierte Klassen und entsprechende Operationen mit. Ein \emph{JSONObject} bzw. \emph{JSONArray} kann direkt aus einem ASCII-String erstellt werden. Die Konvertierung in das interne Datenformat (siehe Abbildung \ref{fig:datenmodell}) erfolgt durch Aufrufe der Klassenkonstruktoren, wobei die Werte aus den JSON-Objekten übergeben werden.

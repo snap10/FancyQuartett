@@ -12,7 +12,7 @@ In der Implementierungsphase wurden zuerst die Datenklassen implementiert und mi
 \section{Datenhaltung}
 Für die Speicherung der Deckdaten, welche aus Text- und Bilddaten bestehen, haben wir uns für die Variante des Dateisystems im internen Speicher entschieden. Da wir die Deckdaten als JSON erhalten, bietet es sich an, diese nach spezifizierten Modifikationen auch wieder als JSON zu speichern und erreichen so eine gewisse Konsistenz in den \emph{OfflineDeck- und OnlineDeckLoadern}. Es wäre ein nicht unwesentlicher Mehraufwand gewesen, eine entsprechende Datenbankklasse zu schreiben, die mittels SQL-Statements die JSON-Daten in einem eigenen Schema persistiert speichert. 
 
-Für die Speicherung der Spielzwischenstände und der Statistiken wird Androids Konzept der \emph{Shared Preferences} genutzt. Dies sind Key-Value Paare welche in dem \emph{shared\_prefs} Ordner einer jeden App als XML gespeichert werden. Sollen Objekte abgespeichert werden wie z.B. die Spielzwischenstände, dann müssen diese Objekte serialisiert sein. Da wir zum Speichern des aktuellen Spielzustandes ganz einfach das \emph{GameEngine}-Objekt abspeichern impliziert dies, dass unsere \emph{GameEngine}-Klasse das Interface \emph{Serializable} implementiert. Das betrifft nicht die Controller der GameEngine, weshalb diese bei jedem "Resume" neu initialisiert werden müssen, da sie nicht mit serialisiert werden.
+Für die Speicherung der Spielzwischenstände und der Statistiken wird Androids Konzept der \emph{Shared Preferences} genutzt. Dies sind Key-Value Paare welche in dem \emph{shared\_prefs} Ordner einer jeden App als XML gespeichert werden. Sollen Objekte abgespeichert werden wie z.B. die Spielzwischenstände, dann müssen diese Objekte serialisiert sein. Da wir zum Speichern des aktuellen Spielzustandes ganz einfach das \emph{GameEngine}-Objekt abspeichern impliziert dies, dass unsere \emph{GameEngine}-Klasse das Interface \emph{Serializable} implementiert. Das betrifft nicht die Controller der GameEngine, weshalb diese bei jedem Fortsetzden des Spiels neu initialisiert werden müssen, da sie nicht mit serialisiert werden.
 
 \begin{figure}[!ht]
 \centering
@@ -118,7 +118,7 @@ Ein heruntergeladenes Deck wird wie in Abbildung \ref{fig:folderstructure} auf d
 \begin{align*}
 \emph{/data/data/[packagename]/files/}
 \end{align*}
-gespeichert werden kann eine manuelle Veränderung der Daten ohne gesonderte Root-Rechte ausgeschlossen werden und daher für den Zweck dieses Spiels als geeignet angesehen werden.
+gespeichert werden kann eine manuelle Veränderung der Daten ohne Root-Rechte ausgeschlossen werden und daher für den Zweck dieses Spiels als geeignet angesehen werden.
 
 Die Klasse \emph{Image} aus Abbildung \ref{fig:datenmodell} ist nicht wirklich ein Bild sondern lediglich eine Wrapper-Klasse für die Informationen des zugehörigen Bildes. Hier wird zur Laufzeit festgehalten, ob und wo das Bild lokal ist, sowie die Onlineadresse wo es im Zweifel nachgeladen werden kann. Die Klasse enthält eine Methode \emph{getBitmap()} welche dann aus dem lokalen Pfad mit der Klasse \emph{BitmapFactory} ein \emph{Bitmap}-Objekt decodiert und zurückgibt.
 
@@ -126,7 +126,7 @@ Die Klasse \emph{Image} aus Abbildung \ref{fig:datenmodell} ist nicht wirklich e
 \section{Datenverarbeitung}
 In der Implementierung der Datenklassen für die Decks wird wie in Abbildung \ref{fig:datenmodell} zu sehen zwischen \emph{OfflineDeck} und \emph{OnlineDeck} unterschieden. So ist es nicht nötig in der Deckliste für alle verfügbaren Decks alle vorhandenen Daten herunterzuladen. Alle Dateioperationen werden in gesonderte Loader ausgelagert, welche alle von der Klasse \emph{AsyncTask} erben und somit parallel zum UI-Thread laufen.
 
-Der \emph{OnlineDecksLoader} fragt lediglich die \emph{/decks} Ressource ab um an die IDs der vorhandenen Decks zu kommen über welche dann in einem zweiten Request nach \emph{decks/ID} der Name, Beschreibung und der Pfad für das Coverbild abgefragt werden. Das Coverbild wird anschließend vom gegebenen Pfad heruntergeladen und mittels der Methode \emph{decodeStream()} der Klasse \emph{BitmapFactory} in ein \emph {Bitmap}-Objekt umgewandelt. Dieses wird dann in den Cachepfad (siehe Abbildung \ref{fig:folderstructure}) abgelegt und fortan nichtmehr extra angefragt. Er gibt anschließend eine Liste von fertigen OnlineDecks an seine Listener zurück.
+Der \emph{OnlineDecksLoader} fragt lediglich die \emph{/decks} Ressource ab um an die IDs der vorhandenen Decks zu kommen über welche dann in einem zweiten Request nach \emph{decks/ID} der Name, Beschreibung und der Pfad für das Coverbild abgefragt werden. Das Coverbild wird anschließend vom gegebenen Pfad heruntergeladen und mittels der Methode \emph{decodeStream()} der Klasse \emph{BitmapFactory} in ein \emph {Bitmap}-Objekt umgewandelt. Dieses wird dann in den Cachepfad (siehe Abbildung \ref{fig:folderstructure}) abgelegt und fortan nicht mehr extra angefragt. Er gibt anschließend eine Liste von fertigen OnlineDecks an seine Listener zurück.
 
 Der \emph{DeckDownloader} kapselt hingegen die ganze Logik des Downloads bis hin zur persistenten Speicherung der gesamten Deckdaten eines über die ID spezifizierten Decks. Er ruft dazu sequentiell hintereinander die verschiedenen Ressourcen-Pfade aus Abschnitt \ref{sec:netzwerkfunktionen} ab, ändert nach erfolgreichem Download der Bilder den Bildpfad in den JSON-Objekten und berechnet zusätzlich über allen Attributwerten der Karten jeweils den Median und hängt diesen direkt in die einzelnen Attribute. Anschließend werden alle JSON-Teile zu einem großen JSON-Objekt kombiniert und als File im Dateisystem gespeichert. Zusätzlich wird direkt ein OfflineDeck erstellt und an die Listener zurückgegeben.
 
@@ -170,7 +170,7 @@ Hierbei werden verschiedene Typen verwendet, welche von der Klasse \emph{AsyncTa
 	}
 	\end{itemize}
 \item{\textbf{Controller}\quad
-Hierbei wurden verschieden Typen verwendet:
+Hierbei wurden verschiedene Typen verwendet:
 	\begin{itemize}
 	\item{\textbf{CardController}\quad
 	Regelt die Kartenverteilung zu jedem Zeitpunkt des Spiels. 
@@ -189,11 +189,11 @@ Ist dafür zuständig dass nach jeder Runde eine neue Karte angezeigt wird.
 }
 \end{itemize}
 
-Das komplette Spiel beruht auf dem \emph{Listenerkonzept}, d.h. es gibt keine Schleife die dauerhaft nach Ereignissen sucht. Somit ist wird z.B. nach jedem Spielzug oder nachdem ein Dialogfenster geschlossen wurde eine Nachricht an die \emph{GameEnginge} gesendet, die dann weitere Funktionen aufruft.
+Das komplette Spiel beruht auf dem \emph{Listenerkonzept}, d.h. es gibt keine Schleife die dauerhaft nach Ereignissen sucht. Somit wird z.B. nach jedem Spielzug oder nachdem ein Dialogfenster geschlossen wurde eine Nachricht an die \emph{GameEngine} gesendet, die dann weitere Funktionen aufruft.
 
 
 \section{Views}
-Die Views der in Abschnitt \ref{sec:activities_in_fancyquartett} erläuterten Activities sind allesamt als Fragment implementiert. Jede Activity enthält also mindestens ein Fragment, in welchem das eigentliche Layout ausgerollt wird. Rückwirkend war das für dieses Projekt wohl ein unnötiger Zusatzaufwand, da das Game aktuell nur für Smartphones optimiert ist. Der Vorteil alles mit dem Fragment-Konzept zu implementieren hätte sich unter anderem erst ausgewirkt, wenn das Game auch für andere Formfaktoren wie z.B. Tablets hätte optimiert werden müssen, denn dann hätte das Layout mithilfe der Fragments sehr leicht angepasst werden können. Obwohl dies keine direkte Anforderung war wollten wir uns diese Option trotzdem offen halten.
+Die Views der in Abschnitt \ref{sec:activities_in_fancyquartett} erläuterten Activities sind allesamt als Fragment implementiert. Jede Activity enthält also mindestens ein Fragment, in welchem das eigentliche Layout ausgerollt wird. Rückwirkend war das für dieses Projekt wohl ein unnötiger Zusatzaufwand, da das Spiel aktuell nur für Smartphones optimiert ist. Der Vorteil alles mit dem Fragment-Konzept zu implementieren hätte sich unter anderem erst ausgewirkt, wenn das Spiel auch für andere Formfaktoren wie z.B. Tablets hätte optimiert werden müssen, denn dann hätte das Layout mithilfe der Fragments sehr leicht angepasst werden können. Obwohl dies keine direkte Anforderung war wollten wir uns diese Option trotzdem offen halten.
 
 
 
