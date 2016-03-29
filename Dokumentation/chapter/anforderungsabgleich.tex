@@ -1,0 +1,125 @@
+\chapter{Anforderungsabgleich}
+\label{cha:anforderungsabgleich}
+
+In der folgenden Tabelle soll verdeutlicht werden, wie gut die an die App gestellten Anforderungen umgesetzt wurden. Die verwendete Skala geht von \glqq sehr gut\grqq\ (1) bis \glqq ungenügend\grqq\ (6). Außerdem wird im Folgenden noch einmal auf jede Anforderung konkret eingegangen.
+
+\section{Funktionale Anforderungen}
+\label{sec:abgleich_funtionaleanforderungen}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{l|c c c c c c}
+funktionale Anforderungen & 1 & 2 & 3 & 4 & 5 & 6 \\ \hline\hline
+Spieltyp & $\checkmark$ &  &  &  &  &   \\
+Spielmodi & $\checkmark$ &  &  &  &  & \\
+Schwierigkeitsgrade & $\checkmark$ &  &  &  &  & \\
+Einstellungsmöglichkeiten & $\checkmark$ &  &  &  &  & \\
+Gespeichertes Spiel & $\checkmark$ &  &  &  &  & \\
+Statistiken & $\checkmark$ &  &  &  &  & \\
+Galerie & $\checkmark$ &  &  &  &  & \\
+Kartendecks & $\checkmark$ &  &  &  &  & \\
+Serverkommunikation &  & $\checkmark$ &  &  &  &
+\end{tabular}
+\label{tab:abgleich_funktionaleanforderungen}
+\end{table}
+
+\subsection{Spieltyp}
+Der Benutzer kann vor beginn eines Spiels wählen, ob er ein reines Single-Player-Spiel oder ein Hotseat-Spiel gegen einen Freund spielen möchte. Außerdem wird ein \emph{Zuschauermodus} zur Auswahl angeboten, in dem der Spieler einem Duell zwischen 2 Computergegnern zuschauen kann.
+
+\vspace{5mm}
+\emph{Bewertung: sehr gut}
+\vspace{5mm}
+
+\subsection{Spielmodi}
+Dem Benutzer werden die Spielmodi \emph{To-The-End} und \emph{Time} zur Auswahl angeboten. Der selbst entwickelte Spielmodus \emph{Points} soll die Spieler dazu verleiten auch \emph{schlechte} Karten zu spielen. Durch die unterschiedlichen Spielmodi soll die Langzeitmotivation des Spielers gefordert werden.
+
+\vspace{5mm}
+\emph{Bewertung: sehr gut}
+\vspace{5mm}
+
+\subsection{Schwierigkeitsgrade}
+Die verschiedenen Schwierigkeitsgrade entsprechen alle ihrer Beschreibung. Gegen einen leichten Computergegner gelingt es fast immer zu gewinnen, wohingegen der schwere Computergegner den Spieler wirklich fordert und somit Herausforderung darstellt.
+
+\vspace{5mm}
+\emph{Bewertung: sehr gut}
+\vspace{5mm}
+
+\subsection{Einstellungsmöglichkeiten}
+Vor jedem Spiel hat der Benutzer die Möglichkeit die \emph{maximale Rundenzahl} und/oder ein \emph{Zeitlimit für einen Spielzug} zu aktivieren und einzustellen. Dadurch kann der Benutzer selbst entscheiden ob das Spiel lang oder kurz dauert.
+
+\vspace{5mm}
+\emph{Bewertung: sehr gut}
+\vspace{5mm}
+
+\subsection{Gespeichertes Spiel}
+Verlässt der Benutzer ein gerade laufendes Spiel, so bekommt er eine Meldung, dass im Hintergrund das Spiel gespeichert wird und er jederzeit das Spiel fortsetzen kann. Das Spiel wird dann im Hintergrund persistent gespeichert. Sobald das Spiel fertig gespielt wurde, wird der Spielstand gelöscht.
+
+\vspace{5mm}
+\emph{Bewertung: sehr gut}
+\vspace{5mm}
+
+\subsection{Statistiken}
+
+Der Spieler kann in der \emph{MainActivity} die Statistiken einsehen. Hierbei werden die Anzahl der bisher gespielten Spiele und die Anzahl der bisherigen Duelle aufgelistet, welche jeweils die Anzahl der Siege bzw. Niederlagen beinhalten.
+
+\vspace{5mm}
+\emph{Bewertung: sehr gut}
+\vspace{5mm}
+
+\subsection{Galerie}
+% TODO
+
+\vspace{5mm}
+\emph{Bewertung: sehr gut}
+\vspace{5mm}
+
+\subsection{Serverkommunikation}
+% TODO (nur gut wegen effiziens!?)
+
+\vspace{5mm}
+\emph{Bewertung: gut}
+\vspace{5mm}
+
+\section{Nicht-funktionale Anforderungen}
+\label{sec:abgleich_nichtfunktionaleanforderungen}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{l|c c c c c c}
+funktionale Anforderungen & 1 & 2 & 3 & 4 & 5 & 6 \\ \hline\hline
+Material Design & $\checkmark$ &  &  &  &  &   \\
+Gestensteuerung & $\checkmark$ &  &  &  &  & \\
+Animationen & $\checkmark$ &  &  &  &  & \\
+Offline-Szenario & $\checkmark$ &  &  &  &  &
+\end{tabular}
+\label{tab:abgleich_nichtfunktionaleanforderungen}
+\end{table}
+
+\subsection{Material Design}
+% TODO (dank zielapi sehr einfach)
+
+\vspace{5mm}
+\emph{Bewertung: sehr gut}
+\vspace{5mm}
+
+\subsection{Gestensteuerung}
+% TODO (shake = zufallseinstellungen, wischen zb in Kartenansicht in der Galerie)
+
+\vspace{5mm}
+\emph{Bewertung: sehr gut}
+\vspace{5mm}
+
+\subsection{Animationen}
+% TODO (custom animation bei den dialogen)
+
+\vspace{5mm}
+\emph{Bewertung: sehr gut}
+\vspace{5mm}
+
+\subsection{Offline-Szenario}
+% TODO
+
+\vspace{5mm}
+\emph{Bewertung: sehr gut}
+\vspace{5mm}
+
