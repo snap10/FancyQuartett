@@ -88,38 +88,42 @@ Der Spieler kann in der \emph{MainActivity} die Statistiken einsehen. Hierbei we
 \begin{tabular}{l|c c c c c c}
 funktionale Anforderungen & 1 & 2 & 3 & 4 & 5 & 6 \\ \hline\hline
 Material Design & $\checkmark$ &  &  &  &  &   \\
-Gestensteuerung & $\checkmark$ &  &  &  &  & \\
+Gestensteuerung &  & $\checkmark$  &  &  &  & \\
 Animationen & $\checkmark$ &  &  &  &  & \\
-Offline-Szenario & $\checkmark$ &  &  &  &  &
+Offline-Szenario & & $\checkmark$  &  &  &  &
 \end{tabular}
 \label{tab:abgleich_nichtfunktionaleanforderungen}
 \end{table}
 
 \subsection{Material Design}
-% TODO (dank zielapi sehr einfach)
 
+Das Design der App ist streng an den Standard Design Bibliotheken von Android gehalten und erfüllt damit die Anforderungen des Material Designs. Alle verwendeten Icons sind Teil des Material Design Paketes. Die verwendeten Konzepte wie Viewpager mit integrierten 
+Tabview Indikatoren sowie die von Android bekannte Backstack Navigation ermöglichen dem Nutzern ein gewohntes Navigieren mit bekanntem Look and Feel seiner Platform. Kontextmenüs sind gewohnt durch das typische Menüicon als auch durch Long-Press zu öffnen. Die Gallerielisten ermöglichen das ebenfalls bekannte Umschalten zwischen Listen und Kachelansicht mit den gewohnten Icons in der Actionbar.
+% TODO Ferdi@all: fehlt noch was???
 \vspace{5mm}
 \emph{Bewertung: sehr gut}
 \vspace{5mm}
 
 \subsection{Gestensteuerung}
-% TODO (shake = zufallseinstellungen, wischen zb in Kartenansicht in der Galerie)
-
+Die Anwendung unterstützt die auf Touchgeräten wohl wichtigste Geste, dass Wischen direkt in der MainActivity, wo sie das leichte Navigieren zwischen den drei Hauptfunktionen Spielen, Gallerie und Statistik ermöglicht. Zusätzlich lässt sich in den Gallerielisten die Wischgeste zum gewohnten Scrollen einsetzen. Ganz intuitiv kann die Wischgeste in der Kartenansicht verwendet werden um seitlich durch die Karten zu blättern. 
+An dieser Stelle hätte man eventuell noch eine Kippgeste für die Blätterfunktion implementieren können.
+Die Schüttelgeste ermöglicht in den Spieleinstellungen ein schnelles zufälliges Einstellen der Spielattribute. Dadurch muss sich der Spieler nicht lang mit Einstellen aufhalten, sondern kann direkt mit zufälligen Einstellungen starten.
 \vspace{5mm}
-\emph{Bewertung: sehr gut}
+\emph{Bewertung: gut}
 \vspace{5mm}
 
 \subsection{Animationen}
-% TODO (custom animation bei den dialogen)
+Die Anwendung nutzt lediglich dezente Animationen um den Bedingungen des Material Designs gerecht zu werden. Zum einen werden Fehlbedienungen und Inkorrekte Anwendungszustände durch dynamische Toasts realisiert die kurzzeitig eingeblendet werden und somit nicht störend kleine aber wichtige Informationen bereitstellen. 
+Alle Dialoge wurden durch eine eigens erstellte Animation erweitert die sie von unten in den Bildschirm fahren lassen. Der Nutzer wird dadurch nicht von einem plötzlich erscheinenden Dialog überrascht sondern durch die kurzzeitige Animation unterschwellig auf den Dialog vorbereitet. Insgesamt werden durch die dezenten Animationen ein geschmeidiges Look and Feel erzeugt.
 
 \vspace{5mm}
 \emph{Bewertung: sehr gut}
 \vspace{5mm}
 
 \subsection{Offline-Szenario}
-% TODO
+Die grundsätzlichen Anforderungen für Offline Verhalten werden auf funktionaler Seite vollständig erfüllt. Der Nutzer kann alle heruntergeladenen Decks auch ohne Internetverbindung nutzen und ohne Einschränkungen damit spielen. Ein möglicher Nachteil könnte sein, dass die App bei der Installation ohne spielbares Offlinedeck ausgeliefert wird. Es ist zwingend erforderlich selber ein Deck herunterzuladen. Da aber zum Installieren aus dem Store eine Internetverbindung vorhanden sein muss ist der Nutzer höchstwahrscheinlich auch direkt in der Lage ein Deck herunterzuladen. 
 
 \vspace{5mm}
-\emph{Bewertung: sehr gut}
+\emph{Bewertung: gut}
 \vspace{5mm}
 
