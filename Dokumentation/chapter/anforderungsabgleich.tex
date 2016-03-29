@@ -67,14 +67,24 @@ Der Spieler kann in der \emph{MainActivity} die Statistiken einsehen. Hierbei we
 \vspace{5mm}
 
 \subsection{Galerie}
-% TODO
+
+In der Galerie kann der Spieler alle verfügbaren Kartendecks sehen - sowohl die lokal gespeicherten als auch die auf dem Server bereit liegenden. Die online verfügbaren Decks sind mit einem \emph{Download-Icon} gekennzeichnet.
+
+Bei Auswahl eines lokalen Decks werden dessen Karten angezeigt. Bei Auswahl einer Karte werden deren Bilder und Attributwerte angezeigt.
+
+Bei Auswahl eines online verfügbaren Decks wird der Download gestartet. Nach dessen Beendigung verschwindet das \emph{Download-Icon}.
+
+Über das Menü eines jeden Decks kann ein neues Spiel mit diesem Deck gestartet oder das Deck vom Gerät gelöscht werden. Nach Auswahl von \emph{Neues Einzelspieler} oder \emph{Neues Mehrspieler} wird die Ansicht für die Spieleinstellungen angezeigt. Nach Auswahl von \emph{Deck löschen} werden die Daten im Dateisystem gelöscht und das Deck steht anschließend wieder zum Download bereit, falls es auf dem Server noch verfügbar ist.
 
 \vspace{5mm}
 \emph{Bewertung: sehr gut}
 \vspace{5mm}
 
 \subsection{Serverkommunikation}
-% TODO (nur gut wegen effiziens!?)
+
+Beim Download eines Decks wird ein Fortschrittsbalken mit einer Prozentzahl angezeigt, um dem Nutzer zu zeigen, wann der Download beendet ist. Die App lädt Karten und Bilder sequentiell, d.h. es wird ein HTTP Request nach dem anderen gesendet. Dies ist ein praktikables Vorgehen, allerdings besteht Optimierungspotenzial. Die Karten sowie deren Bilder sind voneinander unabhängig und können daher parallel geladen werden. Ein paralleles Aufbauen mehrerer TCP-Verbindungen würde die Netzwerklast erhöhen und die verfügbare Bandbreite stärker ausnutzen.
+
+Die Geschwindigkeit des Downloads könnte somit verbessert werden. Jedoch dauert ein Deck-Download bei den derzeit verfügbaren Decks selbst im mobilen Datennetz nicht mehr als 2 Minuten. Die Fortschrittsanzeige beugt möglicher Frustration vor. Daher kann die Serverkommunikation als gut bewertet werden.
 
 \vspace{5mm}
 \emph{Bewertung: gut}
