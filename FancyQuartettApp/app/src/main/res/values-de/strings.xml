@@ -16,6 +16,7 @@
     <string name="statistic">Statistik</string>
     <string name="start">Start</string>
 
+
     <!-- Buttons -->
     <string name="start_caps">START</string>
     <string name="ok_caps">OK</string>
@@ -65,6 +66,15 @@
     <string name="statisticNumSingleplayerDuelsWonKey">numSingleplayerDuelsWon</string>
     <string name="statisticNumSingleplayerDuelsLostKey">numSingleplayerDuelsLost</string>
     <string name="statisticSingleplayerDuelsWinningPercentageKey">singleplayerDuelsWinningPercentage</string>
+
+    <string name="statisticNumMultiplayerGamesPlayedKey">numMultiplayerGamesPlayed</string>
+    <string name="statisticNumMultiplayerGamesWonKey">numMultiplayerGamesWon</string>
+    <string name="statisticNumMultiplayerGamesLostKey">numMultiplayerGamesLost</string>
+    <string name="statisticMultiplayerGamesWinningPercentageKey">multiplayerWinningPercentage</string>
+    <string name="statisticNumMultiplayerDuelsMadeKey">numMultiplayerDuelsMade</string>
+    <string name="statisticNumMultiplayerDuelsWonKey">numMultiplayerDuelsWon</string>
+    <string name="statisticNumMultiplayerDuelsLostKey">numMultiplayerDuelsLost</string>
+    <string name="statisticMultiplayerDuelsWinningPercentageKey">multiplayerDuelsWinningPercentage</string>
 
     <!-- New Game Settings -->
         <!-- Titles -->
